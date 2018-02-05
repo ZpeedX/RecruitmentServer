@@ -22,7 +22,7 @@ public class Controller {
     
     @EJB
     RecruitmentDAO edao;
-    
+    /*new*/
     public boolean authenticate(User newUser) {
         return edao.authenticateUser(newUser);
     }
