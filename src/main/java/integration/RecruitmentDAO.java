@@ -12,7 +12,9 @@ import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import model.Person;
+import model.Role;
 import net.User;
 
 /**
@@ -26,28 +28,34 @@ public class RecruitmentDAO {
     @PersistenceContext(unitName = "recruitmentPU")
     private EntityManager em;
     
-    //Store a user in the database
-    public boolean storeUser(Person newUser) {
+    //Store a person in the database
+    public boolean registerPerson(Person newUser) {
         try{
-        
         if (!existsUser(newUser)) {
+            Role r = getRole("Applicant");
+            newUser.setRoleId(r);
             em.persist(newUser);
             return true;
         } else {
             return false;
         }
         }catch(Exception e){
+            e.printStackTrace();
             return false;
         }
     }
+    public Role getRole(String name){
+        TypedQuery<Role> r = em.createNamedQuery("Role.findByName", Role.class)
+                .setParameter("name", name);
+        return r.getSingleResult();
+    }
+    
     //Check if a user is already in database
     public boolean existsUser(Person user) {
-        Person u = em.find(Person.class, user.getUsername());
-        if (u != null) {
-            return true;
-        } else {
-            return false;
-        }
+        TypedQuery<Person> p = em.createNamedQuery("Person.findByUsername", Person.class)
+                .setParameter("username", user.getUsername());
+        
+        return !p.getResultList().isEmpty();
     }
     
     public boolean authenticateUser(User user) {

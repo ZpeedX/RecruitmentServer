@@ -33,7 +33,6 @@ public class ApplicationConfig extends Application {
         resources.add(net.CompetenceFacadeREST.class);
         resources.add(net.CompetenceProfileFacadeREST.class);
         resources.add(net.PersonFacadeREST.class);
-        resources.add(net.PersonFacadeRESTold.class);
         resources.add(net.RoleFacadeREST.class);
     }
     

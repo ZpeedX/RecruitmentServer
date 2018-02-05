@@ -11,6 +11,8 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -29,7 +31,6 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @Entity
 @Table(name = "PERSON")
-@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Person.findAll", query = "SELECT p FROM Person p")
     , @NamedQuery(name = "Person.findByPersonId", query = "SELECT p FROM Person p WHERE p.personId = :personId")
@@ -43,10 +44,9 @@ public class Person implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @Basic(optional = false)
-    @NotNull
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "PERSON_ID")
-    private Long personId;
+    private long personId;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
@@ -81,11 +81,7 @@ public class Person implements Serializable {
     @JoinColumn(name = "ROLE_ID", referencedColumnName = "ROLE_ID")
     @ManyToOne(optional = false)
     private Role roleId;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "personId")
-    private Collection<Availability> availabilityCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "personId")
-    private Collection<CompetenceProfile> competenceProfileCollection;
-
+    
     public Person() {
     }
 
@@ -93,8 +89,7 @@ public class Person implements Serializable {
         this.personId = personId;
     }
 
-    public Person(Long personId, String name, String surname, String ssn, String email, String password, String username) {
-        this.personId = personId;
+    public Person(String name, String surname, String ssn, String email, String password, String username) {
         this.name = name;
         this.surname = surname;
         this.ssn = ssn;
@@ -167,47 +162,5 @@ public class Person implements Serializable {
         this.roleId = roleId;
     }
 
-    @XmlTransient
-    public Collection<Availability> getAvailabilityCollection() {
-        return availabilityCollection;
-    }
-
-    public void setAvailabilityCollection(Collection<Availability> availabilityCollection) {
-        this.availabilityCollection = availabilityCollection;
-    }
-
-    @XmlTransient
-    public Collection<CompetenceProfile> getCompetenceProfileCollection() {
-        return competenceProfileCollection;
-    }
-
-    public void setCompetenceProfileCollection(Collection<CompetenceProfile> competenceProfileCollection) {
-        this.competenceProfileCollection = competenceProfileCollection;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (personId != null ? personId.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Person)) {
-            return false;
-        }
-        Person other = (Person) object;
-        if ((this.personId == null && other.personId != null) || (this.personId != null && !this.personId.equals(other.personId))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "kth.iv1201.recruitmentserv.Person[ personId=" + personId + " ]";
-    }
     
 }

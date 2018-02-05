@@ -36,16 +36,23 @@ public class PersonFacadeREST {
     public String fromServ(JsonObject user) {
         if (user.getString("type").equals("login")) {
             User newUser = new User(user.getString("username"), user.getString("password"));
+            System.out.println(newUser.getUsername() + newUser.getPassword());
             if (cont.authenticate(newUser)) {
-                return "Authenticated new";
+                return "Authenticated";
             } else {
                 return "Invalid credentials";
             }
         } else {
-            Person person = new Person(new Long(1), user.getString("name"), user.getString("surname"),
-                    user.getString("ssn"), user.getString("email"), user.getString("password"), user.getString("username"));
+            Person person = new Person(user.getString("name"), user.getString("surname"), user.getString("ssn"), 
+                    user.getString("email"), user.getString("password"), user.getString("username"));
+            
+            if(cont.register(person)){
+                System.out.println("Sucessfully registered");
+            }else{
+                System.out.println("Not registered");
+            }
         }
-        return "hi";
+        return "The end";
     }
 
 }

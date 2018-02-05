@@ -10,6 +10,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
+import model.Person;
 import net.User;
 
 /**
@@ -21,10 +22,13 @@ import net.User;
 public class Controller {
     
     @EJB
-    RecruitmentDAO edao;
-    /*new*/
+    RecruitmentDAO rdao;
+    
     public boolean authenticate(User newUser) {
-        return edao.authenticateUser(newUser);
+        return rdao.authenticateUser(newUser);
+    }
+    public boolean register(Person newUser) {
+        return rdao.registerPerson(newUser);
     }
     
 }
