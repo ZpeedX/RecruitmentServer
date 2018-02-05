@@ -44,14 +44,7 @@ public class AvailabilityFacadeREST extends AbstractFacade<Availability> {
         return ("HELLO FROM THE OTHER SIIIIIIDE");
     }
     
-    @GET
-    @Override
-    @Consumes("text/plain")
-    //@Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void create(Availability entity) {
-        //super.create(entity);
-        System.out.println("något");
-    }
+  
 
     @PUT
     @Path("{id}")
