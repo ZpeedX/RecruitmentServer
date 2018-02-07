@@ -48,11 +48,12 @@ public class PersonFacadeREST {
             
             if(cont.register(person)){
                 System.out.println("Sucessfully registered");
+                
             }else{
                 System.out.println("Not registered");
             }
         }
-        return "The end";
+        return " ";
     }
 
 }

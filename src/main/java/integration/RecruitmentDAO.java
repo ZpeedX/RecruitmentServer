@@ -44,6 +44,13 @@ public class RecruitmentDAO {
             return false;
         }
     }
+    public Person getPerson(Person user){
+        TypedQuery<Person> p = em.createNamedQuery("Person.findByUsername", Person.class)
+                .setParameter("username", user.getUsername());
+        
+        return p.getSingleResult();
+    }
+    
     public Role getRole(String name){
         TypedQuery<Role> r = em.createNamedQuery("Role.findByName", Role.class)
                 .setParameter("name", name);
