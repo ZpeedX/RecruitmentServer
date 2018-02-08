@@ -24,10 +24,10 @@ public class Controller {
     @EJB
     RecruitmentDAO rdao;
     
-    public boolean authenticate(User newUser) {
+    public Person authenticate(User newUser) {
         return rdao.authenticateUser(newUser);
     }
-    public boolean register(Person newUser) {
+    public Person register(Person newUser) {
         return rdao.registerPerson(newUser);
     }
     

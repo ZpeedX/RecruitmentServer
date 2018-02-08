@@ -5,13 +5,11 @@
  */
 package integration;
 
-import java.util.List;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import model.Person;
 import model.Role;
@@ -21,61 +19,59 @@ import net.User;
  *
  * @author Emil
  */
- 
 @TransactionAttribute(TransactionAttributeType.MANDATORY)
 @Stateless
 public class RecruitmentDAO {
+
     @PersistenceContext(unitName = "recruitmentPU")
     private EntityManager em;
-    
+
     //Store a person in the database
-    public boolean registerPerson(Person newUser) {
-        try{
-        if (!existsUser(newUser)) {
-            Role r = getRole("Applicant");
-            newUser.setRoleId(r);
-            em.persist(newUser);
-            return true;
-        } else {
-            return false;
-        }
-        }catch(Exception e){
+    public Person registerPerson(Person newUser) {
+        try {
+            if (!existsUser(newUser.getUsername())) {
+                Role r = getRole("Applicant");
+                newUser.setRoleId(r);
+                em.persist(newUser);
+                return getPerson(newUser.getUsername());
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
             e.printStackTrace();
-            return false;
+            return null;
         }
     }
-    public Person getPerson(Person user){
+
+    public Person getPerson(String username) {
         TypedQuery<Person> p = em.createNamedQuery("Person.findByUsername", Person.class)
-                .setParameter("username", user.getUsername());
-        
+                .setParameter("username", username);
+
         return p.getSingleResult();
     }
-    
-    public Role getRole(String name){
+
+    public Role getRole(String name) {
         TypedQuery<Role> r = em.createNamedQuery("Role.findByName", Role.class)
                 .setParameter("name", name);
         return r.getSingleResult();
     }
-    
+
     //Check if a user is already in database
-    public boolean existsUser(Person user) {
+    public boolean existsUser(String username) {
         TypedQuery<Person> p = em.createNamedQuery("Person.findByUsername", Person.class)
-                .setParameter("username", user.getUsername());
-        
+                .setParameter("username", username);
+
         return !p.getResultList().isEmpty();
     }
     
-    public boolean authenticateUser(User user) {
-        Query q = em.createNativeQuery(
-                "SELECT a.username FROM PERSON a WHERE"
-                + " (a.username = ? AND a.password = ?)");
-        q.setParameter(1, user.getUsername());
-        q.setParameter(2, user.getPassword());
-        List<User> ud = q.getResultList();
-        if (ud.isEmpty()) {
-            return false;
-        } else {
-            return true;
+    public Person authenticateUser(User user) {
+        if (existsUser(user.getUsername())) {
+            Person p = getPerson(user.getUsername());
+
+            if (p != null && p.getPassword().equals(user.getPassword())) {
+                return p;
+            }
         }
+        return null;
     }
 }
