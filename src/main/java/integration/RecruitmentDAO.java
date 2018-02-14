@@ -11,6 +11,7 @@ import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import model.Competence;
 import model.Person;
 import model.Role;
 
@@ -64,6 +65,11 @@ public class RecruitmentDAO {
         } catch(Exception e){
             return null;
         }
+    }
+
+    public List<Competence> getAllCompetences() {
+        TypedQuery<Competence> query = em.createNamedQuery("Competence.findAll", Competence.class);
+        return query.getResultList();
     }
 
 }

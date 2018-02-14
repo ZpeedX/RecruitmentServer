@@ -29,11 +29,7 @@ public class ApplicationConfig extends Application {
      * If required, comment out calling this method in getClasses().
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
-        resources.add(net.AvailabilityFacadeREST.class);
-        resources.add(net.CompetenceFacadeREST.class);
-        resources.add(net.CompetenceProfileFacadeREST.class);
+        resources.add(net.ApplicationsREST.class);
         resources.add(net.PersonFacadeREST.class);
-        resources.add(net.RoleFacadeREST.class);
     }
-    
 }
