@@ -13,7 +13,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import model.Person;
 import model.Role;
-import net.User;
 
 /**
  *
@@ -29,7 +28,7 @@ public class RecruitmentDAO {
     //Store a person in the database
     public Person registerPerson(Person newUser) {
         try {
-            if (!existsUser(newUser.getUsername())) {
+            if (existsUser(newUser.getUsername()) == null) {
                 Role r = getRole("Applicant");
                 newUser.setRoleId(r);
                 em.persist(newUser);
@@ -57,21 +56,14 @@ public class RecruitmentDAO {
     }
 
     //Check if a user is already in database
-    public boolean existsUser(String username) {
+    public Person existsUser(String username) {
+        try{
         TypedQuery<Person> p = em.createNamedQuery("Person.findByUsername", Person.class)
                 .setParameter("username", username);
-
-        return !p.getResultList().isEmpty();
-    }
-    
-    public Person authenticateUser(User user) {
-        if (existsUser(user.getUsername())) {
-            Person p = getPerson(user.getUsername());
-
-            if (p != null && p.getPassword().equals(user.getPassword())) {
-                return p;
-            }
+            return p.getSingleResult();
+        } catch(Exception e){
+            return null;
         }
-        return null;
     }
+
 }

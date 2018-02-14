@@ -161,6 +161,10 @@ public class Person implements Serializable {
     public void setRoleId(Role roleId) {
         this.roleId = roleId;
     }
+    
+    public boolean authenticate(String pass){
+        return pass.equals(password);
+    }
 
     
 }
