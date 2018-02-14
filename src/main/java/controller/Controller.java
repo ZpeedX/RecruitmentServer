@@ -11,7 +11,6 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import model.Person;
-import net.User;
 
 /**
  *
