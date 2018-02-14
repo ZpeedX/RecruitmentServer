@@ -24,8 +24,13 @@ import model.Person;
 @Path("kth.iv1201.recruitmentserv.person")
 public class PersonFacadeREST {
 
+    private Person p;
     @Inject
     private Controller cont;
+
+    
+    @Inject
+    private SessionHandler sessionhandler;
 
     public PersonFacadeREST() {
     }
@@ -36,23 +41,32 @@ public class PersonFacadeREST {
     public String fromServ(JsonObject user) {
         if (user.getString("type").equals("login")) {
             User newUser = new User(user.getString("username"), user.getString("password"));
-            System.out.println(newUser.getUsername() + newUser.getPassword());
-            if (cont.authenticate(newUser)) {
-                return "Authenticated";
-            } else {
-                return "Invalid credentials";
-            }
+            return login(newUser);
         } else {
-            Person person = new Person(user.getString("name"), user.getString("surname"), user.getString("ssn"), 
+            Person person = new Person(user.getString("name"), user.getString("surname"), user.getString("ssn"),
                     user.getString("email"), user.getString("password"), user.getString("username"));
-            
-            if(cont.register(person)){
-                System.out.println("Sucessfully registered");
-            }else{
-                System.out.println("Not registered");
-            }
+            return register(person);
         }
-        return "The end";
+    }
+
+    private String login(User newUser) {
+        Person per = cont.authenticate(newUser.getUsername());
+        if (per != null && per.authenticate(newUser.getPassword())) {
+            sessionhandler.logon(per);
+            return per.getPersonId().toString();
+        } else {
+            return "invalid";
+        }
+    }
+
+    private String register(Person person) {
+        p = cont.register(person);
+        if (p != null) {
+            sessionhandler.logon(p);
+            return p.getPersonId().toString();
+        } else {
+            return "invalid";
+        }
     }
 
 }
