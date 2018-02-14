@@ -6,7 +6,12 @@
 package model;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
+import javax.json.Json;
+import javax.json.JsonObjectBuilder;
+import javax.json.spi.JsonProvider;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -109,5 +114,11 @@ public class Competence implements Serializable {
     public String toString() {
         return "kth.iv1201.recruitmentserv.Competence[ competenceId=" + competenceId + " ]";
     }
-    
+
+    public JsonObjectBuilder toJson() {
+        JsonObjectBuilder obj = Json.createObjectBuilder()
+                .add("competenceId", competenceId)
+                .add("competenceName", name);
+        return obj;
+    }
 }

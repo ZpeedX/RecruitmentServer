@@ -13,6 +13,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import model.Competence;
 import model.Person;
 import model.Role;
 import net.User;
@@ -70,5 +71,10 @@ public class RecruitmentDAO {
         } else {
             return true;
         }
+    }
+
+    public List<Competence> getAllCompetences() {
+        TypedQuery<Competence> query = em.createNamedQuery("Competence.findAll", Competence.class);
+        return query.getResultList();
     }
 }

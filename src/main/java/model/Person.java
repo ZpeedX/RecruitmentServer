@@ -7,6 +7,7 @@ package model;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -41,6 +42,9 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Person.findByPassword", query = "SELECT p FROM Person p WHERE p.password = :password")
     , @NamedQuery(name = "Person.findByUsername", query = "SELECT p FROM Person p WHERE p.username = :username")})
 public class Person implements Serializable {
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "personId")
+    private List<Applications> applicationsList;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -160,6 +164,15 @@ public class Person implements Serializable {
 
     public void setRoleId(Role roleId) {
         this.roleId = roleId;
+    }
+
+    @XmlTransient
+    public List<Applications> getApplicationsList() {
+        return applicationsList;
+    }
+
+    public void setApplicationsList(List<Applications> applicationsList) {
+        this.applicationsList = applicationsList;
     }
 
     
