@@ -15,7 +15,6 @@ import javax.ejb.TransactionAttributeType;
 import model.Applications;
 import model.Competence;
 import model.Person;
-import net.User;
 
 /**
  *

@@ -22,11 +22,18 @@ public class SessionHandler {
     private HashMap<Long, Person> loggedOnUsers = new HashMap<>();
     private long generatedLong;
     
-    public void logon(Person p){
+    public Long logon(Person p){
         do{
         generatedLong = new Random().nextLong();
         }while(loggedOnUsers.containsKey(generatedLong));
         loggedOnUsers.put(generatedLong, p);
+        return generatedLong;
     }
+    
+    public void logout(String id){
+        Long l = new Long(id);
+        loggedOnUsers.remove(l);
+    }
+    
      
 }

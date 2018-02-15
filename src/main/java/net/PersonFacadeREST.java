@@ -28,7 +28,6 @@ public class PersonFacadeREST {
     @Inject
     private Controller cont;
 
-    
     @Inject
     private SessionHandler sessionhandler;
 
@@ -39,31 +38,42 @@ public class PersonFacadeREST {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
     public String fromServ(JsonObject user) {
-        if (user.getString("type").equals("login")) {
-            User newUser = new User(user.getString("username"), user.getString("password"));
-            return login(newUser);
-        } else {
-            Person person = new Person(user.getString("name"), user.getString("surname"), user.getString("ssn"),
-                    user.getString("email"), user.getString("password"), user.getString("username"));
-            return register(person);
+        switch (user.getString("type")) {
+            case "login":
+                User newUser = new User(user.getString("username"), user.getString("password"));
+                return login(newUser);
+
+            case "register":
+                Person person = new Person(user.getString("name"), user.getString("surname"), user.getString("ssn"),
+                        user.getString("email"), user.getString("password"), user.getString("username"));
+                return register(person);
+                
+            case "logout":
+                logout(user.getString("uid"));
+                return "";
+                
+            default:
+                return "";
         }
     }
 
     private String login(User newUser) {
         Person per = cont.authenticate(newUser.getUsername());
         if (per != null && per.authenticate(newUser.getPassword())) {
-            sessionhandler.logon(per);
-            return per.getPersonId().toString();
+            return sessionhandler.logon(per).toString();
         } else {
             return "invalid";
         }
     }
 
+    private void logout(String id) {
+        sessionhandler.logout(id);
+    }
+
     private String register(Person person) {
         p = cont.register(person);
         if (p != null) {
-            sessionhandler.logon(p);
-            return p.getPersonId().toString();
+            return sessionhandler.logon(p).toString();
         } else {
             return "invalid";
         }
