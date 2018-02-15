@@ -5,13 +5,18 @@
  */
 package integration;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
+import model.Applications;
 import model.Competence;
 import model.Person;
 import model.Role;
@@ -72,5 +77,26 @@ public class RecruitmentDAO {
         TypedQuery<Competence> query = em.createNamedQuery("Competence.findAll", Competence.class);
         return query.getResultList();
     }
+    
+    public List<Applications> getAllApplications() {
+        TypedQuery<Applications> query = em.createNamedQuery("Applications.findAll", Applications.class);
+        return query.getResultList();
+    }
 
+    public List<Applications> getApplications(Date submissionDate, String periodFrom, String periodTo, long competence, String firstname) {
+        Date tempDate = null;
+        try{
+                 tempDate = new SimpleDateFormat("d-MM-yyyy").parse("1-11-0000");
+        }catch(ParseException e){
+            
+        }
+                TypedQuery<Applications> query = 
+                        em.createNamedQuery("Applications.findByParams", Applications.class)
+                        .setParameter("firstname", firstname)
+                        .setParameter("cpId", competence)
+                        .setParameter("regDate", submissionDate, TemporalType.DATE)
+                        .setParameter("tempDate", tempDate, TemporalType.DATE);
+                
+        return query.getResultList();
+    }
 }

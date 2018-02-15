@@ -6,7 +6,11 @@
 package model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -30,7 +34,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Applications.findAll", query = "SELECT a FROM Applications a")
-    , @NamedQuery(name = "Applications.findByApplicationId", query = "SELECT a FROM Applications a WHERE a.applicationId = :applicationId")})
+    , @NamedQuery(name = "Applications.findByApplicationId", query = "SELECT a FROM Applications a WHERE a.applicationId = :applicationId")
+    , @NamedQuery(name = "Applications.findByParams", 
+            query = "SELECT DISTINCT app "
+                    + "FROM Applications app, CompetenceProfile cp "
+                    + "WHERE (app.personId.name = :firstname OR :firstname = '')"
+                    + "AND ((cp.competenceId.competenceId = :cpId AND app.personId = cp.personId) OR :cpId = 0) "
+                    + "AND (app.registrationDate = :regDate OR :regDate = :tempDate)"
+                  )})
 public class Applications implements Serializable {
 
     @Column(name = "REGISTRATION_DATE")
@@ -102,5 +113,11 @@ public class Applications implements Serializable {
     public void setRegistrationDate(Date registrationDate) {
         this.registrationDate = registrationDate;
     }
-    
+    public JsonObject toJson() {
+        JsonObjectBuilder obj = Json.createObjectBuilder()
+                .add("firstname", personId.getName())
+                .add("surname", personId.getSurname())
+                .add("email", personId.getEmail());
+        return obj.build();
+    }
 }
