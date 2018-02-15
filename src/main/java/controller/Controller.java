@@ -6,11 +6,13 @@
 package controller;
 
 import integration.RecruitmentDAO;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
+import model.Applications;
 import model.Competence;
 import model.Person;
 import net.User;
@@ -35,6 +37,14 @@ public class Controller {
     
     public List<Competence> getAllCompetences() {
         return rdao.getAllCompetences();
+    }
+    public List<Applications> getAllApplications(){
+        return rdao.getAllApplications();
+    }
+
+    public List<Applications> getApplications(Date submissionDate, String periodFrom, String periodTo, long competence, String firstname) {
+        
+        return rdao.getApplications(submissionDate,periodFrom, periodTo, competence, firstname);
     }
     
 }
