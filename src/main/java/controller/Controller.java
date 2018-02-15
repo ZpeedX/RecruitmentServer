@@ -13,7 +13,6 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import model.Competence;
 import model.Person;
-import net.User;
 
 /**
  *
