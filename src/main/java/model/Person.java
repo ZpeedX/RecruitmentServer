@@ -6,7 +6,6 @@
 package model;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -23,7 +22,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
@@ -42,6 +40,9 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Person.findByPassword", query = "SELECT p FROM Person p WHERE p.password = :password")
     , @NamedQuery(name = "Person.findByUsername", query = "SELECT p FROM Person p WHERE p.username = :username")})
 public class Person implements Serializable {
+
+    @OneToMany(mappedBy = "personId")
+    private List<CompetenceProfile> competenceProfileList;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "personId")
     private List<Applications> applicationsList;
@@ -177,6 +178,15 @@ public class Person implements Serializable {
 
     public void setApplicationsList(List<Applications> applicationsList) {
         this.applicationsList = applicationsList;
+    }
+
+    @XmlTransient
+    public List<CompetenceProfile> getCompetenceProfileList() {
+        return competenceProfileList;
+    }
+
+    public void setCompetenceProfileList(List<CompetenceProfile> competenceProfileList) {
+        this.competenceProfileList = competenceProfileList;
     }
 
     

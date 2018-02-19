@@ -33,6 +33,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "APPLICATIONS")
 @XmlRootElement
 @NamedQueries({
+    
     @NamedQuery(name = "Applications.findAll", query = "SELECT a FROM Applications a")
     , @NamedQuery(name = "Applications.findByApplicationId", query = "SELECT a FROM Applications a WHERE a.applicationId = :applicationId")
     , @NamedQuery(name = "Applications.findByParams", 

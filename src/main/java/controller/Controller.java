@@ -13,7 +13,7 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import model.Applications;
-import model.Competence;
+import model.CompetenceName;
 import model.Person;
 
 /**
@@ -34,7 +34,7 @@ public class Controller {
         return rdao.registerPerson(newUser);
     }
     
-    public List<Competence> getAllCompetences() {
+    public List<CompetenceName> getAllCompetences() {
         return rdao.getAllCompetences();
     }
     public List<Applications> getAllApplications(){

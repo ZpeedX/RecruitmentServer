@@ -17,7 +17,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
 import model.Applications;
-import model.Competence;
+import model.CompetenceName;
 import model.Person;
 import model.Role;
 
@@ -73,8 +73,8 @@ public class RecruitmentDAO {
         }
     }
 
-    public List<Competence> getAllCompetences() {
-        TypedQuery<Competence> query = em.createNamedQuery("Competence.findAll", Competence.class);
+    public List<CompetenceName> getAllCompetences() {
+        TypedQuery<CompetenceName> query = em.createNamedQuery("Competence.findAll", CompetenceName.class);
         return query.getResultList();
     }
     

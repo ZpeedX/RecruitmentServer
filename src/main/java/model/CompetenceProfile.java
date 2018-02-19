@@ -6,7 +6,7 @@
 package model;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
+import java.math.BigInteger;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -21,7 +21,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Evan
+ * @author Emil
  */
 @Entity
 @Table(name = "COMPETENCE_PROFILE")
@@ -29,7 +29,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "CompetenceProfile.findAll", query = "SELECT c FROM CompetenceProfile c")
     , @NamedQuery(name = "CompetenceProfile.findByCompetenceProfileId", query = "SELECT c FROM CompetenceProfile c WHERE c.competenceProfileId = :competenceProfileId")
-    , @NamedQuery(name = "CompetenceProfile.findByYearsOfExperience", query = "SELECT c FROM CompetenceProfile c WHERE c.yearsOfExperience = :yearsOfExperience")})
+    , @NamedQuery(name = "CompetenceProfile.findByYearsOfExperience", query = "SELECT c FROM CompetenceProfile c WHERE c.yearsOfExperience = :yearsOfExperience")
+    , @NamedQuery(name = "CompetenceProfile.findByCompetenceId", query = "SELECT c FROM CompetenceProfile c WHERE c.competenceId = :competenceId")})
 public class CompetenceProfile implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -38,16 +39,12 @@ public class CompetenceProfile implements Serializable {
     @NotNull
     @Column(name = "COMPETENCE_PROFILE_ID")
     private Long competenceProfileId;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    @Basic(optional = false)
-    @NotNull
     @Column(name = "YEARS_OF_EXPERIENCE")
-    private BigDecimal yearsOfExperience;
-    @JoinColumn(name = "COMPETENCE_ID", referencedColumnName = "COMPETENCE_ID")
-    @ManyToOne(optional = false)
-    private Competence competenceId;
+    private Long yearsOfExperience;
+    @Column(name = "COMPETENCE_ID")
+    private BigInteger competenceId;
     @JoinColumn(name = "PERSON_ID", referencedColumnName = "PERSON_ID")
-    @ManyToOne(optional = false)
+    @ManyToOne
     private Person personId;
 
     public CompetenceProfile() {
@@ -55,11 +52,6 @@ public class CompetenceProfile implements Serializable {
 
     public CompetenceProfile(Long competenceProfileId) {
         this.competenceProfileId = competenceProfileId;
-    }
-
-    public CompetenceProfile(Long competenceProfileId, BigDecimal yearsOfExperience) {
-        this.competenceProfileId = competenceProfileId;
-        this.yearsOfExperience = yearsOfExperience;
     }
 
     public Long getCompetenceProfileId() {
@@ -70,19 +62,19 @@ public class CompetenceProfile implements Serializable {
         this.competenceProfileId = competenceProfileId;
     }
 
-    public BigDecimal getYearsOfExperience() {
+    public Long getYearsOfExperience() {
         return yearsOfExperience;
     }
 
-    public void setYearsOfExperience(BigDecimal yearsOfExperience) {
+    public void setYearsOfExperience(Long yearsOfExperience) {
         this.yearsOfExperience = yearsOfExperience;
     }
 
-    public Competence getCompetenceId() {
+    public BigInteger getCompetenceId() {
         return competenceId;
     }
 
-    public void setCompetenceId(Competence competenceId) {
+    public void setCompetenceId(BigInteger competenceId) {
         this.competenceId = competenceId;
     }
 
@@ -116,7 +108,7 @@ public class CompetenceProfile implements Serializable {
 
     @Override
     public String toString() {
-        return "kth.iv1201.recruitmentserv.CompetenceProfile[ competenceProfileId=" + competenceProfileId + " ]";
+        return "model.CompetenceProfile[ competenceProfileId=" + competenceProfileId + " ]";
     }
     
 }

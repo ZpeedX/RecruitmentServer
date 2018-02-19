@@ -6,9 +6,8 @@
 package model;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -23,7 +22,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Evan
+ * @author Emil
  */
 @Entity
 @Table(name = "ROLE")
@@ -34,30 +33,24 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Role.findByName", query = "SELECT r FROM Role r WHERE r.name = :name")})
 public class Role implements Serializable {
 
+    @OneToMany(mappedBy = "roleId")
+    private List<Person> personList;
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
     @NotNull
     @Column(name = "ROLE_ID")
     private Long roleId;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 255)
+    @Size(max = 255)
     @Column(name = "NAME")
     private String name;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "roleId")
-    private Collection<Person> personCollection;
 
     public Role() {
     }
 
     public Role(Long roleId) {
         this.roleId = roleId;
-    }
-
-    public Role(Long roleId, String name) {
-        this.roleId = roleId;
-        this.name = name;
     }
 
     public Long getRoleId() {
@@ -74,15 +67,6 @@ public class Role implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    @XmlTransient
-    public Collection<Person> getPersonCollection() {
-        return personCollection;
-    }
-
-    public void setPersonCollection(Collection<Person> personCollection) {
-        this.personCollection = personCollection;
     }
 
     @Override
@@ -107,7 +91,16 @@ public class Role implements Serializable {
 
     @Override
     public String toString() {
-        return "kth.iv1201.recruitmentserv.Role[ roleId=" + roleId + " ]";
+        return "model.Role[ roleId=" + roleId + " ]";
+    }
+
+    @XmlTransient
+    public List<Person> getPersonList() {
+        return personList;
+    }
+
+    public void setPersonList(List<Person> personList) {
+        this.personList = personList;
     }
     
 }

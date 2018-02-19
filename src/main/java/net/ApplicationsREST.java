@@ -23,7 +23,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import model.Applications;
-import model.Competence;
+import model.CompetenceName;
+
 
 /**
  *
@@ -47,7 +48,7 @@ public class ApplicationsREST {
         JsonArray list = null;
         switch (entity.getString("type")) {
             case "getAllCompetences":
-                List<Competence> comps = contr.getAllCompetences();
+                List<CompetenceName> comps = contr.getAllCompetences();
                 list = compListToJsonArray(comps);
                 break;
             case "getAllJobApplications":
@@ -91,10 +92,10 @@ public class ApplicationsREST {
         return list;
     }
 
-    public JsonArray compListToJsonArray(List<Competence> list) {
+    public JsonArray compListToJsonArray(List<CompetenceName> list) {
         JsonArrayBuilder builder = Json.createArrayBuilder();
-        for (Competence l : list) {
-            builder.add(l.toJson().build());
+        for (CompetenceName l : list) {
+            //builder.add(l.toJson().build());
         }
         return builder.build();
     }
