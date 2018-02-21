@@ -70,9 +70,9 @@ public class Controller {
         return rdao.getAllApplications();
     }
 
-    public List<Applications> getApplications(Date submissionDate, String periodFrom, String periodTo, long competence, String firstname) {
+    public List<Applications> getApplications(Date submissionDate, Date periodFrom, Date periodTo, long competence, String firstname, Date dummyDate) {
         
-        return rdao.getApplications(submissionDate,periodFrom, periodTo, competence, firstname);
+        return rdao.getApplications(submissionDate,periodFrom, periodTo, competence, firstname, dummyDate);
     }
 	
     public void addCompetenceProfiles(String user, List<CompetenceProfileDTO> profiles) {
