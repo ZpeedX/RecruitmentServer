@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "SupportedLanguage.findAll", query = "SELECT s FROM SupportedLanguage s")
-    , @NamedQuery(name = "SupportedLanguage.findBySlId", query = "SELECT s FROM SupportedLanguage s WHERE s.slId = :slId")
+    , @NamedQuery(name = "SupportedLanguage.findBySupportedLanguageId", query = "SELECT s FROM SupportedLanguage s WHERE s.supportedLanguageId = :supportedLanguageId")
     , @NamedQuery(name = "SupportedLanguage.findByLocale", query = "SELECT s FROM SupportedLanguage s WHERE s.locale = :locale")})
 public class SupportedLanguage implements Serializable {
 
@@ -34,8 +34,8 @@ public class SupportedLanguage implements Serializable {
     @Id
     @Basic(optional = false)
     @NotNull
-    @Column(name = "SL_ID")
-    private Long slId;
+    @Column(name = "SUPPORTED_LANGUAGE_ID")
+    private Long supportedLanguageId;
     @Size(max = 255)
     @Column(name = "LOCALE")
     private String locale;
@@ -43,16 +43,16 @@ public class SupportedLanguage implements Serializable {
     public SupportedLanguage() {
     }
 
-    public SupportedLanguage(Long slId) {
-        this.slId = slId;
+    public SupportedLanguage(Long supportedLanguageId) {
+        this.supportedLanguageId = supportedLanguageId;
     }
 
-    public Long getSlId() {
-        return slId;
+    public Long getSupportedLanguageId() {
+        return supportedLanguageId;
     }
 
-    public void setSlId(Long slId) {
-        this.slId = slId;
+    public void setSupportedLanguageId(Long supportedLanguageId) {
+        this.supportedLanguageId = supportedLanguageId;
     }
 
     public String getLocale() {
@@ -66,7 +66,7 @@ public class SupportedLanguage implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (slId != null ? slId.hashCode() : 0);
+        hash += (supportedLanguageId != null ? supportedLanguageId.hashCode() : 0);
         return hash;
     }
 
@@ -77,7 +77,7 @@ public class SupportedLanguage implements Serializable {
             return false;
         }
         SupportedLanguage other = (SupportedLanguage) object;
-        if ((this.slId == null && other.slId != null) || (this.slId != null && !this.slId.equals(other.slId))) {
+        if ((this.supportedLanguageId == null && other.supportedLanguageId != null) || (this.supportedLanguageId != null && !this.supportedLanguageId.equals(other.supportedLanguageId))) {
             return false;
         }
         return true;
@@ -85,7 +85,7 @@ public class SupportedLanguage implements Serializable {
 
     @Override
     public String toString() {
-        return "model.SupportedLanguage[ slId=" + slId + " ]";
+        return "model.SupportedLanguage[ SupportedLanguageId=" + supportedLanguageId + " ]";
     }
     
 }

@@ -40,7 +40,7 @@ import javax.xml.bind.annotation.XmlRootElement;
             query = "SELECT DISTINCT app "
                     + "FROM Applications app, CompetenceProfile cp "
                     + "WHERE (app.personId.name = :firstname OR :firstname = '')"
-                    + "AND ((cp.competenceId.competenceId = :cpId AND app.personId = cp.personId) OR :cpId = 0) "
+                    + "AND ((cp.competenceId = :cpId AND app.personId = cp.personId) OR :cpId = 0) "
                     + "AND (app.registrationDate = :regDate OR :regDate = :tempDate)"
                   )})
 public class Applications implements Serializable {

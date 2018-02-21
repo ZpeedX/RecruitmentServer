@@ -6,6 +6,9 @@
 package model;
 
 import java.io.Serializable;
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -29,8 +32,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "CompetenceName.findAll", query = "SELECT c FROM CompetenceName c")
     , @NamedQuery(name = "CompetenceName.findByCompetenceNameId", query = "SELECT c FROM CompetenceName c WHERE c.competenceNameId = :competenceNameId")
-    , @NamedQuery(name = "CompetenceName.findBySupportedLanguageId", query = "SELECT c FROM CompetenceName c WHERE c.supportedLanguageId = :supportedLanguageId")
-    , @NamedQuery(name = "CompetenceName.findByName", query = "SELECT c FROM CompetenceName c WHERE c.name = :name")})
+    , @NamedQuery(name = "CompetenceName.findByName", query = "SELECT c FROM CompetenceName c WHERE c.name = :name")
+    , @NamedQuery(name = "CompetenceName.findByCompetenceId", query = "SELECT c FROM CompetenceName c WHERE c.competenceId = :competenceId")})
 public class CompetenceName implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -39,13 +42,18 @@ public class CompetenceName implements Serializable {
     @NotNull
     @Column(name = "COMPETENCE_NAME_ID")
     private Long competenceNameId;
-    @Basic(optional = false)
-    @NotNull
     @JoinColumn(name = "SUPPORTED_LANGUAGE_ID", referencedColumnName = "SUPPORTED_LANGUAGE_ID")
     @ManyToOne(optional = false)
     private SupportedLanguage supportedLanguageId;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 255)
     @Column(name = "NAME")
     private String name;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "COMPETENCE_ID")
+    private long competenceId;
 
     public CompetenceName() {
     }
@@ -54,9 +62,10 @@ public class CompetenceName implements Serializable {
         this.competenceNameId = competenceNameId;
     }
 
-    public CompetenceName(Long competenceNameId, String name) {
+    public CompetenceName(Long competenceNameId, String name, long competenceId) {
         this.competenceNameId = competenceNameId;
         this.name = name;
+        this.competenceId = competenceId;
     }
 
     public Long getCompetenceNameId() {
@@ -83,6 +92,14 @@ public class CompetenceName implements Serializable {
         this.name = name;
     }
 
+    public long getCompetenceId() {
+        return competenceId;
+    }
+
+    public void setCompetenceId(long competenceId) {
+        this.competenceId = competenceId;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -106,6 +123,13 @@ public class CompetenceName implements Serializable {
     @Override
     public String toString() {
         return "model.CompetenceName[ competenceNameId=" + competenceNameId + " ]";
+    }
+    
+    public JsonObject toJson() {
+        JsonObjectBuilder obj = Json.createObjectBuilder()
+                .add("name", name)
+                .add("id", competenceNameId);
+        return obj.build();
     }
     
 }

@@ -6,7 +6,6 @@
 package model;
 
 import java.io.Serializable;
-import java.math.BigInteger;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -42,7 +41,7 @@ public class CompetenceProfile implements Serializable {
     @Column(name = "YEARS_OF_EXPERIENCE")
     private Long yearsOfExperience;
     @Column(name = "COMPETENCE_ID")
-    private BigInteger competenceId;
+    private Long competenceId;
     @JoinColumn(name = "PERSON_ID", referencedColumnName = "PERSON_ID")
     @ManyToOne
     private Person personId;
@@ -70,11 +69,11 @@ public class CompetenceProfile implements Serializable {
         this.yearsOfExperience = yearsOfExperience;
     }
 
-    public BigInteger getCompetenceId() {
+    public Long getCompetenceId() {
         return competenceId;
     }
 
-    public void setCompetenceId(BigInteger competenceId) {
+    public void setCompetenceId(Long competenceId) {
         this.competenceId = competenceId;
     }
 

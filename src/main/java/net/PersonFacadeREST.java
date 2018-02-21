@@ -6,6 +6,7 @@
 package net;
 
 import controller.Controller;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.json.JsonObject;
@@ -14,7 +15,9 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import model.CompetenceName;
 import model.Person;
+import model.SupportedLanguage;
 
 /**
  *
@@ -47,7 +50,7 @@ public class PersonFacadeREST {
                 Person person = new Person(user.getString("name"), user.getString("surname"), user.getString("ssn"),
                         user.getString("email"), user.getString("password"), user.getString("username"));
                 return register(person);
-                
+
             case "logout":
                 logout(user.getString("uid"));
                 return "";
@@ -56,6 +59,7 @@ public class PersonFacadeREST {
                 return "";
         }
     }
+
 
     private String login(User newUser) {
         Person per = cont.authenticate(newUser.getUsername());
