@@ -23,7 +23,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import model.Applications;
-import model.Competence;
+import model.CompetenceName;
+import model.SupportedLanguage;
+
 
 /**
  *
@@ -47,8 +49,8 @@ public class ApplicationsREST {
         JsonArray list = null;
         switch (entity.getString("type")) {
             case "getAllCompetences":
-                List<Competence> comps = contr.getAllCompetences();
-                list = compListToJsonArray(comps);
+                List<CompetenceName> comps = contr.getAllCompetences();
+                list = compListToJsonArray(comps, entity.getString("locale"));
                 break;
             case "getAllJobApplications":
                 List<Applications> applications = contr.getAllApplications();
@@ -91,10 +93,12 @@ public class ApplicationsREST {
         return list;
     }
 
-    public JsonArray compListToJsonArray(List<Competence> list) {
+    public JsonArray compListToJsonArray(List<CompetenceName> list, String locale) {
         JsonArrayBuilder builder = Json.createArrayBuilder();
-        for (Competence l : list) {
-            builder.add(l.toJson().build());
+        SupportedLanguage id = contr.getSl(locale);
+        for (CompetenceName l : list) {
+            if(l.getSupportedLanguageId().equals(id))
+            builder.add(l.toJson());
         }
         return builder.build();
     }

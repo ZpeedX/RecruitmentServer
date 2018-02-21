@@ -33,13 +33,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "APPLICATIONS")
 @XmlRootElement
 @NamedQueries({
+    
     @NamedQuery(name = "Applications.findAll", query = "SELECT a FROM Applications a")
     , @NamedQuery(name = "Applications.findByApplicationId", query = "SELECT a FROM Applications a WHERE a.applicationId = :applicationId")
     , @NamedQuery(name = "Applications.findByParams", 
             query = "SELECT DISTINCT app "
                     + "FROM Applications app, CompetenceProfile cp "
                     + "WHERE (app.personId.name = :firstname OR :firstname = '')"
-                    + "AND ((cp.competenceId.competenceId = :cpId AND app.personId = cp.personId) OR :cpId = 0) "
+                    + "AND ((cp.competenceId = :cpId AND app.personId = cp.personId) OR :cpId = 0) "
                     + "AND (app.registrationDate = :regDate OR :regDate = :tempDate)"
                   )})
 public class Applications implements Serializable {

@@ -14,12 +14,14 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
 import model.Applications;
-import model.Competence;
+import model.CompetenceName;
 import model.Person;
 import model.Role;
+import model.SupportedLanguage;
 
 /**
  *
@@ -73,9 +75,15 @@ public class RecruitmentDAO {
         }
     }
 
-    public List<Competence> getAllCompetences() {
-        TypedQuery<Competence> query = em.createNamedQuery("Competence.findAll", Competence.class);
+    public List<CompetenceName> getAllCompetences() {
+        TypedQuery<CompetenceName> query = em.createNamedQuery("CompetenceName.findAll", CompetenceName.class);
         return query.getResultList();
+    }
+    
+    public SupportedLanguage getSlId(String locale){
+        TypedQuery<SupportedLanguage> p = em.createNamedQuery("SupportedLanguage.findByLocale", SupportedLanguage.class)
+                .setParameter("locale", locale);
+        return p.getSingleResult();
     }
     
     public List<Applications> getAllApplications() {
