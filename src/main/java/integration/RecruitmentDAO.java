@@ -5,7 +5,7 @@
  */
 package integration;
 
-import java.math.BigDecimal;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -15,7 +15,7 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+
 import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
 import model.Applications;
@@ -81,7 +81,9 @@ public class RecruitmentDAO {
             return null;
         }
     }
-
+    public List<CompetenceName> listCompetence() {
+        return em.createNamedQuery("CompetenceName.findAll", CompetenceName.class).getResultList();
+    }
     public List<CompetenceName> getAllCompetences() {
         TypedQuery<CompetenceName> query = em.createNamedQuery("CompetenceName.findAll", CompetenceName.class);
         return query.getResultList();
@@ -141,8 +143,8 @@ public class RecruitmentDAO {
         
         profiles.forEach(p -> {
             CompetenceProfile cp = new CompetenceProfile();
-            cp.setCompetenceId(em.find(Competence.class, p.getCompetenceId()));
-            cp.setYearsOfExperience(new BigDecimal(p.getYearsOfExperience()));
+            cp.setCompetenceId(p.getCompetenceId());
+            cp.setYearsOfExperience((long) p.getYearsOfExperience());
             cp.setPersonId(person);
             try {
                 em.persist(cp);

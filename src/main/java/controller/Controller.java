@@ -22,7 +22,6 @@ import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import model.AvailabilityDTO;
 import model.CompetenceDTO;
-import model.Competence;
 import model.CompetenceProfileDTO;
 import model.Person;
 import model.Token;
