@@ -5,6 +5,7 @@
  */
 package integration;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -19,10 +20,16 @@ import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
 import model.Applications;
 import model.CompetenceName;
+import model.CompetenceProfile;
+import model.CompetenceProfileDTO;
 import model.Person;
 import model.Role;
 import model.SupportedLanguage;
 
+import model.Availability;
+import model.AvailabilityDTO;
+
+import javax.validation.ConstraintViolationException;
 /**
  *
  * @author Emil
@@ -106,5 +113,45 @@ public class RecruitmentDAO {
                         .setParameter("tempDate", tempDate, TemporalType.DATE);
                 
         return query.getResultList();
+    }
+
+    public void addAvailabilities(String user, List<AvailabilityDTO> availabilities) {
+        Person person = em.createNamedQuery("Person.findByUsername", Person.class).setParameter("username", user).getSingleResult();
+        System.out.println("Person is : " + person.getName() + ", email: " + person.getEmail());
+        
+        availabilities.forEach(a -> {
+            Availability availability = new Availability();
+            availability.setPersonId(person);
+            availability.setFromDate(a.getFromDate());
+            availability.setToDate(a.getToDate());
+            try {
+                em.persist(availability);
+            } catch (ConstraintViolationException e) { // LOG these errors
+                e.getConstraintViolations().forEach(err -> System.out.println("err = " + err.toString()));
+            } catch (Exception ex) {
+                System.out.println("ERROR ADDING TO DB: " + ex.getMessage());
+                ex.printStackTrace();
+            }
+        });
+    }
+	
+    public void addCompetenceProfiles(String user, List<CompetenceProfileDTO> profiles) {
+        Person person = em.createNamedQuery("Person.findByUsername", Person.class).setParameter("username", user).getSingleResult();
+        System.out.println("Person is : " + person.getName() + ", email: " + person.getEmail());
+        
+        profiles.forEach(p -> {
+            CompetenceProfile cp = new CompetenceProfile();
+            cp.setCompetenceId(em.find(Competence.class, p.getCompetenceId()));
+            cp.setYearsOfExperience(new BigDecimal(p.getYearsOfExperience()));
+            cp.setPersonId(person);
+            try {
+                em.persist(cp);
+            } catch (ConstraintViolationException e) { // LOG these errors
+                e.getConstraintViolations().forEach(err -> System.out.println("err = " + err.toString()));
+            } catch (Exception ex) {
+                System.out.println("ERROR ADDING TO DB: " + ex.getMessage());
+                ex.printStackTrace();
+            }
+        });
     }
 }

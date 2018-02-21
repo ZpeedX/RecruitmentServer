@@ -6,18 +6,17 @@
 package net;
 
 import controller.Controller;
-import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.json.JsonObject;
+import javax.json.spi.JsonProvider;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import model.CompetenceName;
+import javax.ws.rs.core.Response;
 import model.Person;
-import model.SupportedLanguage;
 
 /**
  *
@@ -31,56 +30,55 @@ public class PersonFacadeREST {
     @Inject
     private Controller cont;
 
-    @Inject
-    private SessionHandler sessionhandler;
-
     public PersonFacadeREST() {
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.TEXT_PLAIN)
-    public String fromServ(JsonObject user) {
-        switch (user.getString("type")) {
-            case "login":
-                User newUser = new User(user.getString("username"), user.getString("password"));
-                return login(newUser);
-
-            case "register":
-                Person person = new Person(user.getString("name"), user.getString("surname"), user.getString("ssn"),
-                        user.getString("email"), user.getString("password"), user.getString("username"));
-                return register(person);
-
-            case "logout":
-                logout(user.getString("uid"));
-                return "";
-                
-            default:
-                return "";
-        }
-    }
-
-
-    private String login(User newUser) {
-        Person per = cont.authenticate(newUser.getUsername());
-        if (per != null && per.authenticate(newUser.getPassword())) {
-            return sessionhandler.logon(per).toString();
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response fromServ(JsonObject user) {
+        if (user.getString("type").equals("login")) {
+            return Response.ok(login(user)).build();
         } else {
-            return "invalid";
+            Person person = new Person(user.getString("name"), user.getString("surname"), user.getString("ssn"),
+                    user.getString("email"), user.getString("password"), user.getString("username"));
+            return Response.ok(register(person)).build();
         }
     }
 
-    private void logout(String id) {
-        sessionhandler.logout(id);
+    private JsonObject login(JsonObject newUser) {
+        Person per = cont.authenticate(newUser.getString("username", ""));
+        if (per != null && per.authenticate(newUser.getString("password", ""))) {
+            String token = cont.login(per.getUsername(), per.getRoleId().getName());
+            String role = cont.getRoleFromToken(token);
+            return successJson(token, role);
+        } else {
+            return errorJson("invalid");
+        }
     }
 
-    private String register(Person person) {
+    private JsonObject register(Person person) {
         p = cont.register(person);
         if (p != null) {
-            return sessionhandler.logon(p).toString();
+            String token = cont.login(p.getUsername(), p.getRoleId().getName());
+            String role = cont.getRoleFromToken(token);
+            return successJson(token, role);
         } else {
-            return "invalid";
+            return errorJson("invalid");
         }
     }
 
+    private JsonObject errorJson(String msg) {
+        JsonObject json = JsonProvider.provider().createObjectBuilder()
+                .add("error", msg).build();
+        
+        return json;
+    }
+    
+    private JsonObject successJson(String token, String role) {
+        JsonObject json = JsonProvider.provider().createObjectBuilder()
+                .add("token", token).add("role", role).build();
+        
+        return json;
+    }
 }
