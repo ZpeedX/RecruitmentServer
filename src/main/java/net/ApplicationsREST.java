@@ -65,32 +65,41 @@ public class ApplicationsREST {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("searchApplications")
     public JsonArray searcApplications(JsonObject entity) {
-        JsonArray list = null;
-        switch (entity.getString("type")) {
-            case "searchApplications":
-                Date regDate = null;
-                try{
-                 regDate = new SimpleDateFormat("d-MM-yyyy").parse(entity.getString("subDate"));
-                } catch(ParseException e){
-                    try{
-                        System.out.println("hello");
-                    regDate = new SimpleDateFormat("d-MM-yyyy").parse("1-11-0000");
-                    } catch(ParseException ex){
-                        System.out.println("hello1");
-                    }
-                }
-                
-                List<Applications> applications
-                        = contr.getApplications(
-                                regDate,
-                                entity.getString("periodFrom"),
-                                entity.getString("periodTo"),
-                                Long.parseLong(entity.getString("competence")),
-                                entity.getString("name"));
-                list = appListToJsonArray(applications);
+        Date regDate, periodFrom, periodTo, dummyDate;
+        SimpleDateFormat formatDate = new SimpleDateFormat("d-MM-yyyy");
 
+        try {
+            dummyDate = formatDate.parse("0-00-0000");
+        } catch (ParseException e) {
+            return null;
         }
-        return list;
+
+        try {
+            regDate = formatDate.parse(entity.getString("subDate"));
+        } catch (ParseException e) {
+            regDate = dummyDate;
+        }
+        try {
+            periodFrom = formatDate.parse(entity.getString("periodFrom"));
+        } catch (ParseException e) {
+            periodFrom = dummyDate;
+        }
+        try {
+            periodTo = formatDate.parse(entity.getString("periodTo"));
+        } catch (ParseException e) {
+            periodTo = dummyDate;
+        }
+
+        List<Applications> applications
+                = contr.getApplications(
+                        regDate,
+                        periodFrom,
+                        periodTo,
+                        Long.parseLong(entity.getString("competence")),
+                        entity.getString("name"),
+                        dummyDate);
+        return appListToJsonArray(applications);
+
     }
 
     public JsonArray compListToJsonArray(List<CompetenceName> list, String locale) {

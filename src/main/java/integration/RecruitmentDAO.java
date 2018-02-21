@@ -100,20 +100,15 @@ public class RecruitmentDAO {
         return query.getResultList();
     }
 
-    public List<Applications> getApplications(Date submissionDate, String periodFrom, String periodTo, long competence, String firstname) {
-        Date tempDate = null;
-        try{
-                 tempDate = new SimpleDateFormat("d-MM-yyyy").parse("1-11-0000");
-        }catch(ParseException e){
-            
-        }
-                TypedQuery<Applications> query = 
-                        em.createNamedQuery("Applications.findByParams", Applications.class)
+    public List<Applications> getApplications(Date submissionDate, Date periodFrom, Date periodTo, long competence, String firstname, Date dummyDate) {
+        TypedQuery<Applications> query
+                = em.createNamedQuery("Applications.findByParams", Applications.class)
                         .setParameter("firstname", firstname)
                         .setParameter("cpId", competence)
                         .setParameter("regDate", submissionDate, TemporalType.DATE)
-                        .setParameter("tempDate", tempDate, TemporalType.DATE);
-                
+                        .setParameter("tempDate", dummyDate, TemporalType.DATE)
+                        .setParameter("datePeriodFrom", periodFrom, TemporalType.DATE)
+                        .setParameter("datePeriodTo", periodTo, TemporalType.DATE);
         return query.getResultList();
     }
 

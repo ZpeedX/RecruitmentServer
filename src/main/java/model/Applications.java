@@ -38,10 +38,12 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Applications.findByApplicationId", query = "SELECT a FROM Applications a WHERE a.applicationId = :applicationId")
     , @NamedQuery(name = "Applications.findByParams", 
             query = "SELECT DISTINCT app "
-                    + "FROM Applications app, CompetenceProfile cp "
+                    + "FROM Applications app, CompetenceProfile cp, Availability av "
                     + "WHERE (app.personId.name = :firstname OR :firstname = '')"
                     + "AND ((cp.competenceId = :cpId AND app.personId = cp.personId) OR :cpId = 0) "
-                    + "AND (app.registrationDate = :regDate OR :regDate = :tempDate)"
+                    + "AND (app.registrationDate = :regDate OR :regDate = :tempDate) "
+                    + "AND ((av.fromDate >= :datePeriodFrom AND app.personId = av.personId) OR :datePeriodFrom = :tempDate) "
+                    + "AND ((av.toDate <= :datePeriodTo AND app.personId = av.personId ) OR :datePeriodTo = :tempDate)"
                   )})
 public class Applications implements Serializable {
 
@@ -116,6 +118,7 @@ public class Applications implements Serializable {
     }
     public JsonObject toJson() {
         JsonObjectBuilder obj = Json.createObjectBuilder()
+                .add("applicationId", applicationId.toString())
                 .add("firstname", personId.getName())
                 .add("surname", personId.getSurname())
                 .add("email", personId.getEmail());
