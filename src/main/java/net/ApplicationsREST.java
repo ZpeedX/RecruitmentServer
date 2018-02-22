@@ -27,12 +27,15 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import model.Applications;
 import model.CompetenceDTO;
+import model.RoleEnum;
+import model.Secured;
 
 /**
  *
  * @author Evan
  */
 @Stateless
+//@Secured({RoleEnum.Recruiter})
 @Path("applications")
 public class ApplicationsREST {
 
