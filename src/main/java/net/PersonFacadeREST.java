@@ -27,6 +27,7 @@ import model.Secured;
 /**
  *
  * @author Emil
+ * @author Oscar
  */
 @Stateless
 @Path("auth")
@@ -38,19 +39,6 @@ public class PersonFacadeREST {
     @Context SecurityContext securityContext;
 
     public PersonFacadeREST() {
-    }
-
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response fromServ(JsonObject user) {
-        if (user.getString("type").equals("login")) {
-            return Response.ok(login(user)).build();
-        } else {
-            Person person = new Person(user.getString("name"), user.getString("surname"), user.getString("ssn"),
-                    user.getString("email"), user.getString("password"), user.getString("username"));
-            return Response.ok(register(person)).build();
-        }
     }
     
     @POST
