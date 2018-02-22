@@ -40,7 +40,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Applications.findByParams", 
             query = "SELECT DISTINCT app "
                     + "FROM Applications app, CompetenceProfile cp, Availability av "
-                    + "WHERE (app.personId.name = :firstname OR :firstname = '')"
+                    + "WHERE (LOWER(app.personId.name) = LOWER(:firstname) OR :firstname = '')"
                     + "AND ((cp.competenceId = :cpId AND app.personId = cp.personId) OR :cpId = 0) "
                     + "AND (app.registrationDate = :regDate OR :regDate = :tempDate) "
                     + "AND ((av.fromDate >= :datePeriodFrom AND app.personId = av.personId) OR :datePeriodFrom = :tempDate) "
