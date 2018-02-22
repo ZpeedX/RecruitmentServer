@@ -24,6 +24,12 @@ public class TokenDAO {
     @PersistenceContext(unitName = "tokenPU")
     private EntityManager em;
     
+    /**
+     * This method tries to store the token issued to a user to the database.
+     * 
+     * @param token the token to be stored
+     * @return boolean true if successfully added to the database, else false
+     */
     public boolean addToken(Token token) {
         boolean success = false;
         
@@ -38,10 +44,23 @@ public class TokenDAO {
         return success;
     }
     
+    /**
+     * This method retrieves the token issued a specific user from the database.
+     * 
+     * @param username the username of the user
+     * @return Token the token the user has been issued or null if none
+     */
     public Token getTokenFromUsername(String username) {
         return em.find(Token.class, username);
     }
     
+    /**
+     * This method retrieves the username from the database for whom 
+     * the token has been issued.
+     * 
+     * @param token the string value the token has
+     * @return String the username of the token holder
+     */
     public String getUsernameFromToken(String token) {
         try {
             return em.createNamedQuery("Token.findByToken", Token.class)
@@ -53,12 +72,25 @@ public class TokenDAO {
         }
     }
     
+    /**
+     * This method checks in the database if a user belongs to the role entered.
+     * 
+     * @param username the username of signed in user
+     * @param role the role the user has been assigned
+     * @return boolean true is the user belongs to the role, else false
+     */
     public boolean isUserInRole(String username, String role) {
         Token token = em.find(Token.class, username);
         
         return token == null ? false : role.equals(token.getRole());
     }
     
+    /**
+     * This method checks if a user has a valid token in the database.
+     * 
+     * @param issuedToken the token the user has been issued or uses
+     * @return boolean true if the token is valid, else false
+     */
     public boolean isValidToken(String issuedToken) {
         try {
             Token token = em.createNamedQuery("Token.findByToken", Token.class)
@@ -76,6 +108,13 @@ public class TokenDAO {
         return token == null ? false : now.before(token.getExpires());
     }
 
+    /**
+     * This method retrives the name of the role associated with the token of the 
+     * signed in user from the database.
+     * 
+     * @param token token genereted for signed in users
+     * @return String the name of the role the user belongs to
+     */
     public String getRoleFromToken(String token) {
         Token tok = em.createNamedQuery("Token.findByToken", Token.class)
                 .setParameter("token", token).getSingleResult();
@@ -83,6 +122,12 @@ public class TokenDAO {
         return tok == null ? null : tok.getRole();
     }
 
+    /**
+     * This method logs out a signed in user by using the entered username and
+     * invalidating the token in the database.
+     * 
+     * @param username logged in user
+     */
     public void logout(String username) {
         Token token = em.find(Token.class, username);
         token.setExpires(new Date(0));

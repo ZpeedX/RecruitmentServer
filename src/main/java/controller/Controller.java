@@ -29,6 +29,8 @@ import model.TokenGenerator;
 /**
  *
  * @author Emil
+ * @author Oscar
+ * @author Evan
  */
 @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 @Stateless
@@ -43,13 +45,32 @@ public class Controller {
     @Inject
     private TokenGenerator tokenGenerator;
 	
+    /**
+     * This method takes a username and checks if it is a valid username.
+     * 
+     * @param username the username of the individual trying to get authenticated
+     * @return Person the authenticated person or {@code null} if none
+     */
     public Person authenticate(String username) {
         return rdao.existsUser(username);
     }
+
+    /**
+     * This method registers a new user to the services.
+     * 
+     * @param newUser the Person getting registered
+     * @return Person if sucessfully registering a new person, else {@code null}
+     */
     public Person register(Person newUser) {
         return rdao.registerPerson(newUser);
     }
 	
+    /**
+     * This method retrieves a list of the competences available at these services.
+     * 
+     * @param locale language desired/specified by the user
+     * @return List<CompetenceDTO> with the competences
+     */
     public List<CompetenceDTO> listCompetence(String locale) {
         return rdao.getAllCompetences(locale).stream()
                 .map(competenceName -> new CompetenceDTO(
@@ -60,18 +81,45 @@ public class Controller {
                 ).collect(Collectors.toList());
     }	
 
+    /**
+     *
+     * @param lang
+     * @return
+     */
     public SupportedLanguage getSl(String lang){
         return rdao.getSlId(lang);
     }
+
+    /**
+     *
+     * @return
+     */
     public List<Applications> listApplications(){
         return rdao.getAllApplications();
     }
 
+    /**
+     *
+     * @param submissionDate
+     * @param periodFrom
+     * @param periodTo
+     * @param competence
+     * @param firstname
+     * @param dummyDate
+     * @return
+     */
     public List<Applications> getApplications(Date submissionDate, Date periodFrom, Date periodTo, long competence, String firstname, Date dummyDate) {
         
         return rdao.getApplications(submissionDate,periodFrom, periodTo, competence, firstname, dummyDate);
     }
 	
+    /**
+     * This method adds competence profiles of a user and tries to store them in the
+     * database. It first validates that the entered profiles.
+     * 
+     * @param user username of the signed in user to whom the profiles belong
+     * @param profiles the profiles with the information
+     */
     public void addCompetenceProfiles(String user, List<CompetenceProfileDTO> profiles) {
         List<CompetenceProfileDTO> cleanProfiles = new ArrayList<>();
         
@@ -86,24 +134,22 @@ public class Controller {
         }
     }
 
+    /**
+     *
+     * @param username
+     * @param availabilities
+     */
     public void addAvailabilities(String username, List<Availability> availabilities) {
         rdao.addAvailabilities(username, availabilities);
     }
-    
-    /*public void addAvailabilities(String user, List<AvailabilityDTO> availabilities) {
-        List<AvailabilityDTO> cleanAvailabilities = new ArrayList<>();
-
-        availabilities.forEach(a -> {
-            if(a.getFromDate() != null && a.getToDate() != null) {
-                cleanAvailabilities.add(a);
-            }
-        });
-
-        if (!cleanAvailabilities.isEmpty()) {
-            rdao.addAvailabilities(user, cleanAvailabilities);
-        }
-    }*/
 	
+    /**
+     * This method logs in a user.
+     * 
+     * @param username user to be logged in
+     * @param role the role to which this user belongs
+     * @return String the generated token value
+     */
     public String login(String username, String role) {
         Token token = tokenGenerator.generateToken(username, role);
         
@@ -114,10 +160,21 @@ public class Controller {
         return token.getToken();
     }
 
+    /**
+     * This method retrieves the role associated to a specific token value.
+     *
+     * @param token value of the users token
+     * @return String the role name the token belongs to
+     */
     public String getRoleFromToken(String token) {
         return tokenDAO.getRoleFromToken(token);
     }
 
+    /**
+     * This method logs out a user.
+     * 
+     * @param username user to be logged out
+     */
     public void logout(String username) {
         tokenDAO.logout(username);
     }
