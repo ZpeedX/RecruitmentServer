@@ -18,14 +18,21 @@ import javax.json.JsonArray;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.GenericEntity;
+import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import model.Applications;
+import model.CompetenceDTO;
 import model.CompetenceName;
+import model.RoleEnum;
+import model.Secured;
 import model.SupportedLanguage;
-
 
 /**
  *
@@ -41,29 +48,26 @@ public class ApplicationsREST {
     public ApplicationsREST() {
     }
 
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
+    @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("initAppListing")
-    public JsonArray initFromClient(JsonObject entity) {
-        JsonArray list = null;
-        switch (entity.getString("type")) {
-            case "getAllCompetences":
-                List<CompetenceName> comps = contr.getAllCompetences();
-                list = compListToJsonArray(comps, entity.getString("locale"));
-                break;
-            case "getAllJobApplications":
-                List<Applications> applications = contr.getAllApplications();
-                list = appListToJsonArray(applications);
+    @Path("listApplications")
+    public JsonArray listApplications() {
+        List<Applications> applications = contr.listApplications();
+        return appListToJsonArray(applications);
+    }
 
-        }
-        return list;
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("competence")
+    public Response listCompetences(@HeaderParam("language") String locale) {
+        return Response.ok(new GenericEntity<List<CompetenceDTO>>(contr.listCompetence(locale)) {
+        }, MediaType.APPLICATION_JSON).build();
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("searchApplications")
+    @Path("searchApplication")
     public JsonArray searcApplications(JsonObject entity) {
         Date regDate, periodFrom, periodTo, dummyDate;
         SimpleDateFormat formatDate = new SimpleDateFormat("d-MM-yyyy");
@@ -100,16 +104,6 @@ public class ApplicationsREST {
                         dummyDate);
         return appListToJsonArray(applications);
 
-    }
-
-    public JsonArray compListToJsonArray(List<CompetenceName> list, String locale) {
-        JsonArrayBuilder builder = Json.createArrayBuilder();
-        SupportedLanguage id = contr.getSl(locale);
-        for (CompetenceName l : list) {
-            if(l.getSupportedLanguageId().equals(id))
-            builder.add(l.toJson());
-        }
-        return builder.build();
     }
 
     public JsonArray appListToJsonArray(List<Applications> list) {

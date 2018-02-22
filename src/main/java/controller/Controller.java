@@ -49,24 +49,20 @@ public class Controller {
         return rdao.registerPerson(newUser);
     }
 	
-    public List<CompetenceDTO> listCompetence() {
-        return rdao.listCompetence().stream()
+    public List<CompetenceDTO> listCompetence(String locale) {
+        return rdao.getAllCompetences(locale).stream()
                 .map(competence -> new CompetenceDTO(
-                        competence.getCompetenceId(), 
-                        competence.getName())
+                        competence.getCompetenceNameId(), 
+                        competence.getCompetenceId(),
+                        competence.getName(),
+                        competence.getSupportedLanguageId().getLocale())
                 ).collect(Collectors.toList());
     }	
-/*
-    public SupportedLanguage getSlId() {
-        return rdao.getSlId("sv");
-    }*/
-    public List<CompetenceName> getAllCompetences() {
-        return rdao.getAllCompetences();
-    }
+
     public SupportedLanguage getSl(String lang){
         return rdao.getSlId(lang);
     }
-    public List<Applications> getAllApplications(){
+    public List<Applications> listApplications(){
         return rdao.getAllApplications();
     }
 

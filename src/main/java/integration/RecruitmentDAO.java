@@ -84,8 +84,9 @@ public class RecruitmentDAO {
     public List<CompetenceName> listCompetence() {
         return em.createNamedQuery("CompetenceName.findAll", CompetenceName.class).getResultList();
     }
-    public List<CompetenceName> getAllCompetences() {
-        TypedQuery<CompetenceName> query = em.createNamedQuery("CompetenceName.findAll", CompetenceName.class);
+    public List<CompetenceName> getAllCompetences(String locale) {
+        TypedQuery<CompetenceName> query = em.createNamedQuery("CompetenceName.findAllByLang", CompetenceName.class)
+                .setParameter("locale", locale);
         return query.getResultList();
     }
     

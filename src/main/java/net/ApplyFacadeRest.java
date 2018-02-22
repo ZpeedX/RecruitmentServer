@@ -43,7 +43,7 @@ public class ApplyFacadeRest {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<CompetenceDTO> listCompetence() {
-        return controller.listCompetence();
+        return null;
     }
     
     @GET
