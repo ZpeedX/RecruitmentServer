@@ -35,7 +35,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "CompetenceName.findAll", query = "SELECT c FROM CompetenceName c")
     , @NamedQuery(name = "CompetenceName.findByCompetenceNameId", query = "SELECT c FROM CompetenceName c WHERE c.competenceNameId = :competenceNameId")
     , @NamedQuery(name = "CompetenceName.findByName", query = "SELECT c FROM CompetenceName c WHERE c.name = :name")
-    , @NamedQuery(name = "CompetenceName.findByCompetenceId", query = "SELECT c FROM CompetenceName c WHERE c.competenceId = :competenceId")})
+    , @NamedQuery(name = "CompetenceName.findByCompetenceId", query = "SELECT c FROM CompetenceName c WHERE c.competenceId = :competenceId")
+    , @NamedQuery(name = "CompetenceName.findAllByLang", query = "SELECT c FROM CompetenceName c WHERE c.supportedLanguageId.locale = :locale")
+})
 public class CompetenceName implements Serializable {
 
     private static final long serialVersionUID = 1L;
