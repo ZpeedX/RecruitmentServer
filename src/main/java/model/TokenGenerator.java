@@ -26,6 +26,14 @@ public class TokenGenerator {
         return token;
     }
     
+    /**
+     * This method generates a new Token object for a specified user belonging 
+     * to a specific role. The token belongs to the {@code Token} class.
+     * 
+     * @param username user to issue token to.
+     * @param role the role the user belongs to.
+     * @return Token for the user.
+     */
     public Token generateToken(String username, String role) {
         String token = getNewTokenString();
         long issuedMs = System.currentTimeMillis();
