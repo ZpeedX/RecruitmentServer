@@ -4,10 +4,11 @@
     <jta-data-source>jdbc/recruitmentResource</jta-data-source>
     <class>model.Applications</class>
     <class>model.Availability</class>
-    <class>model.Competence</class>
+    <class>model.CompetenceName</class>
     <class>model.CompetenceProfile</class>
     <class>model.Person</class>
     <class>model.Role</class>
+    <class>model.SupportedLanguage</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.schema-generation.database.action" value="create"/>
