@@ -41,7 +41,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class CompetenceName implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "COMPETENCE_NAME_ID")
     private Long competenceNameId;
@@ -61,78 +62,98 @@ public class CompetenceName implements Serializable {
     public CompetenceName() {
     }
 
+    /**
+     * Class Constructor
+     *
+     * @param competenceNameId sets the competenceNameId property
+     */
     public CompetenceName(Long competenceNameId) {
         this.competenceNameId = competenceNameId;
     }
 
+    /**
+     * Class Constructor
+     *
+     * @param competenceNameId sets the competenceNameId property
+     * @param name sets the name property
+     * @param competenceId sets the competenceId property
+     */
     public CompetenceName(Long competenceNameId, String name, long competenceId) {
         this.competenceNameId = competenceNameId;
         this.name = name;
         this.competenceId = competenceId;
     }
 
+    /**
+     * Gets the value of the competenceNameId property
+     *
+     * @return competenceNameId as Long object
+     */
     public Long getCompetenceNameId() {
         return competenceNameId;
     }
 
+    /**
+     * Sets the competenceNameId property
+     *
+     * @param competenceNameId the competenceNameId to set
+     */
     public void setCompetenceNameId(Long competenceNameId) {
         this.competenceNameId = competenceNameId;
     }
 
+    /**
+     * Gets the value of the supportedLanguageId property
+     *
+     * @return supportedLanguageId as SupportedLanguage object
+     */
     public SupportedLanguage getSupportedLanguageId() {
         return supportedLanguageId;
     }
 
+    /**
+     * Sets the supportedLanguageId property
+     *
+     * @param supportedLanguageId the supportedLanguageId to set
+     */
     public void setSupportedLanguageId(SupportedLanguage supportedLanguageId) {
         this.supportedLanguageId = supportedLanguageId;
     }
 
+    /**
+     * Gets the value of the name property
+     *
+     * @return name as String object
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Sets the name property
+     *
+     * @param name the name to set
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+
+    /**
+     * Gets the value of the competenceId property
+     *
+     * @return competenceId as long
+     */    
     public long getCompetenceId() {
         return competenceId;
     }
 
+    /**
+     * Sets the competenceId property
+     *
+     * @param competenceId the competenceId to set
+     */
     public void setCompetenceId(long competenceId) {
         this.competenceId = competenceId;
     }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (competenceNameId != null ? competenceNameId.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof CompetenceName)) {
-            return false;
-        }
-        CompetenceName other = (CompetenceName) object;
-        if ((this.competenceNameId == null && other.competenceNameId != null) || (this.competenceNameId != null && !this.competenceNameId.equals(other.competenceNameId))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "model.CompetenceName[ competenceNameId=" + competenceNameId + " ]";
-    }
-    
-    public JsonObject toJson() {
-        JsonObjectBuilder obj = Json.createObjectBuilder()
-                .add("name", name)
-                .add("id", competenceNameId);
-        return obj.build();
-    }
-    
 }

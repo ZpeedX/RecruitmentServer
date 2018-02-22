@@ -34,18 +34,17 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "APPLICATIONS")
 @XmlRootElement
 @NamedQueries({
-    
     @NamedQuery(name = "Applications.findAll", query = "SELECT a FROM Applications a")
     , @NamedQuery(name = "Applications.findByApplicationId", query = "SELECT a FROM Applications a WHERE a.applicationId = :applicationId")
-    , @NamedQuery(name = "Applications.findByParams", 
+    , @NamedQuery(name = "Applications.findByParams",
             query = "SELECT DISTINCT app "
-                    + "FROM Applications app, CompetenceProfile cp, Availability av "
-                    + "WHERE (LOWER(app.personId.name) = LOWER(:firstname) OR :firstname = '')"
-                    + "AND ((cp.competenceId = :cpId AND app.personId = cp.personId) OR :cpId = 0) "
-                    + "AND (app.registrationDate = :regDate OR :regDate = :tempDate) "
-                    + "AND ((av.fromDate >= :datePeriodFrom AND app.personId = av.personId) OR :datePeriodFrom = :tempDate) "
-                    + "AND ((av.toDate <= :datePeriodTo AND app.personId = av.personId ) OR :datePeriodTo = :tempDate)"
-                  )})
+            + "FROM Applications app, CompetenceProfile cp, Availability av "
+            + "WHERE (LOWER(app.personId.name) = LOWER(:firstname) OR :firstname = '')"
+            + "AND ((cp.competenceId = :cpId AND app.personId = cp.personId) OR :cpId = 0) "
+            + "AND (app.registrationDate = :regDate OR :regDate = :tempDate) "
+            + "AND ((av.fromDate >= :datePeriodFrom AND app.personId = av.personId) OR :datePeriodFrom = :tempDate) "
+            + "AND ((av.toDate <= :datePeriodTo AND app.personId = av.personId ) OR :datePeriodTo = :tempDate)"
+    )})
 public class Applications implements Serializable {
 
     @Column(name = "REGISTRATION_DATE")
@@ -53,7 +52,8 @@ public class Applications implements Serializable {
     private Date registrationDate;
 
     private static final long serialVersionUID = 1L;
-    @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "APPLICATION_ID")
     private Long applicationId;
@@ -65,58 +65,74 @@ public class Applications implements Serializable {
     public Applications() {
     }
 
+    /**
+     * Contructor for this class
+     *
+     * @param applicationId sets
+     */
     public Applications(Long applicationId) {
         this.applicationId = applicationId;
     }
 
+    /**
+     * Gets the value of the applicationsId property
+     *
+     * @return applicationId as long value
+     */
     public Long getApplicationId() {
         return applicationId;
     }
 
+    /**
+     * Sets the applicationId property
+     *
+     * @param applicationId the applicationId to set
+     */
     public void setApplicationId(Long applicationId) {
         this.applicationId = applicationId;
     }
 
+    /**
+     * Gets the value of the personId property
+     *
+     * @return personId as Person object
+     */
     public Person getPersonId() {
         return personId;
     }
 
+    /**
+     * Sets the personId property
+     *
+     * @param personId the personId to set
+     */
     public void setPersonId(Person personId) {
         this.personId = personId;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (applicationId != null ? applicationId.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Applications)) {
-            return false;
-        }
-        Applications other = (Applications) object;
-        if ((this.applicationId == null && other.applicationId != null) || (this.applicationId != null && !this.applicationId.equals(other.applicationId))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "model.Applications[ applicationId=" + applicationId + " ]";
-    }
-
+    /**
+     * Gets the value of the registrationDate property
+     *
+     * @return registrationDate as Date object
+     */
     public Date getRegistrationDate() {
         return registrationDate;
     }
 
+    /**
+     * Sets the registrationDate property
+     *
+     * @param registrationDate the registrationDate to set
+     */
     public void setRegistrationDate(Date registrationDate) {
         this.registrationDate = registrationDate;
     }
+
+    /**
+     * Adds properties in this class into json object
+     *
+     * @return Json Object
+     */
     public JsonObject toJson() {
         JsonObjectBuilder obj = Json.createObjectBuilder()
                 .add("applicationId", applicationId.toString())

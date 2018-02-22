@@ -20,6 +20,10 @@ import javax.ejb.Stateless;
 public class TokenGenerator {
     private final long VALID_TOKEN_TIME = TimeUnit.HOURS.toMillis(2);
     
+    /**
+     * Creates a random 32 character long string
+     * @return rndom 32 character long string
+     */
     private String getNewTokenString() {
         Random random = new SecureRandom();
         String token = new BigInteger(130, random).toString(32);

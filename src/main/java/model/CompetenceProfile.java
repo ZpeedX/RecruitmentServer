@@ -35,7 +35,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class CompetenceProfile implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "COMPETENCE_PROFILE_ID")
     private Long competenceProfileId;
@@ -50,68 +51,90 @@ public class CompetenceProfile implements Serializable {
     @ManyToOne
     private Person personId;
 
+    /**
+     * Class Constructor
+     */
     public CompetenceProfile() {
     }
 
+    /**
+     * Class Constructor
+     *
+     * @param competenceProfileId sets the competenceProfileId property
+     */
     public CompetenceProfile(Long competenceProfileId) {
         this.competenceProfileId = competenceProfileId;
     }
 
+    /**
+     * Gets the value of the competenceProfileId property
+     *
+     * @return competenceProfileId as Long object
+     */
     public Long getCompetenceProfileId() {
         return competenceProfileId;
     }
 
+    /**
+     * Sets the competenceProfileId property
+     *
+     * @param competenceProfileId the competenceProfileId to set
+     */
     public void setCompetenceProfileId(Long competenceProfileId) {
         this.competenceProfileId = competenceProfileId;
     }
 
+    /**
+     * Gets the value of the getYearsOfExperience property
+     *
+     * @return getYearsOfExperience as double
+     */
     public double getYearsOfExperience() {
         return yearsOfExperience;
     }
 
+    /**
+     * Sets the yearsOfExperience property
+     *
+     * @param yearsOfExperience the yearsOfExperience to set
+     */
     public void setYearsOfExperience(double yearsOfExperience) {
         this.yearsOfExperience = yearsOfExperience;
     }
-
+    
+    /**
+     * Gets the value of the competenceId property
+     *
+     * @return competenceId as Long object
+     */
     public Long getCompetenceId() {
         return competenceId;
     }
 
+    /**
+     * Sets the competenceId property
+     *
+     * @param competenceId the competenceId to set
+     */
     public void setCompetenceId(Long competenceId) {
         this.competenceId = competenceId;
     }
 
+    /**
+     * Gets the value of the personId property
+     *
+     * @return personId as Person object
+     */
     public Person getPersonId() {
         return personId;
     }
 
+    /**
+     * Sets the personId property
+     *
+     * @param personId the personId to set
+     */
     public void setPersonId(Person personId) {
         this.personId = personId;
     }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (competenceProfileId != null ? competenceProfileId.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof CompetenceProfile)) {
-            return false;
-        }
-        CompetenceProfile other = (CompetenceProfile) object;
-        if ((this.competenceProfileId == null && other.competenceProfileId != null) || (this.competenceProfileId != null && !this.competenceProfileId.equals(other.competenceProfileId))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "model.CompetenceProfile[ competenceProfileId=" + competenceProfileId + " ]";
-    }
-    
 }

@@ -78,7 +78,12 @@ public class RecruitmentDAO {
         }
         
     }
-
+    
+    /**
+     * Gets the Role object from database by providing the role name
+     * @param name provided to get role object
+     * @return Role object
+     */
     private Role getRole(String name) {
         try {
             return em.createNamedQuery("Role.findByName", Role.class)
@@ -111,7 +116,7 @@ public class RecruitmentDAO {
     /**
      * This metohd returns a list with all the competences stored in the database.
      * 
-     * @return List<CompetenceName> the list with all competences.
+     * @return List of CompetenceName objects.
      */
     public List<CompetenceName> listCompetence() {
         return em.createNamedQuery("CompetenceName.findAll", CompetenceName.class).getResultList();
@@ -122,18 +127,19 @@ public class RecruitmentDAO {
      * is chosen by the user.
      * 
      * @param locale language selected/specified.
-     * @return List<CompetenceName> a list with competences in the specified language.
+     * @return List of CompetenceName objects in the specified language.
      */
     public List<CompetenceName> getAllCompetences(String locale) {
         TypedQuery<CompetenceName> query = em.createNamedQuery("CompetenceName.findAllByLang", CompetenceName.class)
                 .setParameter("locale", locale);
         return query.getResultList();
     }
-    
+
     /**
+     * This method gets specific language id by providing language name
      *
-     * @param locale
-     * @return
+     * @param locale provided language name
+     * @return language id from database
      */
     public SupportedLanguage getSlId(String locale){
         TypedQuery<SupportedLanguage> p = em.createNamedQuery("SupportedLanguage.findByLocale", SupportedLanguage.class)
@@ -142,8 +148,9 @@ public class RecruitmentDAO {
     }
     
     /**
+     * Gets all applications from databases
      *
-     * @return
+     * @return List of Application objects
      */
     public List<Applications> getAllApplications() {
         TypedQuery<Applications> query = em.createNamedQuery("Applications.findAll", Applications.class);
@@ -151,14 +158,15 @@ public class RecruitmentDAO {
     }
 
     /**
-     *
-     * @param submissionDate
-     * @param periodFrom
-     * @param periodTo
-     * @param competence
-     * @param firstname
-     * @param dummyDate
-     * @return
+     * Gets all applications which fulfills every search criteria.
+     * 
+     * @param submissionDate Date provided by the client
+     * @param periodFrom Date provided by the client
+     * @param periodTo Date provided by the client
+     * @param competence Competence id provided by the client
+     * @param firstname String name provided by the client
+     * @param dummyDate Illegal date to filter out all empty dates
+     * @return List of Application objects
      */
     public List<Applications> getApplications(Date submissionDate, Date periodFrom, Date periodTo, long competence, String firstname, Date dummyDate) {
         TypedQuery<Applications> query

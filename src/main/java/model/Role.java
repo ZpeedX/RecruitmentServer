@@ -39,7 +39,8 @@ public class Role implements Serializable {
     private List<Person> personList;
 
     private static final long serialVersionUID = 1L;
-    @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "ROLE_ID")
     private Long roleId;
@@ -48,61 +49,54 @@ public class Role implements Serializable {
     @Column(name = "NAME")
     private String name;
 
+    /**
+     * Class Constructor
+     */
     public Role() {
     }
 
+    /**
+     * Class Constructor
+     *
+     * @param roleId sets the roleId property
+     */
     public Role(Long roleId) {
         this.roleId = roleId;
     }
 
+    /**
+     * Gets the value of the roleId property
+     *
+     * @return roleId as Long object
+     */
     public Long getRoleId() {
         return roleId;
     }
-
+    
+    /**
+     * Sets the roleId property
+     *
+     * @param roleId the roleId to set
+     */
     public void setRoleId(Long roleId) {
         this.roleId = roleId;
     }
 
+    /**
+     * Gets the value of the name property
+     *
+     * @return name as String object
+     */
     public String getName() {
         return name;
     }
-
+    
+    /**
+     * Sets the name property
+     *
+     * @param name the name to set
+     */
     public void setName(String name) {
         this.name = name;
     }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (roleId != null ? roleId.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Role)) {
-            return false;
-        }
-        Role other = (Role) object;
-        if ((this.roleId == null && other.roleId != null) || (this.roleId != null && !this.roleId.equals(other.roleId))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "model.Role[ roleId=" + roleId + " ]";
-    }
-
-    @XmlTransient
-    public List<Person> getPersonList() {
-        return personList;
-    }
-
-    public void setPersonList(List<Person> personList) {
-        this.personList = personList;
-    }
-    
 }

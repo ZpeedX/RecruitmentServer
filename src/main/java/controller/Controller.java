@@ -35,20 +35,21 @@ import model.TokenGenerator;
 @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 @Stateless
 public class Controller {
-    
+
     @EJB
     private RecruitmentDAO rdao;
-	
+
     @EJB
     private TokenDAO tokenDAO;
 
     @Inject
     private TokenGenerator tokenGenerator;
-	
+
     /**
      * This method takes a username and checks if it is a valid username.
-     * 
-     * @param username the username of the individual trying to get authenticated
+     *
+     * @param username the username of the individual trying to get
+     * authenticated
      * @return Person the authenticated person or {@code null} if none
      */
     public Person authenticate(String username) {
@@ -57,106 +58,104 @@ public class Controller {
 
     /**
      * This method registers a new user to the services.
-     * 
+     *
      * @param newUser the Person getting registered
      * @return Person if sucessfully registering a new person, else {@code null}
      */
     public Person register(Person newUser) {
         return rdao.registerPerson(newUser);
     }
-	
+
     /**
-     * This method retrieves a list of the competences available at these services.
-     * 
+     * This method retrieves a list of the competences available at these
+     * services.
+     *
      * @param locale language desired/specified by the user
-     * @return List<CompetenceDTO> with the competences
+     * @return List of CompetenceDTO objects
      */
     public List<CompetenceDTO> listCompetence(String locale) {
         return rdao.getAllCompetences(locale).stream()
                 .map(competenceName -> new CompetenceDTO(
-                        competenceName.getCompetenceNameId(), 
-                        competenceName.getCompetenceId(),
-                        competenceName.getName(),
-                        competenceName.getSupportedLanguageId().getLocale())
+                competenceName.getCompetenceNameId(),
+                competenceName.getCompetenceId(),
+                competenceName.getName(),
+                competenceName.getSupportedLanguageId().getLocale())
                 ).collect(Collectors.toList());
-    }	
+    }
 
     /**
+     * This method gets specific language id by providing language name
      *
-     * @param lang
-     * @return
+     * @param lang provided language name
+     * @return language id from database
      */
-    public SupportedLanguage getSl(String lang){
+    public SupportedLanguage getSl(String lang) {
         return rdao.getSlId(lang);
     }
 
     /**
+     * Gets all applications from databases
      *
-     * @return
+     * @return List of Application objects
      */
-    public List<Applications> listApplications(){
+    public List<Applications> listApplications() {
         return rdao.getAllApplications();
+    }
+    
+    /**
+     * Gets all applications which fulfills every search criteria.
+     * 
+     * @param submissionDate Date provided by the client
+     * @param periodFrom Date provided by the client
+     * @param periodTo Date provided by the client
+     * @param competence Competence id provided by the client
+     * @param firstname String name provided by the client
+     * @param dummyDate Illegal date to filter out all empty dates
+     * @return List of Application objects
+     */
+    public List<Applications> getApplications(Date submissionDate, Date periodFrom, Date periodTo, long competence, String firstname, Date dummyDate) {
+        return rdao.getApplications(submissionDate, periodFrom, periodTo, competence, firstname, dummyDate);
     }
 
     /**
+     * This method adds competence profiles of a user and tries to store them in
+     * the database. It first validates that the entered profiles.
      *
-     * @param submissionDate
-     * @param periodFrom
-     * @param periodTo
-     * @param competence
-     * @param firstname
-     * @param dummyDate
-     * @return
-     */
-    public List<Applications> getApplications(Date submissionDate, Date periodFrom, Date periodTo, long competence, String firstname, Date dummyDate) {
-        
-        return rdao.getApplications(submissionDate,periodFrom, periodTo, competence, firstname, dummyDate);
-    }
-	
-    /**
-     * This method adds competence profiles of a user and tries to store them in the
-     * database. It first validates that the entered profiles.
-     * 
      * @param user username of the signed in user to whom the profiles belong
      * @param profiles the profiles with the information
      */
     public void addCompetenceProfiles(String user, List<CompetenceProfileDTO> profiles) {
         List<CompetenceProfileDTO> cleanProfiles = new ArrayList<>();
-        
+
         profiles.forEach(p -> {
-            if(p.getName() != null && p.getCompetenceId() != null && p.getYearsOfExperience() != 0) {
+            if (p.getName() != null && p.getCompetenceId() != null && p.getYearsOfExperience() != 0) {
                 cleanProfiles.add(p);
             }
         });
-        
-        if(!cleanProfiles.isEmpty()) {
+
+        if (!cleanProfiles.isEmpty()) {
             rdao.addCompetenceProfiles(user, cleanProfiles);
         }
     }
 
-    /**
-     *
-     * @param username
-     * @param availabilities
-     */
     public void addAvailabilities(String username, List<Availability> availabilities) {
         rdao.addAvailabilities(username, availabilities);
     }
-	
+
     /**
      * This method logs in a user.
-     * 
+     *
      * @param username user to be logged in
      * @param role the role to which this user belongs
      * @return String the generated token value
      */
     public String login(String username, String role) {
         Token token = tokenGenerator.generateToken(username, role);
-        
-        while(!tokenDAO.addToken(token)) {
+
+        while (!tokenDAO.addToken(token)) {
             token = tokenGenerator.generateToken(username, role);
         }
-        
+
         return token.getToken();
     }
 
@@ -172,11 +171,11 @@ public class Controller {
 
     /**
      * This method logs out a user.
-     * 
+     *
      * @param username user to be logged out
      */
     public void logout(String username) {
         tokenDAO.logout(username);
     }
-    
+
 }

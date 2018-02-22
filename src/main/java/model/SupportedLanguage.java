@@ -41,53 +41,57 @@ public class SupportedLanguage implements Serializable {
     @Size(max = 255)
     @Column(name = "LOCALE")
     private String locale;
-
+    
+    /**
+     * Class Constructor
+     */
     public SupportedLanguage() {
     }
 
+    /**
+     * Class Constructor
+     *
+     * @param supportedLanguageId sets the supportedLanguageId property
+     * 
+     */
     public SupportedLanguage(Long supportedLanguageId) {
         this.supportedLanguageId = supportedLanguageId;
     }
-
+    
+    /**
+     * Gets the value of the supportedLanguageId property
+     *
+     * @return supportedLanguageId as Long object
+     */
     public Long getSupportedLanguageId() {
         return supportedLanguageId;
     }
 
+    /**
+     * Sets the supportedLanguageId property
+     *
+     * @param supportedLanguageId the supportedLanguageId to set
+     */  
     public void setSupportedLanguageId(Long supportedLanguageId) {
         this.supportedLanguageId = supportedLanguageId;
     }
 
+    
+    /**
+     * Gets the value of the locale property
+     *
+     * @return locale as String object
+     */
     public String getLocale() {
         return locale;
     }
 
+    /**
+     * Sets the locale property
+     *
+     * @param locale the locale to set
+     */
     public void setLocale(String locale) {
         this.locale = locale;
     }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (supportedLanguageId != null ? supportedLanguageId.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof SupportedLanguage)) {
-            return false;
-        }
-        SupportedLanguage other = (SupportedLanguage) object;
-        if ((this.supportedLanguageId == null && other.supportedLanguageId != null) || (this.supportedLanguageId != null && !this.supportedLanguageId.equals(other.supportedLanguageId))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "model.SupportedLanguage[ SupportedLanguageId=" + supportedLanguageId + " ]";
-    }
-    
 }

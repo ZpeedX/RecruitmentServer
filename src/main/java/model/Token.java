@@ -64,13 +64,30 @@ public class Token implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date expires;
 
+    /**
+     * Class Constructor
+     */
     public Token() {
     }
 
+    /**
+     * Class Constructor
+     *
+     * @param username sets the username property
+     */
     public Token(String username) {
         this.username = username;
     }
 
+    /**
+     * Class Constructor
+     *
+     * @param username sets the username property
+     * @param role sets the role property
+     * @param token sets the token property
+     * @param issued sets the issued property
+     * @param expires sets the expires property
+     */
     public Token(String username, String role, String token, Date issued, Date expires) {
         this.username = username;
         this.role = role;
@@ -79,69 +96,93 @@ public class Token implements Serializable {
         this.expires = expires;
     }
 
+    /**
+     * Gets the value of the username property
+     *
+     * @return username as String object
+     */
     public String getUsername() {
         return username;
     }
 
+    /**
+     * Sets the username property
+     *
+     * @param username the password to set
+     */
     public void setUsername(String username) {
         this.username = username;
     }
 
+    /**
+     * Gets the value of the role property
+     *
+     * @return role as String object
+     */
     public String getRole() {
         return role;
     }
 
+    /**
+     * Sets the role property
+     *
+     * @param role the role to set
+     */
     public void setRole(String role) {
         this.role = role;
     }
 
+    /**
+     * Gets the value of the token property
+     *
+     * @return token as String object
+     */
     public String getToken() {
         return token;
     }
 
+    /**
+     * Sets the token property
+     *
+     * @param token the token to set
+     */
     public void setToken(String token) {
         this.token = token;
     }
 
+    /**
+     * Gets the value of the issued property
+     *
+     * @return issued as Date object
+     */
     public Date getIssued() {
         return issued;
     }
 
+    /**
+     * Sets the issued property
+     *
+     * @param issued the token to set
+     */
     public void setIssued(Date issued) {
         this.issued = issued;
     }
 
+    /**
+     * Gets the value of the expires property
+     *
+     * @return expires as Date object
+     */
     public Date getExpires() {
         return expires;
     }
 
+    /**
+     * Sets the expires property
+     *
+     * @param expires the expires to set
+     */
     public void setExpires(Date expires) {
         this.expires = expires;
     }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (username != null ? username.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Token)) {
-            return false;
-        }
-        Token other = (Token) object;
-        if ((this.username == null && other.username != null) || (this.username != null && !this.username.equals(other.username))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "model.Token[ username=" + username + " ]";
-    }
-    
 }

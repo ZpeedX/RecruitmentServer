@@ -38,7 +38,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Availability implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "AVAILABILITY_ID")
     private Long availabilityId;
@@ -60,71 +61,97 @@ public class Availability implements Serializable {
     public Availability() {
     }
 
+    /**
+     * Class Constructor
+     *
+     * @param availabilityId sets the availabilityId property
+     */
     public Availability(Long availabilityId) {
         this.availabilityId = availabilityId;
     }
 
+    /**
+     * Class Constructor
+     *
+     * @param availabilityId sets the availabilityId property
+     * @param fromDate sets the fromDate property
+     * @param toDate sets the toDAte property
+     */
     public Availability(Long availabilityId, Date fromDate, Date toDate) {
         this.availabilityId = availabilityId;
         this.fromDate = fromDate;
         this.toDate = toDate;
     }
 
+    /**
+     * Gets the value of the availabilityId property
+     *
+     * @return availabilityId as Long object
+     */
     public Long getAvailabilityId() {
         return availabilityId;
     }
 
+    /**
+     * Sets the availabilityId property
+     *
+     * @param availabilityId the availabilityId to set
+     */
     public void setAvailabilityId(Long availabilityId) {
         this.availabilityId = availabilityId;
     }
 
+    /**
+     * Gets the value of the fromDate property
+     *
+     * @return fromDate as Date object
+     */
     public Date getFromDate() {
         return fromDate;
     }
 
+    /**
+     * Sets the fromDate property
+     *
+     * @param fromDate the fromDate to set
+     */
     public void setFromDate(Date fromDate) {
         this.fromDate = fromDate;
     }
 
+    /**
+     * Gets the value of the toDate property
+     *
+     * @return toDate as Date object
+     */
     public Date getToDate() {
         return toDate;
     }
 
+    /**
+     * Sets the toDate property
+     *
+     * @param toDate the toDate to set
+     */
     public void setToDate(Date toDate) {
         this.toDate = toDate;
     }
 
+    /**
+     * Gets the value of the personId property
+     *
+     * @return personId as Person object
+     */
     public Person getPersonId() {
         return personId;
     }
 
+    /**
+     * Sets the personId property
+     *
+     * @param personId the personId to set
+     */
     public void setPersonId(Person personId) {
         this.personId = personId;
     }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (availabilityId != null ? availabilityId.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Availability)) {
-            return false;
-        }
-        Availability other = (Availability) object;
-        if ((this.availabilityId == null && other.availabilityId != null) || (this.availabilityId != null && !this.availabilityId.equals(other.availabilityId))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "kth.iv1201.recruitmentserv.Availability[ availabilityId=" + availabilityId + " ]";
-    }
-    
 }

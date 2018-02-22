@@ -87,14 +87,32 @@ public class Person implements Serializable {
     @JoinColumn(name = "ROLE_ID", referencedColumnName = "ROLE_ID")
     @ManyToOne(optional = false)
     private Role roleId;
-    
+
+    /**
+     * Class Constructor
+     */
     public Person() {
     }
 
+    /**
+     * Class Constructor
+     *
+     * @param personId sets the personId property
+     */
     public Person(Long personId) {
         this.personId = personId;
     }
 
+    /**
+     * Class Constructor
+     *
+     * @param name sets the name property
+     * @param surname sets the surname property
+     * @param ssn sets the ssn property
+     * @param email sets the email property
+     * @param password sets the password property
+     * @param username sets the username property
+     */
     public Person(String name, String surname, String ssn, String email, String password, String username) {
         this.name = name;
         this.surname = surname;
@@ -104,91 +122,156 @@ public class Person implements Serializable {
         this.username = username;
     }
 
-    public Long getPersonId() {
+    /**
+     * Gets the value of the personId property
+     *
+     * @return personId as long
+     */
+    public long getPersonId() {
         return personId;
     }
 
-    public void setPersonId(Long personId) {
+    /**
+     * Sets the personId property
+     *
+     * @param personId the personId to set
+     */
+    public void setPersonId(long personId) {
         this.personId = personId;
     }
 
+    /**
+     * Gets the value of the name property
+     *
+     * @return name as String object
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Sets the name property
+     *
+     * @param name the name to set
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * Gets the value of the surname property
+     *
+     * @return surname as String object
+     */
     public String getSurname() {
         return surname;
     }
 
+    /**
+     * Sets the surname property
+     *
+     * @param surname the surname to set
+     */
     public void setSurname(String surname) {
         this.surname = surname;
     }
-
+    
+    /**
+     * Gets the value of the snn property
+     *
+     * @return ssn as String object
+     */
     public String getSsn() {
         return ssn;
     }
-
+    
+    /**
+     * Sets the ssn property
+     *
+     * @param ssn the ssn to set
+     */
     public void setSsn(String ssn) {
         this.ssn = ssn;
     }
 
+    /**
+     * Gets the value of the email property
+     *
+     * @return email as String object
+     */
     public String getEmail() {
         return email;
     }
 
+    /**
+     * Sets the email property
+     *
+     * @param email the email to set
+     */
     public void setEmail(String email) {
         this.email = email;
     }
-
+    
+    /**
+     * Gets the value of the password property
+     *
+     * @return password as String object
+     */
     public String getPassword() {
         return password;
     }
 
+    /**
+     * Sets the password property
+     *
+     * @param password the password to set
+     */
     public void setPassword(String password) {
         this.password = password;
     }
 
+    /**
+     * Gets the value of the username property
+     *
+     * @return username as String object
+     */ 
     public String getUsername() {
         return username;
     }
-
+    
+    /**
+     * Sets the username property
+     *
+     * @param username the password to set
+     */
     public void setUsername(String username) {
         this.username = username;
     }
 
+    /**
+     * Gets the value of the roleId property
+     *
+     * @return roleId as Role object
+     */   
     public Role getRoleId() {
         return roleId;
     }
 
+    /**
+     * Sets the roleId property
+     *
+     * @param roleId the roleId to set
+     */
     public void setRoleId(Role roleId) {
         this.roleId = roleId;
     }
     
-    public boolean authenticate(String pass){
+    /**
+     * Checks if provided password matches the password property in the Person object
+     * @param pass provided password
+     * @return Boolean True if they match, else False
+     */
+    public boolean authenticate(String pass) {
         return pass.equals(password);
     }
-
-    @XmlTransient
-    public List<Applications> getApplicationsList() {
-        return applicationsList;
-    }
-
-    public void setApplicationsList(List<Applications> applicationsList) {
-        this.applicationsList = applicationsList;
-    }
-
-    @XmlTransient
-    public List<CompetenceProfile> getCompetenceProfileList() {
-        return competenceProfileList;
-    }
-
-    public void setCompetenceProfileList(List<CompetenceProfile> competenceProfileList) {
-        this.competenceProfileList = competenceProfileList;
-    }
-
-    
 }
