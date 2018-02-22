@@ -11,13 +11,16 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
+import model.Availability;
 import model.AvailabilityDTO;
 import model.CompetenceDTO;
 import model.CompetenceProfileDTO;
@@ -38,8 +41,9 @@ public class ApplyFacadeRest {
     
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<CompetenceDTO> listCompetence() {
-        return null;
+    public List<CompetenceDTO> listCompetence(@HeaderParam("language") String language) {
+        System.out.println("LANGUAGE: " + language);
+        return controller.listCompetence(language);
     }
 
     @POST
@@ -50,7 +54,7 @@ public class ApplyFacadeRest {
         if(profiles == null || profiles.isEmpty()) { return Response.notModified().build(); }
         
         profiles.forEach(p -> {
-            System.out.println("id: " + p.getCompetenceId() + ", name: " /*+ p.getName() */+ ", yoe: " + p.getYearsOfExperience());
+            System.out.println("id: " + p.getCompetenceId() + ", name: " + p.getName() + ", yoe: " + p.getYearsOfExperience());
         });
         
         controller.addCompetenceProfiles(getUserFromPrincipal(), profiles);        
@@ -58,6 +62,21 @@ public class ApplyFacadeRest {
     }
     
     @POST
+    @Path("/availability")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response registerAvailability2(List<Availability> availabilities) {
+        System.out.println("path = /availability");
+        if (availabilities == null || availabilities.isEmpty()) {return Response.notModified().build(); }
+        
+        availabilities.forEach(av -> {
+            System.out.println("from: " + av.getFromDate().toString() + ", to: " + av.getToDate().toString());
+        });
+        
+        controller.addAvailabilities(getUserFromPrincipal(), availabilities);
+        return Response.ok().build();
+    }
+    
+    /*@POST
     @Path("/availability")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response registerAvailability(List<AvailabilityDTO> availabilities) {
@@ -70,7 +89,7 @@ public class ApplyFacadeRest {
         
         controller.addAvailabilities(getUserFromPrincipal(), availabilities);
         return Response.ok().build();
-    }
+    }*/
     
     private String getUserFromPrincipal() {
         String user = securityContext.getUserPrincipal().getName();

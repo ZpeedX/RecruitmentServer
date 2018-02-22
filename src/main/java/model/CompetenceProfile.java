@@ -40,8 +40,8 @@ public class CompetenceProfile implements Serializable {
     @Column(name = "COMPETENCE_PROFILE_ID")
     private Long competenceProfileId;
     @NotNull
-    @Column(name = "YEARS_OF_EXPERIENCE")
-    private Long yearsOfExperience;
+    @Column(name = "YEARS_OF_EXPERIENCE", precision = 4, scale = 2)
+    private double yearsOfExperience;
     @NotNull
     @Column(name = "COMPETENCE_ID")
     private Long competenceId;
@@ -65,11 +65,11 @@ public class CompetenceProfile implements Serializable {
         this.competenceProfileId = competenceProfileId;
     }
 
-    public Long getYearsOfExperience() {
+    public double getYearsOfExperience() {
         return yearsOfExperience;
     }
 
-    public void setYearsOfExperience(Long yearsOfExperience) {
+    public void setYearsOfExperience(double yearsOfExperience) {
         this.yearsOfExperience = yearsOfExperience;
     }
 

@@ -28,8 +28,6 @@ public class CompetenceDTO implements Serializable{
         this.language = language;
     }
 
-
-
     public Long getCompetenceNameId() {
         return competenceNameId;
     }

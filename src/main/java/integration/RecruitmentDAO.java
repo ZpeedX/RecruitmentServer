@@ -119,7 +119,7 @@ public class RecruitmentDAO {
         return query.getResultList();
     }
 
-    public void addAvailabilities(String user, List<AvailabilityDTO> availabilities) {
+    /*public void addAvailabilities(String user, List<AvailabilityDTO> availabilities) {
         Person person = em.createNamedQuery("Person.findByUsername", Person.class).setParameter("username", user).getSingleResult();
         System.out.println("Person is : " + person.getName() + ", email: " + person.getEmail());
         
@@ -137,7 +137,7 @@ public class RecruitmentDAO {
                 ex.printStackTrace();
             }
         });
-    }
+    }*/
 	
     public void addCompetenceProfiles(String user, List<CompetenceProfileDTO> profiles) {
         Person person = em.createNamedQuery("Person.findByUsername", Person.class).setParameter("username", user).getSingleResult();
@@ -146,7 +146,7 @@ public class RecruitmentDAO {
         profiles.forEach(p -> {
             CompetenceProfile cp = new CompetenceProfile();
             cp.setCompetenceId(p.getCompetenceId());
-            cp.setYearsOfExperience((long) p.getYearsOfExperience());
+            cp.setYearsOfExperience(p.getYearsOfExperience());
             cp.setPersonId(person);
             try {
                 em.persist(cp);
@@ -157,5 +157,21 @@ public class RecruitmentDAO {
                 ex.printStackTrace();
             }
         });
+    }
+
+    public void addAvailabilities(String username, List<Availability> availabilities) {
+        Person person = em.createNamedQuery("Person.findByUsername", Person.class)
+                .setParameter("username", username).getSingleResult();
+        
+        availabilities.forEach(av -> {
+            try {
+                av.setPersonId(person);
+                em.persist(av);
+            } catch(Exception ex) {
+                System.out.println("ERROR ADDING AVAIL: " + ex.getMessage());
+                ex.printStackTrace();
+            }
+        });
+        
     }
 }

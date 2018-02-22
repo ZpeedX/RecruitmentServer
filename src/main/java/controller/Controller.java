@@ -7,7 +7,6 @@ package controller;
 
 import java.util.Date;
 import model.Applications;
-import model.CompetenceName;
 import model.SupportedLanguage;
 
 import integration.RecruitmentDAO;
@@ -20,7 +19,7 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
-import model.AvailabilityDTO;
+import model.Availability;
 import model.CompetenceDTO;
 import model.CompetenceProfileDTO;
 import model.Person;
@@ -36,13 +35,13 @@ import model.TokenGenerator;
 public class Controller {
     
     @EJB
-    RecruitmentDAO rdao;
+    private RecruitmentDAO rdao;
 	
     @EJB
-    TokenDAO tokenDAO;
+    private TokenDAO tokenDAO;
 
     @Inject
-    TokenGenerator tokenGenerator;
+    private TokenGenerator tokenGenerator;
 	
     public Person authenticate(String username) {
         return rdao.existsUser(username);
@@ -53,11 +52,11 @@ public class Controller {
 	
     public List<CompetenceDTO> listCompetence(String locale) {
         return rdao.getAllCompetences(locale).stream()
-                .map(competence -> new CompetenceDTO(
-                        competence.getCompetenceNameId(), 
-                        competence.getCompetenceId(),
-                        competence.getName(),
-                        competence.getSupportedLanguageId().getLocale())
+                .map(competenceName -> new CompetenceDTO(
+                        competenceName.getCompetenceNameId(), 
+                        competenceName.getCompetenceId(),
+                        competenceName.getName(),
+                        competenceName.getSupportedLanguageId().getLocale())
                 ).collect(Collectors.toList());
     }	
 
@@ -87,7 +86,11 @@ public class Controller {
         }
     }
 
-    public void addAvailabilities(String user, List<AvailabilityDTO> availabilities) {
+    public void addAvailabilities(String username, List<Availability> availabilities) {
+        rdao.addAvailabilities(username, availabilities);
+    }
+    
+    /*public void addAvailabilities(String user, List<AvailabilityDTO> availabilities) {
         List<AvailabilityDTO> cleanAvailabilities = new ArrayList<>();
 
         availabilities.forEach(a -> {
@@ -99,7 +102,7 @@ public class Controller {
         if (!cleanAvailabilities.isEmpty()) {
             rdao.addAvailabilities(user, cleanAvailabilities);
         }
-    }
+    }*/
 	
     public String login(String username, String role) {
         Token token = tokenGenerator.generateToken(username, role);
@@ -118,4 +121,5 @@ public class Controller {
     public void logout(String username) {
         tokenDAO.logout(username);
     }
+    
 }
