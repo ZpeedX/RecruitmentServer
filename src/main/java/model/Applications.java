@@ -6,7 +6,6 @@
 package model;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
 import javax.json.Json;
 import javax.json.JsonObject;
@@ -14,6 +13,8 @@ import javax.json.JsonObjectBuilder;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -52,11 +53,11 @@ public class Applications implements Serializable {
     private Date registrationDate;
 
     private static final long serialVersionUID = 1L;
-    @Id
+    @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
     @Column(name = "APPLICATION_ID")
     private Long applicationId;
+    @NotNull
     @JoinColumn(name = "PERSON_ID", referencedColumnName = "PERSON_ID")
     @ManyToOne(optional = false)
     private Person personId;

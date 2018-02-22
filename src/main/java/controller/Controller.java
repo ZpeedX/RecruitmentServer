@@ -38,9 +38,11 @@ public class Controller {
     @EJB
     RecruitmentDAO rdao;
 	
-	@EJB TokenDAO tokenDAO;
-    
-	@Inject TokenGenerator tokenGenerator;
+    @EJB
+    TokenDAO tokenDAO;
+
+    @Inject
+    TokenGenerator tokenGenerator;
 	
     public Person authenticate(String username) {
         return rdao.existsUser(username);
@@ -89,16 +91,16 @@ public class Controller {
         }
     }
 
-	public void addAvailabilities(String user, List<AvailabilityDTO> availabilities) {
+    public void addAvailabilities(String user, List<AvailabilityDTO> availabilities) {
         List<AvailabilityDTO> cleanAvailabilities = new ArrayList<>();
-        
+
         availabilities.forEach(a -> {
             if(a.getFromDate() != null && a.getToDate() != null) {
                 cleanAvailabilities.add(a);
             }
         });
-        
-        if(!cleanAvailabilities.isEmpty()) {
+
+        if (!cleanAvailabilities.isEmpty()) {
             rdao.addAvailabilities(user, cleanAvailabilities);
         }
     }

@@ -40,7 +40,6 @@ public class Availability implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
     @Column(name = "AVAILABILITY_ID")
     private Long availabilityId;
     @Basic(optional = false)
@@ -53,6 +52,7 @@ public class Availability implements Serializable {
     @Column(name = "TO_DATE")
     @Temporal(TemporalType.DATE)
     private Date toDate;
+    @NotNull
     @JoinColumn(name = "PERSON_ID", referencedColumnName = "PERSON_ID")
     @ManyToOne(optional = false)
     private Person personId;

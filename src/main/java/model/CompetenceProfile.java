@@ -6,7 +6,6 @@
 package model;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -38,13 +37,15 @@ public class CompetenceProfile implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
     @Column(name = "COMPETENCE_PROFILE_ID")
     private Long competenceProfileId;
+    @NotNull
     @Column(name = "YEARS_OF_EXPERIENCE")
     private Long yearsOfExperience;
+    @NotNull
     @Column(name = "COMPETENCE_ID")
     private Long competenceId;
+    @NotNull
     @JoinColumn(name = "PERSON_ID", referencedColumnName = "PERSON_ID")
     @ManyToOne
     private Person personId;

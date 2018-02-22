@@ -49,7 +49,7 @@ public class Person implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PERSON_ID")
     private long personId;
     @Basic(optional = false)
@@ -83,6 +83,7 @@ public class Person implements Serializable {
     @Size(min = 1, max = 255)
     @Column(name = "USERNAME")
     private String username;
+    @NotNull
     @JoinColumn(name = "ROLE_ID", referencedColumnName = "ROLE_ID")
     @ManyToOne(optional = false)
     private Role roleId;

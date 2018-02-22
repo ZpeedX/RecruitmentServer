@@ -6,8 +6,6 @@
 package integration;
 
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -48,36 +46,44 @@ public class RecruitmentDAO {
                 Role r = getRole("Applicant");
                 newUser.setRoleId(r);
                 em.persist(newUser);
-                return getPerson(newUser.getUsername());
+                return newUser;
             } else {
                 return null;
             }
-        } catch (Exception e) {
+        } catch (Exception e) { // LOG HERE
             e.printStackTrace();
             return null;
         }
     }
 
     public Person getPerson(String username) {
-        TypedQuery<Person> p = em.createNamedQuery("Person.findByUsername", Person.class)
-                .setParameter("username", username);
-
-        return p.getSingleResult();
+        try {
+            return em.createNamedQuery("Person.findByUsername", Person.class)
+                .setParameter("username", username).getSingleResult();
+        } catch(Exception ex) {
+            return null;
+        }
+        
     }
 
-    public Role getRole(String name) {
-        TypedQuery<Role> r = em.createNamedQuery("Role.findByName", Role.class)
-                .setParameter("name", name);
-        return r.getSingleResult();
+    private Role getRole(String name) {
+        try {
+            return em.createNamedQuery("Role.findByName", Role.class)
+                .setParameter("name", name).getSingleResult();
+        } catch(Exception ex) {
+            return null;
+        }
+        
     }
 
     //Check if a user is already in database
     public Person existsUser(String username) {
+        if(username == null || username.isEmpty()) { return null;}
+        
         try{
-        TypedQuery<Person> p = em.createNamedQuery("Person.findByUsername", Person.class)
-                .setParameter("username", username);
-            return p.getSingleResult();
-        } catch(Exception e){
+            return em.createNamedQuery("Person.findByUsername", Person.class)
+                    .setParameter("username", username).getSingleResult();
+        } catch (Exception e) {
             return null;
         }
     }
