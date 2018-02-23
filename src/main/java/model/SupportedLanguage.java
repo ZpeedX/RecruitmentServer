@@ -6,6 +6,7 @@
 package model;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,10 +15,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -31,6 +34,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "SupportedLanguage.findBySupportedLanguageId", query = "SELECT s FROM SupportedLanguage s WHERE s.supportedLanguageId = :supportedLanguageId")
     , @NamedQuery(name = "SupportedLanguage.findByLocale", query = "SELECT s FROM SupportedLanguage s WHERE s.locale = :locale")})
 public class SupportedLanguage implements Serializable {
+
+    @OneToMany(mappedBy = "supportedLanguageId")
+    private List<StatusName> statusNameList;
 
     private static final long serialVersionUID = 1L;
     @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -93,5 +99,14 @@ public class SupportedLanguage implements Serializable {
      */
     public void setLocale(String locale) {
         this.locale = locale;
+    }
+
+    @XmlTransient
+    public List<StatusName> getStatusNameList() {
+        return statusNameList;
+    }
+
+    public void setStatusNameList(List<StatusName> statusNameList) {
+        this.statusNameList = statusNameList;
     }
 }

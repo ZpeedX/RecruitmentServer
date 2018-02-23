@@ -6,6 +6,7 @@
 package model;
 
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.util.Date;
 import javax.json.Json;
 import javax.json.JsonObject;
@@ -13,8 +14,6 @@ import javax.json.JsonObjectBuilder;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -47,29 +46,24 @@ import javax.xml.bind.annotation.XmlRootElement;
     )})
 public class Applications implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+    @Id
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "APPLICATION_ID")
+    private Long applicationId;
     @Column(name = "REGISTRATION_DATE")
     @Temporal(TemporalType.DATE)
     private Date registrationDate;
-
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "APPLICATION_ID")
-    private Long applicationId;
-    @NotNull
+    @Column(name = "STATUS_ID")
+    private BigInteger statusId;
     @JoinColumn(name = "PERSON_ID", referencedColumnName = "PERSON_ID")
-    @ManyToOne(optional = false)
+    @ManyToOne
     private Person personId;
 
     public Applications() {
     }
 
-    /**
-     * Contructor for this class
-     *
-     * @param applicationId sets
-     */
     public Applications(Long applicationId) {
         this.applicationId = applicationId;
     }
@@ -128,6 +122,14 @@ public class Applications implements Serializable {
         this.registrationDate = registrationDate;
     }
 
+    public BigInteger getStatusId() {
+        return statusId;
+    }
+
+    public void setStatusId(BigInteger statusId) {
+        this.statusId = statusId;
+    }
+
     /**
      * Adds properties in this class into json object
      *
@@ -140,5 +142,5 @@ public class Applications implements Serializable {
                 .add("surname", personId.getSurname())
                 .add("email", personId.getEmail());
         return obj.build();
-    }
+    } 
 }
