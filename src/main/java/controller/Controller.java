@@ -70,11 +70,10 @@ public class Controller {
      * This method retrieves a list of the competences available at these
      * services.
      *
-     * @param locale language desired/specified by the user
      * @return List of CompetenceDTO objects
      */
-    public List<CompetenceDTO> listCompetence(String locale) {
-        return rdao.getAllCompetences(locale).stream()
+    public List<CompetenceDTO> listCompetence() {
+        return rdao.listCompetence().stream()
                 .map(competenceName -> new CompetenceDTO(
                 competenceName.getCompetenceNameId(),
                 competenceName.getCompetenceId(),

@@ -56,8 +56,8 @@ public class ApplicationsREST {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("competence")
-    public Response listCompetences(@HeaderParam("language") String locale) {
-        return Response.ok(new GenericEntity<List<CompetenceDTO>>(contr.listCompetence(locale)) {
+    public Response listCompetences() {
+        return Response.ok(new GenericEntity<List<CompetenceDTO>>(contr.listCompetence()) {
         }, MediaType.APPLICATION_JSON).build();
     }
 

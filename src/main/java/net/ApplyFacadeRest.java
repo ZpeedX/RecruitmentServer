@@ -39,9 +39,8 @@ public class ApplyFacadeRest {
     
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<CompetenceDTO> listCompetence(@HeaderParam("language") String language) {
-        System.out.println("LANGUAGE: " + language);
-        return controller.listCompetence(language);
+    public List<CompetenceDTO> listCompetence() {
+        return controller.listCompetence();
     }
 
     @POST
