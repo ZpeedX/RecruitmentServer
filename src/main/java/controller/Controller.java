@@ -12,17 +12,24 @@ import model.SupportedLanguage;
 import integration.RecruitmentDAO;
 import integration.TokenDAO;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
+import model.ApplicationDetailsDTO;
 import model.Availability;
+import model.AvailabilityDTO;
 import model.CompetenceDTO;
+import model.CompetenceProfile;
 import model.CompetenceProfileDTO;
+import model.CompetenceProfileDTO1;
 import model.Person;
+import model.StatusName;
 import model.Token;
 import model.TokenGenerator;
 
@@ -100,10 +107,10 @@ public class Controller {
     public List<Applications> listApplications() {
         return rdao.getAllApplications();
     }
-    
+
     /**
      * Gets all applications which fulfills every search criteria.
-     * 
+     *
      * @param submissionDate Date provided by the client
      * @param periodFrom Date provided by the client
      * @param periodTo Date provided by the client
@@ -175,6 +182,46 @@ public class Controller {
      */
     public void logout(String username) {
         tokenDAO.logout(username);
+    }
+
+    public ApplicationDetailsDTO getApplicationDetails(long appId) {
+        Applications app = rdao.getApplicationById(appId);
+        if(app == null){
+            return null;
+        }
+        Person person = app.getPersonId();
+        Map<String, String> statusMap = statusNamesToMap(rdao.getStatusNamesByStatusId(app.getStatusId()));
+        List<CompetenceProfileDTO1> cp = rdao.getCompetenceProfileByPersonId(person);
+        List<AvailabilityDTO> av = avToAvDTO(rdao.getAvailabilityíesByPerson(person));
+        
+        return new ApplicationDetailsDTO(
+                person.getName(),
+                person.getSurname(),
+                person.getEmail(),
+                person.getSsn(),
+                app.getRegistrationDate(),
+                statusMap,
+                cp,
+                av
+        );
+
+    }
+
+
+    private Map<String, String> statusNamesToMap(List<StatusName> statusNames) {
+        Map<String, String> statusMap = new HashMap<>();
+        statusNames.forEach((sn) -> {
+            statusMap.put(sn.getSupportedLanguageId().getLocale(), sn.getName());
+        });
+        return statusMap;
+    }
+
+    public List<AvailabilityDTO> avToAvDTO(List<Availability> av) {
+        return av.stream()
+                .map(availability -> new AvailabilityDTO(
+                availability.getFromDate(),
+                availability.getToDate()))
+                .collect(Collectors.toList());
     }
 
 }

@@ -25,6 +25,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import model.ApplicationDetailsDTO;
 import model.Applications;
 import model.CompetenceDTO;
 import model.RoleEnum;
@@ -109,5 +110,17 @@ public class ApplicationsREST {
             builder.add(l.toJson());
         }
         return builder.build();
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("getApplicationDetails")
+    public Response getApplicationDetails(@HeaderParam("applicationId") long applicationId) {
+        ApplicationDetailsDTO appDetail = contr.getApplicationDetails(applicationId);
+        if(appDetail == null){
+           return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+        return Response.ok(new GenericEntity<ApplicationDetailsDTO>(appDetail) {
+        }, MediaType.APPLICATION_JSON).build();
     }
 }

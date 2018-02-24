@@ -5,13 +5,14 @@
  */
 package model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  *
  * @author Oscar
  */
-public class AvailabilityDTO {
+public class AvailabilityDTO implements Serializable{
     private Date fromDate;
     private Date toDate;
 
@@ -63,6 +64,11 @@ public class AvailabilityDTO {
      */
     public void setToDate(Date toDate) {
         this.toDate = toDate;
+    }
+
+    @Override
+    public String toString() {
+        return "AvailabilityDTO{" + "fromDate=" + fromDate + ", toDate=" + toDate + '}';
     }
     
 }

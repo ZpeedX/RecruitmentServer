@@ -35,9 +35,6 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "SupportedLanguage.findByLocale", query = "SELECT s FROM SupportedLanguage s WHERE s.locale = :locale")})
 public class SupportedLanguage implements Serializable {
 
-    @OneToMany(mappedBy = "supportedLanguageId")
-    private List<StatusName> statusNameList;
-
     private static final long serialVersionUID = 1L;
     @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Basic(optional = false)
@@ -99,14 +96,5 @@ public class SupportedLanguage implements Serializable {
      */
     public void setLocale(String locale) {
         this.locale = locale;
-    }
-
-    @XmlTransient
-    public List<StatusName> getStatusNameList() {
-        return statusNameList;
-    }
-
-    public void setStatusNameList(List<StatusName> statusNameList) {
-        this.statusNameList = statusNameList;
     }
 }

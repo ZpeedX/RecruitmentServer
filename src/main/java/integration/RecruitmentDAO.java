@@ -5,7 +5,7 @@
  */
 package integration;
 
-
+import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -24,6 +24,9 @@ import model.Role;
 import model.SupportedLanguage;
 import model.Availability;
 import javax.validation.ConstraintViolationException;
+import model.ApplicationDetailsDTO;
+import model.CompetenceProfileDTO1;
+import model.StatusName;
 
 /**
  *
@@ -40,9 +43,9 @@ public class RecruitmentDAO {
 
     /**
      * This method stores a new user in the database.
-     * 
+     *
      * @param newUser the new user to be stored.
-     * @return Person the person stored or {@code null} if unsucessful in 
+     * @return Person the person stored or {@code null} if unsucessful in
      * persisting the user.
      */
     public Person registerPerson(Person newUser) {
@@ -62,50 +65,57 @@ public class RecruitmentDAO {
     }
 
     /**
-     * This method retrieves the person belonging to a specific username from 
+     * This method retrieves the person belonging to a specific username from
      * the database.
      *
      * @param username the username of the person.
-     * @return Person the person with the username or {@code null} if no such 
+     * @return Person the person with the username or {@code null} if no such
      * Person exists in the database.
      */
     public Person getPerson(String username) {
         try {
             return em.createNamedQuery("Person.findByUsername", Person.class)
-                .setParameter("username", username).getSingleResult();
-        } catch(Exception ex) {
+                    .setParameter("username", username).getSingleResult();
+        } catch (Exception ex) {
             return null;
         }
-        
+
     }
     
+    public Person getPersonById(long personId){
+        return em.find(Person.class, personId);
+    }
+
     /**
      * Gets the Role object from database by providing the role name
+     *
      * @param name provided to get role object
      * @return Role object
      */
     private Role getRole(String name) {
         try {
             return em.createNamedQuery("Role.findByName", Role.class)
-                .setParameter("name", name).getSingleResult();
-        } catch(Exception ex) {
+                    .setParameter("name", name).getSingleResult();
+        } catch (Exception ex) {
             return null;
         }
-        
+
     }
 
     /**
      * This method checks in the database if there is a user with the specified
      * username.
-     * 
+     *
      * @param username of the check.
      * @return Person the person with the enetered username or {@code null} if
      * no such person exists.
      */
     public Person existsUser(String username) {
-        if(username == null || username.isEmpty()) { return null;}
-        
-        try{
+        if (username == null || username.isEmpty()) {
+            return null;
+        }
+
+        try {
             return em.createNamedQuery("Person.findByUsername", Person.class)
                     .setParameter("username", username).getSingleResult();
         } catch (Exception e) {
@@ -114,8 +124,9 @@ public class RecruitmentDAO {
     }
 
     /**
-     * This metohd returns a list with all the competences stored in the database.
-     * 
+     * This metohd returns a list with all the competences stored in the
+     * database.
+     *
      * @return List of CompetenceName objects.
      */
     public List<CompetenceName> listCompetence() {
@@ -123,9 +134,9 @@ public class RecruitmentDAO {
     }
 
     /**
-     * This method retrieves all the competences in a specific language which
-     * is chosen by the user.
-     * 
+     * This method retrieves all the competences in a specific language which is
+     * chosen by the user.
+     *
      * @param locale language selected/specified.
      * @return List of CompetenceName objects in the specified language.
      */
@@ -141,12 +152,12 @@ public class RecruitmentDAO {
      * @param locale provided language name
      * @return language id from database
      */
-    public SupportedLanguage getSlId(String locale){
+    public SupportedLanguage getSlId(String locale) {
         TypedQuery<SupportedLanguage> p = em.createNamedQuery("SupportedLanguage.findByLocale", SupportedLanguage.class)
                 .setParameter("locale", locale);
         return p.getSingleResult();
     }
-    
+
     /**
      * Gets all applications from databases
      *
@@ -159,7 +170,7 @@ public class RecruitmentDAO {
 
     /**
      * Gets all applications which fulfills every search criteria.
-     * 
+     *
      * @param submissionDate Date provided by the client
      * @param periodFrom Date provided by the client
      * @param periodTo Date provided by the client
@@ -182,15 +193,15 @@ public class RecruitmentDAO {
 
     /**
      * This method recieves a list with profiles belonging to a specific user
-     * and persists these profiles in the database if they are valid. 
-     * 
+     * and persists these profiles in the database if they are valid.
+     *
      * @param user username associated with the profiles.
      * @param profiles the profiles to be stored.
      */
     public void addCompetenceProfiles(String user, List<CompetenceProfileDTO> profiles) {
         Person person = em.createNamedQuery("Person.findByUsername", Person.class).setParameter("username", user).getSingleResult();
         System.out.println("Person is : " + person.getName() + ", email: " + person.getEmail());
-        
+
         profiles.forEach(p -> {
             CompetenceProfile cp = new CompetenceProfile();
             cp.setCompetenceId(p.getCompetenceId());
@@ -209,24 +220,53 @@ public class RecruitmentDAO {
 
     /**
      * This method recieves a list with availabilities belonging to a specific
-     * user and persists these in the database if they are valid. 
-     * 
+     * user and persists these in the database if they are valid.
+     *
      * @param username the user associated with the availabilities.
      * @param availabilities the availabilities to be stored.
      */
     public void addAvailabilities(String username, List<Availability> availabilities) {
         Person person = em.createNamedQuery("Person.findByUsername", Person.class)
                 .setParameter("username", username).getSingleResult();
-        
+
         availabilities.forEach(av -> {
             try {
                 av.setPersonId(person);
                 em.persist(av);
-            } catch(Exception ex) {
+            } catch (Exception ex) {
                 System.out.println("ERROR ADDING AVAIL: " + ex.getMessage());
                 ex.printStackTrace();
             }
         });
-        
+
     }
+    
+    public Applications getApplicationById(long appId){
+        return em.find(Applications.class, appId);
+    }
+    
+    public List<CompetenceProfileDTO1> getCompetenceProfileByPersonId(Person person){
+        String query = "SELECT NEW model.CompetenceProfileDTO1(cp.competenceId, cn.name, cp.yearsOfExperience, cn.supportedLanguageId.locale) "
+                + "FROM CompetenceProfile cp, CompetenceName cn "
+                + "WHERE cp.competenceId = cn.competenceId "
+                + "AND cp.personId = :person";
+        return em.createQuery(query, CompetenceProfileDTO1.class)
+                .setParameter("person", person).getResultList();
+    }
+    
+    public List<CompetenceName> getCompetenceNamesByCompetenceId(long competenceId){
+        return em.createNamedQuery("CompetenceName.findByCompetenceId", CompetenceName.class)
+                .setParameter("competenceId", competenceId).getResultList();
+    }
+    
+    public List<StatusName> getStatusNamesByStatusId(BigInteger statusId){
+        return em.createNamedQuery("StatusName.findByStatusId", StatusName.class)
+                .setParameter("statusId", statusId).getResultList();
+    }
+    
+    public List<Availability> getAvailabilityíesByPerson(Person person){
+        return em.createNamedQuery("Availability.findByPersonObject", Availability.class)
+                .setParameter("person", person).getResultList();
+    }
+    
 }

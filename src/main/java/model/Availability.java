@@ -34,7 +34,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Availability.findAll", query = "SELECT a FROM Availability a")
     , @NamedQuery(name = "Availability.findByAvailabilityId", query = "SELECT a FROM Availability a WHERE a.availabilityId = :availabilityId")
     , @NamedQuery(name = "Availability.findByFromDate", query = "SELECT a FROM Availability a WHERE a.fromDate = :fromDate")
-    , @NamedQuery(name = "Availability.findByToDate", query = "SELECT a FROM Availability a WHERE a.toDate = :toDate")})
+    , @NamedQuery(name = "Availability.findByToDate", query = "SELECT a FROM Availability a WHERE a.toDate = :toDate")
+    , @NamedQuery(name = "Availability.findByPersonObject", query = "SELECT a FROM Availability a WHERE a.personId = :person")})
+
 public class Availability implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -154,4 +156,10 @@ public class Availability implements Serializable {
     public void setPersonId(Person personId) {
         this.personId = personId;
     }
+
+    @Override
+    public String toString() {
+        return "Availability{" + "availabilityId=" + availabilityId + ", fromDate=" + fromDate + ", toDate=" + toDate + ", personId=" + personId + '}';
+    }
+    
 }
