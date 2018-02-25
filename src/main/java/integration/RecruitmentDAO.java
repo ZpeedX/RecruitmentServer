@@ -55,13 +55,12 @@ public class RecruitmentDAO {
                 newUser.setRoleId(r);
                 em.persist(newUser);
                 return newUser;
-            } else {
-                return null;
             }
         } catch (Exception e) { // LOG HERE
             e.printStackTrace();
-            return null;
+            
         }
+        return null;
     }
 
     /**

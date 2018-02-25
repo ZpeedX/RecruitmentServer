@@ -49,7 +49,7 @@ public class Person implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "PERSON_ID")
     private long personId;
     @Basic(optional = false)
@@ -274,4 +274,11 @@ public class Person implements Serializable {
     public boolean authenticate(String pass) {
         return pass.equals(password);
     }
+
+    @Override
+    public String toString() {
+        return "Person{" + "competenceProfileList=" + competenceProfileList + ", applicationsList=" + applicationsList + ", personId=" + personId + ", name=" + name + ", surname=" + surname + ", ssn=" + ssn + ", email=" + email + ", password=" + password + ", username=" + username + ", roleId=" + roleId + '}';
+    }
+    
+    
 }
