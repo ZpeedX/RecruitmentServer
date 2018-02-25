@@ -16,6 +16,7 @@ import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
@@ -122,5 +123,20 @@ public class ApplicationsREST {
         }
         return Response.ok(new GenericEntity<ApplicationDetailsDTO>(appDetail) {
         }, MediaType.APPLICATION_JSON).build();
+    }
+    
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("changeStatus")
+    public Response changeAppStatus(@NotNull JsonObject obj){
+        
+        long applicationId = obj.getInt("applicationId");
+        long appStatus = obj.getInt("appStatus");
+        
+        if(contr.changeAppStatus(applicationId, appStatus)){
+            return Response.ok().build();
+        }
+        return Response.status(Response.Status.EXPECTATION_FAILED).build();
     }
 }

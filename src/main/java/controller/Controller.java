@@ -11,6 +11,7 @@ import model.SupportedLanguage;
 
 import integration.RecruitmentDAO;
 import integration.TokenDAO;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -222,6 +223,16 @@ public class Controller {
                 availability.getFromDate(),
                 availability.getToDate()))
                 .collect(Collectors.toList());
+    }
+
+    public boolean changeAppStatus(long applicationId, long appStatus) {
+        Applications app = rdao.getApplicationById(applicationId);
+        StatusName sn = rdao.getStatusNamesByStatusId(BigInteger.valueOf(appStatus)).get(0);
+        if(app != null && sn != null){
+            app.setStatusId(BigInteger.valueOf(appStatus));
+            return true;
+        }
+        return false;
     }
 
 }
