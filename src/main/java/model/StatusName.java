@@ -10,6 +10,8 @@ import java.math.BigInteger;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -23,6 +25,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 /**
  *
  * @author Evan
+ * @author Oscar
  */
 @Entity
 @Table(name = "STATUS_NAME")
@@ -36,15 +39,18 @@ public class StatusName implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
     @Column(name = "STATUS_NAME_ID")
     private Long statusNameId;
+    @NotNull
     @Column(name = "STATUS_ID")
     private BigInteger statusId;
+    @NotNull
     @Size(max = 255)
     @Column(name = "NAME")
     private String name;
+    @NotNull
     @JoinColumn(name = "SUPPORTED_LANGUAGE_ID", referencedColumnName = "SUPPORTED_LANGUAGE_ID")
     @ManyToOne
     private SupportedLanguage supportedLanguageId;

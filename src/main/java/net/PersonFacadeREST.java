@@ -68,7 +68,6 @@ public class PersonFacadeREST {
     @GET
     @Secured
     @Path("/logout")
-    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response logout() {
         String username = securityContext.getUserPrincipal().getName();
@@ -77,15 +76,20 @@ public class PersonFacadeREST {
     }
 
     private JsonObject loginUser(JsonObject newUser) {
-        Person per = cont.authenticate(newUser.getString("username", ""));
-        
-        if (per != null && !per.getUsername().isEmpty() && per.authenticate(newUser.getString("password", ""))) {
-            String token = cont.login(per.getUsername(), per.getRoleId().getName());
-            String role = cont.getRoleFromToken(token);
-            return successJson(token, role);
-        } else {
+        try {
+            Person per = cont.authenticate(newUser.getString("username", ""));
+
+            if(per != null && !per.getUsername().isEmpty() && per.authenticate(newUser.getString("password", ""))) {
+                String token = cont.login(per.getUsername(), per.getRoleId().getName());
+                String role = cont.getRoleFromToken(token);
+                return successJson(token, role);
+            } else {
+                return errorJson("invalid");
+            }
+        } catch(Exception ex) {
             return errorJson("invalid");
         }
+        
     }
 
     private JsonObject registerUser(Person newPerson) {

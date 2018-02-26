@@ -6,9 +6,6 @@
 package model;
 
 import java.io.Serializable;
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -27,6 +24,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 /**
  *
  * @author Emil
+ * @author Oscar
  */
 @Entity
 @Table(name = "COMPETENCE_NAME")

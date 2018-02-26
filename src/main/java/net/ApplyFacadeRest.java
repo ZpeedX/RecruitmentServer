@@ -11,7 +11,6 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
-import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -21,7 +20,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import model.Availability;
 import model.CompetenceDTO;
-import model.CompetenceProfileDTO;
+import model.CompetenceProfile;
 import model.RoleEnum;
 import model.Secured;
 
@@ -47,12 +46,12 @@ public class ApplyFacadeRest {
     @Path("/competence")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response registerCompetence(List<CompetenceProfileDTO> profiles) {
+    public Response registerCompetence(List<CompetenceProfile> profiles) {
         System.out.println("path = /competence");
         if(profiles == null || profiles.isEmpty()) { return Response.notModified().build(); }
         
         profiles.forEach(p -> {
-            System.out.println("id: " + p.getCompetenceId() + ", name: " + p.getName() + ", yoe: " + p.getYearsOfExperience());
+            System.out.println("id: " + p.getCompetenceId() + ", name: " /*+ p.getName()*/ + ", yoe: " + p.getYearsOfExperience());
         });
         
         controller.addCompetenceProfiles(getUserFromPrincipal(), profiles);        

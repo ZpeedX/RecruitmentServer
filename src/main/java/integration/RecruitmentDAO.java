@@ -18,13 +18,10 @@ import javax.persistence.TypedQuery;
 import model.Applications;
 import model.CompetenceName;
 import model.CompetenceProfile;
-import model.CompetenceProfileDTO;
 import model.Person;
 import model.Role;
 import model.SupportedLanguage;
 import model.Availability;
-import javax.validation.ConstraintViolationException;
-import model.ApplicationDetailsDTO;
 import model.CompetenceProfileDTO1;
 import model.StatusName;
 
@@ -192,51 +189,111 @@ public class RecruitmentDAO {
 
     /**
      * This method recieves a list with profiles belonging to a specific user
-     * and persists these profiles in the database if they are valid.
+     * and persists these profiles in the database if they are valid and calls the
+     * {@code newContentAddedToApplication} method.
      *
      * @param user username associated with the profiles.
      * @param profiles the profiles to be stored.
      */
-    public void addCompetenceProfiles(String user, List<CompetenceProfileDTO> profiles) {
-        Person person = em.createNamedQuery("Person.findByUsername", Person.class).setParameter("username", user).getSingleResult();
-        System.out.println("Person is : " + person.getName() + ", email: " + person.getEmail());
-
-        profiles.forEach(p -> {
-            CompetenceProfile cp = new CompetenceProfile();
-            cp.setCompetenceId(p.getCompetenceId());
-            cp.setYearsOfExperience(p.getYearsOfExperience());
-            cp.setPersonId(person);
-            try {
-                em.persist(cp);
-            } catch (ConstraintViolationException e) { // LOG these errors
-                e.getConstraintViolations().forEach(err -> System.out.println("err = " + err.toString()));
-            } catch (Exception ex) {
-                System.out.println("ERROR ADDING TO DB: " + ex.getMessage());
-                ex.printStackTrace();
-            }
-        });
+    public void addCompetenceProfiles(String user, List<CompetenceProfile> profiles) {
+        try {
+            Person person = em.createNamedQuery("Person.findByUsername", Person.class)
+                .setParameter("username", user).getSingleResult();
+           
+            profiles.forEach(prof -> {
+                try {
+                    prof.setPersonId(person);
+                    em.persist(prof);
+                } catch (Exception ex) {
+                    System.out.println("ERRO PERSISTING: " + ex.getMessage());
+                    ex.printStackTrace();
+                }
+            });
+            
+            newConentAddedToApplication(person);
+        } catch(NullPointerException nex) {
+            System.out.println("NO SUCH USER: " + nex.getMessage());
+            nex.printStackTrace();
+        }
+        
     }
-
+    
+    private void resetApplicationStatusIfRejected(Applications application) {
+        try {
+            StatusName pending = getStatusNameByName("Pending");
+            StatusName rejected = getStatusNameByName("Rejected");
+            
+            if(application.getStatusId().getStatusId().equals(rejected.getStatusId())) {
+                application.setStatusId(pending);
+            }
+        } catch(Exception ex) { //LOG
+            System.out.println("Error resetting application stats" + ex.getMessage());
+            ex.printStackTrace();
+        }
+    }
+    
+    private void createNewApplication(Person person) {
+        try {
+            Applications application = new Applications();
+            StatusName status = getStatusNameByName("Pending");
+            Date registrationDate = new Date(System.currentTimeMillis());
+            
+            application.setPersonId(person);
+            application.setStatusId(status);
+            application.setRegistrationDate(registrationDate);
+            
+            em.persist(application);
+        } catch(Exception ex) {
+            System.out.println("Error creating new application" + ex.getMessage());
+            ex.printStackTrace();
+        }
+        
+    }
+    
+    private void newConentAddedToApplication(Person person) {
+        List<Applications> applications = em.createNamedQuery("Applications.findByPersonObject", Applications.class)
+                    .setParameter("person", person).getResultList();
+        
+        try {
+            if(applications.isEmpty()) {
+                createNewApplication(person);
+            } else {
+                resetApplicationStatusIfRejected(applications.get(0));
+            }
+        } catch(Exception ex) {
+            System.out.println("Error adding new content" + ex.getMessage());
+            ex.printStackTrace();
+        }
+    }
+    
     /**
      * This method recieves a list with availabilities belonging to a specific
-     * user and persists these in the database if they are valid.
+     * user and persists these in the database if they are valid and calls the
+     * {@code newContentAddedToApplication} method.
      *
      * @param username the user associated with the availabilities.
      * @param availabilities the availabilities to be stored.
      */
     public void addAvailabilities(String username, List<Availability> availabilities) {
-        Person person = em.createNamedQuery("Person.findByUsername", Person.class)
-                .setParameter("username", username).getSingleResult();
+        try {
+            Person person = em.createNamedQuery("Person.findByUsername", Person.class)
+                    .setParameter("username", username).getSingleResult();
 
-        availabilities.forEach(av -> {
-            try {
-                av.setPersonId(person);
-                em.persist(av);
-            } catch (Exception ex) {
-                System.out.println("ERROR ADDING AVAIL: " + ex.getMessage());
-                ex.printStackTrace();
-            }
-        });
+            availabilities.forEach(av -> {
+                try {
+                    av.setPersonId(person);
+                    em.persist(av);
+                } catch(Exception ex) {
+                    System.out.println("ERROR ADDING AVAIL: " + ex.getMessage());
+                    ex.printStackTrace();
+                }
+            });
+            
+            newConentAddedToApplication(person);
+        } catch(NullPointerException nex) { // LOG THIS
+            System.out.println("NO SUCH USER: " + nex.getMessage());
+            nex.printStackTrace();
+        }
 
     }
     
@@ -266,6 +323,11 @@ public class RecruitmentDAO {
     public List<Availability> getAvailabilityíesByPerson(Person person){
         return em.createNamedQuery("Availability.findByPersonObject", Availability.class)
                 .setParameter("person", person).getResultList();
+    }
+    
+    private StatusName getStatusNameByName(String name) throws Exception {
+        return em.createNamedQuery("StatusName.findByName", StatusName.class)
+                    .setParameter("name", name).getSingleResult();
     }
     
 }

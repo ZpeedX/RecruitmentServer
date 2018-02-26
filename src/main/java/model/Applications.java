@@ -6,7 +6,6 @@
 package model;
 
 import java.io.Serializable;
-import java.math.BigInteger;
 import java.util.Date;
 import javax.json.Json;
 import javax.json.JsonObject;
@@ -14,6 +13,8 @@ import javax.json.JsonObjectBuilder;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -28,12 +29,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 /**
  *
  * @author Evan
+ * @author Oscar
  */
 @Entity
 @Table(name = "APPLICATIONS")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Applications.findAll", query = "SELECT a FROM Applications a")
+    , @NamedQuery(name = "Applications.findByPersonObject", query = "SELECT a FROM Applications a WHERE a.personId = :person")
     , @NamedQuery(name = "Applications.findByApplicationId", query = "SELECT a FROM Applications a WHERE a.applicationId = :applicationId")
     , @NamedQuery(name = "Applications.findByParams",
             query = "SELECT DISTINCT app "
@@ -48,15 +51,19 @@ public class Applications implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
     @Column(name = "APPLICATION_ID")
     private Long applicationId;
+    @NotNull
     @Column(name = "REGISTRATION_DATE")
     @Temporal(TemporalType.DATE)
     private Date registrationDate;
-    @Column(name = "STATUS_ID")
-    private BigInteger statusId;
+    @NotNull
+    @JoinColumn(name = "STATUS_NAME", referencedColumnName = "STATUS_NAME_ID")
+    @ManyToOne
+    private StatusName statusId;
+    @NotNull
     @JoinColumn(name = "PERSON_ID", referencedColumnName = "PERSON_ID")
     @ManyToOne
     private Person personId;
@@ -122,11 +129,11 @@ public class Applications implements Serializable {
         this.registrationDate = registrationDate;
     }
 
-    public BigInteger getStatusId() {
+    public StatusName getStatusId() {
         return statusId;
     }
 
-    public void setStatusId(BigInteger statusId) {
+    public void setStatusId(StatusName statusId) {
         this.statusId = statusId;
     }
 

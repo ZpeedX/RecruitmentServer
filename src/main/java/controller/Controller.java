@@ -12,7 +12,6 @@ import model.SupportedLanguage;
 import integration.RecruitmentDAO;
 import integration.TokenDAO;
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,7 +26,6 @@ import model.Availability;
 import model.AvailabilityDTO;
 import model.CompetenceDTO;
 import model.CompetenceProfile;
-import model.CompetenceProfileDTO;
 import model.CompetenceProfileDTO1;
 import model.Person;
 import model.StatusName;
@@ -125,26 +123,23 @@ public class Controller {
     }
 
     /**
-     * This method adds competence profiles of a user and tries to store them in
-     * the database. It first validates that the entered profiles.
+     * This method adds competence profiles of a user and persists them in
+     * the database.
      *
-     * @param user username of the signed in user to whom the profiles belong
-     * @param profiles the profiles with the information
+     * @param user username of the signed in user to whom the profiles belong.
+     * @param profiles the profiles with the information.
      */
-    public void addCompetenceProfiles(String user, List<CompetenceProfileDTO> profiles) {
-        List<CompetenceProfileDTO> cleanProfiles = new ArrayList<>();
-
-        profiles.forEach(p -> {
-            if (p.getName() != null && p.getCompetenceId() != null && p.getYearsOfExperience() != 0) {
-                cleanProfiles.add(p);
-            }
-        });
-
-        if (!cleanProfiles.isEmpty()) {
-            rdao.addCompetenceProfiles(user, cleanProfiles);
-        }
+    public void addCompetenceProfiles(String user, List<CompetenceProfile> profiles) {
+        rdao.addCompetenceProfiles(user, profiles);
     }
 
+    /**
+     * This method adds availabilities of a user and persists them in
+     * the database.
+     *
+     * @param username username of the signed in user to whom the availabilities belong.
+     * @param availabilities the list with availability priods.
+     */
     public void addAvailabilities(String username, List<Availability> availabilities) {
         rdao.addAvailabilities(username, availabilities);
     }
@@ -191,7 +186,8 @@ public class Controller {
             return null;
         }
         Person person = app.getPersonId();
-        Map<String, String> statusMap = statusNamesToMap(rdao.getStatusNamesByStatusId(app.getStatusId()));
+        
+        Map<String, String> statusMap = statusNamesToMap(rdao.getStatusNamesByStatusId(app.getStatusId().getStatusId()));
         List<CompetenceProfileDTO1> cp = rdao.getCompetenceProfileByPersonId(person);
         List<AvailabilityDTO> av = avToAvDTO(rdao.getAvailabilityíesByPerson(person));
         
@@ -207,7 +203,6 @@ public class Controller {
         );
 
     }
-
 
     private Map<String, String> statusNamesToMap(List<StatusName> statusNames) {
         Map<String, String> statusMap = new HashMap<>();
@@ -229,7 +224,7 @@ public class Controller {
         Applications app = rdao.getApplicationById(applicationId);
         StatusName sn = rdao.getStatusNamesByStatusId(BigInteger.valueOf(appStatus)).get(0);
         if(app != null && sn != null){
-            app.setStatusId(BigInteger.valueOf(appStatus));
+            app.setStatusId(sn);
             return true;
         }
         return false;
