@@ -82,7 +82,7 @@ public class PersonFacadeREST {
             if(per != null && !per.getUsername().isEmpty() && per.authenticate(newUser.getString("password", ""))) {
                 String token = cont.login(per.getUsername(), per.getRoleId().getName());
                 String role = cont.getRoleFromToken(token);
-                return successJson(token, role);
+                return successJson(token, role, per.getUsername());
             } else {
                 return errorJson("invalid");
             }
@@ -98,7 +98,7 @@ public class PersonFacadeREST {
         if(person != null) {
             String token = cont.login(person.getUsername(), person.getRoleId().getName());
             String role = cont.getRoleFromToken(token);
-            return successJson(token, role);
+            return successJson(token, role, person.getUsername());
         } else {
             return errorJson("invalid");
         }
@@ -111,9 +111,9 @@ public class PersonFacadeREST {
         return json;
     }
     
-    private JsonObject successJson(String token, String role) {
+    private JsonObject successJson(String token, String role, String username) {
         JsonObject json = JsonProvider.provider().createObjectBuilder()
-                .add("token", token).add("role", role).build();
+                .add("token", token).add("role", role).add("username", username).build();
         
         return json;
     }
