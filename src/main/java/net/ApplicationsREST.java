@@ -22,6 +22,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
@@ -37,7 +38,7 @@ import model.Secured;
  * @author Evan
  */
 @Stateless
-//@Secured({RoleEnum.Recruiter})
+@Secured({RoleEnum.Recruiter})
 @Path("applications")
 public class ApplicationsREST {
 
@@ -125,6 +126,18 @@ public class ApplicationsREST {
         }, MediaType.APPLICATION_JSON).build();
     }
     
+    @GET
+    @Produces("application/pdf")
+    @Path("getApplicationDetails/pdf/{id}")
+    public Response getPdf(@PathParam("id") String id, @HeaderParam("locale") String language){
+        try {
+            long applicationId = Long.parseLong(id);
+            return Response.ok((Object) contr.getPdf(applicationId, language)).build();
+        } catch(Exception ex) {
+            return Response.status(Response.Status.EXPECTATION_FAILED).build();
+        }
+    }
+    
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -139,4 +152,5 @@ public class ApplicationsREST {
         }
         return Response.status(Response.Status.EXPECTATION_FAILED).build();
     }
+    
 }

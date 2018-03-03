@@ -8,7 +8,6 @@ package controller;
 import java.util.Date;
 import model.Applications;
 import model.SupportedLanguage;
-
 import integration.RecruitmentDAO;
 import integration.TokenDAO;
 import java.math.BigInteger;
@@ -27,13 +26,16 @@ import model.AvailabilityDTO;
 import model.CompetenceDTO;
 import model.CompetenceProfile;
 import model.CompetenceProfileDTO1;
+import model.PDFGenerator;
 import model.Person;
 import model.StatusName;
 import model.Token;
 import model.TokenGenerator;
 
 /**
- *
+ * Handles the incoming calls from the view and passes them on to the appropriate 
+ * methods and returns data on success, else throws exceptions.
+ * 
  * @author Emil
  * @author Oscar
  * @author Evan
@@ -228,6 +230,11 @@ public class Controller {
             return true;
         }
         return false;
+    }
+    
+    public Object getPdf(long id, String language) throws Exception {
+        ApplicationDetailsDTO appDetails = getApplicationDetails(id);
+        return new PDFGenerator(appDetails, language).generatePDF();
     }
 
 }
