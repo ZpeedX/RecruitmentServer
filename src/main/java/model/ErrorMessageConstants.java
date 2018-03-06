@@ -11,5 +11,5 @@ package model;
  */
 public class ErrorMessageConstants {
     public static int USERNAME_PRESENT_CODE = 1;
-    public static int SSN_PRESENT_CODE = 1;
+    public static int SSN_PRESENT_CODE = 2;
 }

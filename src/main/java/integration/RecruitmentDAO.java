@@ -322,7 +322,7 @@ public class RecruitmentDAO {
     private <T> T getSingleResultByQuery(Class<T> entity, String query, Map<String, Object> parameters) {
         try {
             return getNamedQueryWithParameters(entity, query, parameters).getSingleResult();
-        } catch(NullPointerException ex) {
+        } catch(Exception ex) {
             return null;
         }
     }
@@ -367,6 +367,7 @@ public class RecruitmentDAO {
         try {
             em.persist(entity);
         } catch(Exception ex) {
+            em.getTransaction().rollback();
             throwNewRuntimeException(ErrorMessageEnum.OPERTAION_FAILED.toString());
         }
     }
