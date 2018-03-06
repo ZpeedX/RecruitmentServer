@@ -260,11 +260,19 @@ public class RecruitmentDAO {
 
         newConentAddedToApplication(person);
     }
-    
+    /**
+     * Return application based on id
+     * @param appId id of application to return
+     * @return application
+     */
     public Applications getApplicationById(long appId) {
         return getResultFromPK(Applications.class, appId);
     }
-    
+    /**
+     * Returns competence profile from person id
+     * @param person person to get competenceprofile for
+     * @return competence profile
+     */
     public List<CompetenceProfileDTO1> getCompetenceProfileByPersonId(Person person) {
         String query = "SELECT NEW model.CompetenceProfileDTO1(cp.competenceId, cn.name, cp.yearsOfExperience, cn.supportedLanguageId.locale) "
                 + "FROM CompetenceProfile cp, CompetenceName cn "
@@ -285,21 +293,33 @@ public class RecruitmentDAO {
         
         return getListByQuery(CompetenceProfileDTO1.class, query, params);*/
     }
-    
+    /**
+     * Returns competencenames by id
+     * @param competenceId id of competence
+     * @return competences list
+     */
     public List<CompetenceName> getCompetenceNamesByCompetenceId(long competenceId) {
         Map<String, Object> params = new HashMap<>();
         params.put("competenceId", competenceId);
         
         return getListByQuery(CompetenceName.class, "findByCompetenceId", params);
     }
-    
+    /**
+     * Get statusnames by id
+     * @param statusId id of status
+     * @return list of status names
+     */
     public List<StatusName> getStatusNamesByStatusId(BigInteger statusId) {
         Map<String, Object> params = new HashMap<>();
         params.put("statusId", statusId);
         
         return getListByQuery(StatusName.class, "findByStatusId", params);
     }
-    
+    /**
+     * Returns availabilities by person
+     * @param person person to get availability for
+     * @return list of persons availabilities
+     */
     public List<Availability> getAvailabilityíesByPerson(Person person){
         Map<String, Object> params = new HashMap<>();
         params.put("person", person);
@@ -349,7 +369,13 @@ public class RecruitmentDAO {
             return null;
         }
     }
-    
+    /**
+     * Returns result based on primary key
+     * @param <T>   type of entity
+     * @param entity entity
+     * @param pk primary key value
+     * @return result of type T
+     */
     public <T> T getResultFromPK(Class<T> entity, Object pk) {
         validateDbConnectivity();
         
