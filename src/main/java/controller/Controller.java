@@ -61,7 +61,7 @@ public class Controller {
      * @return Person the authenticated person or {@code null} if none
      */
     public Person authenticate(String username) {
-        return rdao.existsUser(username);
+        return rdao.getPerson(username);
     }
 
     /**
@@ -132,6 +132,7 @@ public class Controller {
      * @param profiles the profiles with the information.
      */
     public void addCompetenceProfiles(String user, List<CompetenceProfile> profiles) {
+        if(listIsEmpty(profiles)) { return; }
         rdao.addCompetenceProfiles(user, profiles);
     }
 
@@ -143,6 +144,7 @@ public class Controller {
      * @param availabilities the list with availability priods.
      */
     public void addAvailabilities(String username, List<Availability> availabilities) {
+        if(listIsEmpty(availabilities)) { return; }
         rdao.addAvailabilities(username, availabilities);
     }
 
@@ -214,7 +216,7 @@ public class Controller {
         return statusMap;
     }
 
-    public List<AvailabilityDTO> avToAvDTO(List<Availability> av) {
+    private List<AvailabilityDTO> avToAvDTO(List<Availability> av) {
         return av.stream()
                 .map(availability -> new AvailabilityDTO(
                 availability.getFromDate(),
@@ -232,9 +234,13 @@ public class Controller {
         return false;
     }
     
-    public Object getPdf(long id, String language) throws Exception {
+    public Object getPdf(long id, String language) {
         ApplicationDetailsDTO appDetails = getApplicationDetails(id);
         return new PDFGenerator(appDetails, language).generatePDF();
     }
 
+    private boolean listIsEmpty(List<?> list) {
+        return list != null && !list.isEmpty();
+    }
+    
 }

@@ -51,9 +51,8 @@ public class PDFGenerator {
      * Generates the pdf of the application and returns it.
      * 
      * @return byte[] as Object with the content of the pdf.
-     * @throws Exception with a message if anything goes wrong generating the pdf.
      */
-    public Object generatePDF() throws Exception {
+    public Object generatePDF() {
         try {
             ByteArrayOutputStream pdf = new ByteArrayOutputStream();
             PdfWriter.getInstance(document, pdf);
@@ -68,7 +67,8 @@ public class PDFGenerator {
             return pdf.toByteArray();
         } catch(Exception ex) { 
             // Log reason of failure
-            throw new Exception(PDFLaguageForm.PDF_EXCEPTION_MSG[languageIndex][1]);
+            //throw new Exception(PDFLaguageForm.PDF_EXCEPTION_MSG[languageIndex][1]);
+            throw new AppRuntimeException(ErrorMessageEnum.OPERTAION_FAILED.toString());
         }
     }
     

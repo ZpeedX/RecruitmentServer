@@ -102,6 +102,11 @@ public class AuthentitactionFilter implements ContainerRequestFilter {
     private void validateToken(String token) throws Exception {
         // Check if the token was issued by the server and if it's not expired
         // Throw an Exception if the token is invalid
-        if(!tokenDAO.isValidToken(token)) { throw new Exception("Invalid token"); }
+        try {
+            if(!tokenDAO.isValidToken(token)) { throw new Exception("Invalid token"); }
+        } catch(Exception ex) {
+            throw new Exception("Invalid token");
+        }
+        //if(!tokenDAO.isValidToken(token)) { throw new Exception("Invalid token"); }
     }
 }

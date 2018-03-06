@@ -15,6 +15,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
@@ -38,8 +39,18 @@ public class ApplyFacadeRest {
     
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<CompetenceDTO> listCompetence() {
-        return controller.listCompetence();
+    public Response listCompetence() {
+        List<CompetenceDTO> competences = controller.listCompetence();
+        
+        GenericEntity<List<CompetenceDTO>> entity= new GenericEntity<List<CompetenceDTO>>(competences){};
+        
+        if(competences.isEmpty()) {
+            System.out.println("List empty");
+            return Response.noContent().build();
+        } else {
+            System.out.println("List NOT empty");
+            return Response.ok(entity).build();
+        }
     }
 
     @POST
@@ -48,30 +59,28 @@ public class ApplyFacadeRest {
     @Produces(MediaType.APPLICATION_JSON)
     public Response registerCompetence(List<CompetenceProfile> profiles) {
         System.out.println("path = /competence");
-        if(profiles == null || profiles.isEmpty()) { return Response.notModified().build(); }
         
         profiles.forEach(p -> {
             System.out.println("id: " + p.getCompetenceId() + ", name: " /*+ p.getName()*/ + ", yoe: " + p.getYearsOfExperience());
         });
         
-        controller.addCompetenceProfiles(getUserFromPrincipal(), profiles);        
-        return Response.ok().build();
+        controller.addCompetenceProfiles(getUserFromPrincipal(), profiles);
+        return Response.noContent().build();
     }
     
     @POST
     @Path("/availability")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response registerAvailability2(List<Availability> availabilities) {
+    public Response registerAvailability(List<Availability> availabilities) {
         System.out.println("path = /availability");
-        if (availabilities == null || availabilities.isEmpty()) {return Response.notModified().build(); }
         
         availabilities.forEach(av -> {
             System.out.println("from: " + av.getFromDate().toString() + ", to: " + av.getToDate().toString());
         });
         
         controller.addAvailabilities(getUserFromPrincipal(), availabilities);
-        return Response.ok().build();
+        return Response.noContent().build();
     }
     
     private String getUserFromPrincipal() {
@@ -79,4 +88,5 @@ public class ApplyFacadeRest {
         System.out.println("Logged in user is: " + user);
         return user;
     }
+    
 }

@@ -7,7 +7,9 @@ package integration;
 
 import java.math.BigInteger;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
@@ -15,6 +17,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
+import model.AppRuntimeException;
 import model.Applications;
 import model.CompetenceName;
 import model.CompetenceProfile;
@@ -23,6 +26,7 @@ import model.Role;
 import model.SupportedLanguage;
 import model.Availability;
 import model.CompetenceProfileDTO1;
+import model.ErrorMessageEnum;
 import model.StatusName;
 
 /**
@@ -46,18 +50,15 @@ public class RecruitmentDAO {
      * persisting the user.
      */
     public Person registerPerson(Person newUser) {
-        try {
-            if (existsUser(newUser.getUsername()) == null) {
-                Role r = getRole("Applicant");
-                newUser.setRoleId(r);
-                em.persist(newUser);
-                return newUser;
-            }
-        } catch (Exception e) { // LOG HERE
-            e.printStackTrace();
-            
-        }
-        return null;
+        makeSureUsernameFree(newUser.getUsername());
+        makeSureSsnIsUnique(newUser.getSsn());
+        
+        Role r = getRole("Applicant");
+        newUser.setRoleId(r);
+        
+        persistEntity(newUser);
+        
+        return newUser;
     }
 
     /**
@@ -69,17 +70,26 @@ public class RecruitmentDAO {
      * Person exists in the database.
      */
     public Person getPerson(String username) {
-        try {
-            return em.createNamedQuery("Person.findByUsername", Person.class)
-                    .setParameter("username", username).getSingleResult();
-        } catch (Exception ex) {
-            return null;
-        }
+        Map<String, Object> params = new HashMap<>();
+        params.put("username", username);
+        
+        return getSingleResultByQuery(Person.class, "findByUsername", params);
 
     }
     
-    public Person getPersonById(long personId){
-        return em.find(Person.class, personId);
+    private void makeSureUsernameFree(String username) {
+        if(getPerson(username) != null) {
+            throwNewRuntimeException(ErrorMessageEnum.USERNAME_PRESENT.toString());
+        }
+    }
+    
+    private void makeSureSsnIsUnique(String ssn) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("ssn", ssn);
+        
+        if(getSingleResultByQuery(Person.class, "findBySsn", params) != null) {
+            throwNewRuntimeException(ErrorMessageEnum.SSN_PRESENT.toString());
+        }
     }
 
     /**
@@ -89,34 +99,11 @@ public class RecruitmentDAO {
      * @return Role object
      */
     private Role getRole(String name) {
-        try {
-            return em.createNamedQuery("Role.findByName", Role.class)
-                    .setParameter("name", name).getSingleResult();
-        } catch (Exception ex) {
-            return null;
-        }
+        Map<String, Object> params = new HashMap<>();
+        params.put("name", name);
+        
+        return getSingleResultByQuery(Role.class, "findByName", params);
 
-    }
-
-    /**
-     * This method checks in the database if there is a user with the specified
-     * username.
-     *
-     * @param username of the check.
-     * @return Person the person with the enetered username or {@code null} if
-     * no such person exists.
-     */
-    public Person existsUser(String username) {
-        if (username == null || username.isEmpty()) {
-            return null;
-        }
-
-        try {
-            return em.createNamedQuery("Person.findByUsername", Person.class)
-                    .setParameter("username", username).getSingleResult();
-        } catch (Exception e) {
-            return null;
-        }
     }
 
     /**
@@ -126,7 +113,7 @@ public class RecruitmentDAO {
      * @return List of CompetenceName objects.
      */
     public List<CompetenceName> listCompetence() {
-        return em.createNamedQuery("CompetenceName.findAll", CompetenceName.class).getResultList();
+        return getListByQuery(CompetenceName.class, "findAll", null);
     }
 
     /**
@@ -137,9 +124,10 @@ public class RecruitmentDAO {
      * @return List of CompetenceName objects in the specified language.
      */
     public List<CompetenceName> getAllCompetences(String locale) {
-        TypedQuery<CompetenceName> query = em.createNamedQuery("CompetenceName.findAllByLang", CompetenceName.class)
-                .setParameter("locale", locale);
-        return query.getResultList();
+        Map<String, Object> params = new HashMap<>();
+        params.put("locale", locale);
+        
+        return getListByQuery(CompetenceName.class, "findAllByLang", params);
     }
 
     /**
@@ -149,9 +137,10 @@ public class RecruitmentDAO {
      * @return language id from database
      */
     public SupportedLanguage getSlId(String locale) {
-        TypedQuery<SupportedLanguage> p = em.createNamedQuery("SupportedLanguage.findByLocale", SupportedLanguage.class)
-                .setParameter("locale", locale);
-        return p.getSingleResult();
+        Map<String, Object> params = new HashMap<>();
+        params.put("locale", locale);
+        
+        return getSingleResultByQuery(SupportedLanguage.class, "findByLocale", params);
     }
 
     /**
@@ -160,8 +149,7 @@ public class RecruitmentDAO {
      * @return List of Application objects
      */
     public List<Applications> getAllApplications() {
-        TypedQuery<Applications> query = em.createNamedQuery("Applications.findAll", Applications.class);
-        return query.getResultList();
+        return getListByQuery(Applications.class, "findAll", null);
     }
 
     /**
@@ -176,15 +164,29 @@ public class RecruitmentDAO {
      * @return List of Application objects
      */
     public List<Applications> getApplications(Date submissionDate, Date periodFrom, Date periodTo, long competence, String firstname, Date dummyDate) {
-        TypedQuery<Applications> query
-                = em.createNamedQuery("Applications.findByParams", Applications.class)
-                        .setParameter("firstname", firstname)
-                        .setParameter("cpId", competence)
-                        .setParameter("regDate", submissionDate, TemporalType.DATE)
-                        .setParameter("tempDate", dummyDate, TemporalType.DATE)
-                        .setParameter("datePeriodFrom", periodFrom, TemporalType.DATE)
-                        .setParameter("datePeriodTo", periodTo, TemporalType.DATE);
-        return query.getResultList();
+        try {
+            TypedQuery<Applications> query
+                    = em.createNamedQuery("Applications.findByParams", Applications.class)
+                            .setParameter("firstname", firstname)
+                            .setParameter("cpId", competence)
+                            .setParameter("regDate", submissionDate, TemporalType.DATE)
+                            .setParameter("tempDate", dummyDate, TemporalType.DATE)
+                            .setParameter("datePeriodFrom", periodFrom, TemporalType.DATE)
+                            .setParameter("datePeriodTo", periodTo, TemporalType.DATE);
+            return query.getResultList();
+        } catch(Exception ex) {
+            throwNewRuntimeException(ErrorMessageEnum.OPERTAION_FAILED.toString());
+            return null;
+        }
+        /*Map<String, Object> params = new HashMap<>();
+        params.put("firstname", firstname);
+        params.put("cpId", competence);
+        params.put("regDate", submissionDate);
+        params.put("tempDate", dummyDate);
+        params.put("datePeriodFrom", periodFrom);
+        params.put("datePeriodTo", periodTo);
+        
+        return getListByQuery(Applications.class, "findByParams", params);*/
     }
 
     /**
@@ -196,73 +198,47 @@ public class RecruitmentDAO {
      * @param profiles the profiles to be stored.
      */
     public void addCompetenceProfiles(String user, List<CompetenceProfile> profiles) {
-        try {
-            Person person = em.createNamedQuery("Person.findByUsername", Person.class)
-                .setParameter("username", user).getSingleResult();
-           
-            profiles.forEach(prof -> {
-                try {
-                    prof.setPersonId(person);
-                    em.persist(prof);
-                } catch (Exception ex) {
-                    System.out.println("ERRO PERSISTING: " + ex.getMessage());
-                    ex.printStackTrace();
-                }
-            });
-            
-            newConentAddedToApplication(person);
-        } catch(NullPointerException nex) {
-            System.out.println("NO SUCH USER: " + nex.getMessage());
-            nex.printStackTrace();
-        }
-        
+        Person person = getPerson(user);
+
+        profiles.forEach(prof -> {
+            prof.setPersonId(person);
+            persistEntity(prof);
+        });
+
+        newConentAddedToApplication(person);
     }
     
     private void resetApplicationStatusIfRejected(Applications application) {
-        try {
-            StatusName pending = getStatusNameByName("Pending");
-            StatusName rejected = getStatusNameByName("Rejected");
-            
-            if(application.getStatusId().getStatusId().equals(rejected.getStatusId())) {
-                application.setStatusId(pending);
-            }
-        } catch(Exception ex) { //LOG
-            System.out.println("Error resetting application stats" + ex.getMessage());
-            ex.printStackTrace();
+        StatusName pending = getStatusNameByName("Pending");
+        StatusName rejected = getStatusNameByName("Rejected");
+
+        if(application.getStatusId().getStatusId().equals(rejected.getStatusId())) {
+            application.setStatusId(pending);
         }
     }
     
     private void createNewApplication(Person person) {
-        try {
-            Applications application = new Applications();
-            StatusName status = getStatusNameByName("Pending");
-            Date registrationDate = new Date(System.currentTimeMillis());
-            
-            application.setPersonId(person);
-            application.setStatusId(status);
-            application.setRegistrationDate(registrationDate);
-            
-            em.persist(application);
-        } catch(Exception ex) {
-            System.out.println("Error creating new application" + ex.getMessage());
-            ex.printStackTrace();
-        }
-        
+        Applications application = new Applications();
+        StatusName status = getStatusNameByName("Pending");
+        Date registrationDate = new Date(System.currentTimeMillis());
+
+        application.setPersonId(person);
+        application.setStatusId(status);
+        application.setRegistrationDate(registrationDate);
+
+        persistEntity(application);
     }
     
     private void newConentAddedToApplication(Person person) {
-        List<Applications> applications = em.createNamedQuery("Applications.findByPersonObject", Applications.class)
-                    .setParameter("person", person).getResultList();
+        Map<String, Object> params = new HashMap<>();
+        params.put("person", person);
         
-        try {
-            if(applications.isEmpty()) {
-                createNewApplication(person);
-            } else {
-                resetApplicationStatusIfRejected(applications.get(0));
-            }
-        } catch(Exception ex) {
-            System.out.println("Error adding new content" + ex.getMessage());
-            ex.printStackTrace();
+        List<Applications> applications = getListByQuery(Applications.class, "findByPersonObject", params);
+       
+        if(applications.isEmpty()) {
+            createNewApplication(person);
+        } else {
+            resetApplicationStatusIfRejected(applications.get(0));
         }
     }
     
@@ -275,59 +251,132 @@ public class RecruitmentDAO {
      * @param availabilities the availabilities to be stored.
      */
     public void addAvailabilities(String username, List<Availability> availabilities) {
-        try {
-            Person person = em.createNamedQuery("Person.findByUsername", Person.class)
-                    .setParameter("username", username).getSingleResult();
+        Person person = getPerson(username);
 
-            availabilities.forEach(av -> {
-                try {
-                    av.setPersonId(person);
-                    em.persist(av);
-                } catch(Exception ex) {
-                    System.out.println("ERROR ADDING AVAIL: " + ex.getMessage());
-                    ex.printStackTrace();
-                }
-            });
-            
-            newConentAddedToApplication(person);
-        } catch(NullPointerException nex) { // LOG THIS
-            System.out.println("NO SUCH USER: " + nex.getMessage());
-            nex.printStackTrace();
-        }
+        availabilities.forEach(av -> {
+            av.setPersonId(person);
+            persistEntity(av);
+        });
 
+        newConentAddedToApplication(person);
     }
     
-    public Applications getApplicationById(long appId){
-        return em.find(Applications.class, appId);
+    public Applications getApplicationById(long appId) {
+        return getResultFromPK(Applications.class, appId);
     }
     
-    public List<CompetenceProfileDTO1> getCompetenceProfileByPersonId(Person person){
+    public List<CompetenceProfileDTO1> getCompetenceProfileByPersonId(Person person) {
         String query = "SELECT NEW model.CompetenceProfileDTO1(cp.competenceId, cn.name, cp.yearsOfExperience, cn.supportedLanguageId.locale) "
                 + "FROM CompetenceProfile cp, CompetenceName cn "
                 + "WHERE cp.competenceId = cn.competenceId "
                 + "AND cp.personId = :person";
-        return em.createQuery(query, CompetenceProfileDTO1.class)
+        
+        try {
+            return em.createQuery(query, CompetenceProfileDTO1.class)
                 .setParameter("person", person).getResultList();
+        } catch(Exception ex) {
+            throwNewRuntimeException(ErrorMessageEnum.OPERTAION_FAILED.toString());
+            return null;
+        }
+        
+        
+        /*Map<String, Object> params = new HashMap<>();
+        params.put("person", person);
+        
+        return getListByQuery(CompetenceProfileDTO1.class, query, params);*/
     }
     
-    public List<CompetenceName> getCompetenceNamesByCompetenceId(long competenceId){
-        return em.createNamedQuery("CompetenceName.findByCompetenceId", CompetenceName.class)
-                .setParameter("competenceId", competenceId).getResultList();
+    public List<CompetenceName> getCompetenceNamesByCompetenceId(long competenceId) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("competenceId", competenceId);
+        
+        return getListByQuery(CompetenceName.class, "findByCompetenceId", params);
     }
     
-    public List<StatusName> getStatusNamesByStatusId(BigInteger statusId){
-        return em.createNamedQuery("StatusName.findByStatusId", StatusName.class)
-                .setParameter("statusId", statusId).getResultList();
+    public List<StatusName> getStatusNamesByStatusId(BigInteger statusId) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("statusId", statusId);
+        
+        return getListByQuery(StatusName.class, "findByStatusId", params);
     }
     
     public List<Availability> getAvailabilityíesByPerson(Person person){
-        return em.createNamedQuery("Availability.findByPersonObject", Availability.class)
-                .setParameter("person", person).getResultList();
+        Map<String, Object> params = new HashMap<>();
+        params.put("person", person);
+        
+        return getListByQuery(Availability.class, "findByPersonObject", params);
     }
     
-    private StatusName getStatusNameByName(String name) throws Exception {
-        return em.createNamedQuery("StatusName.findByName", StatusName.class)
-                    .setParameter("name", name).getSingleResult();
+    private StatusName getStatusNameByName(String name) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("name", name);
+        
+        return getSingleResultByQuery(StatusName.class, "findByName", params);
+        
+    }
+    
+    private <T> List<T> getListByQuery(Class<T> entity, String query, Map<String, Object> parameters) {
+        return getNamedQueryWithParameters(entity, query, parameters).getResultList();
+    }
+    
+    private <T> T getSingleResultByQuery(Class<T> entity, String query, Map<String, Object> parameters) {
+        try {
+            return getNamedQueryWithParameters(entity, query, parameters).getSingleResult();
+        } catch(NullPointerException ex) {
+            return null;
+        }
+    }
+    
+    private <T> TypedQuery<T> getNamedQueryWithParameters(Class<T> entity, String query, Map<String, Object> parameters) {
+        validateDbConnectivity();
+        
+        try {
+            String entityType = entity.getSimpleName();
+            String fullQuery = entityType + "." + query;
+
+            TypedQuery<T> namedQuery = em.createNamedQuery(fullQuery, entity);
+
+            if(parameters != null) {
+                parameters.entrySet().forEach(pair -> {
+                    namedQuery.setParameter(pair.getKey(), pair.getValue());
+                });
+            }
+
+            return namedQuery;
+        } catch(Exception ex) {
+            System.out.println("EXCEPTION CAUGHT");
+            throwNewRuntimeException(ErrorMessageEnum.OPERTAION_FAILED.toString());
+            return null;
+        }
+    }
+    
+    public <T> T getResultFromPK(Class<T> entity, Object pk) {
+        validateDbConnectivity();
+        
+        try {
+            return em.find(entity, pk);
+        } catch(Exception ex) {
+            throwNewRuntimeException(ErrorMessageEnum.OPERTAION_FAILED.toString());
+            return null;
+        } 
+    }
+    
+    private void persistEntity(Object entity) {
+        validateDbConnectivity();
+        
+        try {
+            em.persist(entity);
+        } catch(Exception ex) {
+            throwNewRuntimeException(ErrorMessageEnum.OPERTAION_FAILED.toString());
+        }
+    }
+    
+    private void throwNewRuntimeException(String msg) {
+        throw new AppRuntimeException(msg);
+    }
+
+    private void validateDbConnectivity() {
+        if(!em.isOpen()) { throwNewRuntimeException(ErrorMessageEnum.OPERTAION_FAILED.toString()); }
     }
     
 }
