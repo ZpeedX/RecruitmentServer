@@ -36,7 +36,10 @@ public class ApplyFacadeRest {
     @Inject private Controller controller;
     
     @Context SecurityContext securityContext;
-    
+    /**
+     * 
+     * @return 
+     */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response listCompetence() {

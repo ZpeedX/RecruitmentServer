@@ -38,7 +38,11 @@ public class PersonFacadeREST {
     private Controller cont;
     
     @Context SecurityContext securityContext;
-    
+    /**
+     * Endpoint recieving user information from user to log in
+     * @param user user credentials
+     * @return response on success/fail
+     */
     @POST
     @Path("/login")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -46,7 +50,11 @@ public class PersonFacadeREST {
     public Response login(@NotNull JsonObject user) {
         return Response.ok(loginUser(user)).build();
     }
-    
+    /**
+     * Endpoint recieving registration information from user to register
+     * @param person user credentials
+     * @return response on success/fail
+     */
     @POST
     @Path("/register")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -54,7 +62,10 @@ public class PersonFacadeREST {
     public Response register(Person person) {
         return Response.ok(registerUser(person)).build();
     }
-    
+    /**
+     * Endpoint recieving registration information from user to register
+     * @return empty response
+     */
     @GET
     @Secured
     @Path("/logout")

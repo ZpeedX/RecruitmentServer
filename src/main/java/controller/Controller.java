@@ -25,7 +25,7 @@ import model.Availability;
 import model.AvailabilityDTO;
 import model.CompetenceDTO;
 import model.CompetenceProfile;
-import model.CompetenceProfileDTO1;
+import model.CompetenceProfileDTO;
 import model.PDFGenerator;
 import model.Person;
 import model.StatusName;
@@ -196,7 +196,7 @@ public class Controller {
         Person person = app.getPersonId();
         
         Map<String, String> statusMap = statusNamesToMap(rdao.getStatusNamesByStatusId(app.getStatusId().getStatusId()));
-        List<CompetenceProfileDTO1> cp = rdao.getCompetenceProfileByPersonId(person);
+        List<CompetenceProfileDTO> cp = rdao.getCompetenceProfileByPersonId(person);
         List<AvailabilityDTO> av = avToAvDTO(rdao.getAvailabilityíesByPerson(person));
         
         return new ApplicationDetailsDTO(

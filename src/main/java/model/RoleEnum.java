@@ -6,10 +6,16 @@
 package model;
 
 /**
- *
+ * Holds roles
  * @author Oscar
  */
 public enum RoleEnum {
+    /**
+     * An applicant applies
+     */
     Applicant,
+    /**
+     * A reqruiter sees application
+     */
     Recruiter
 }

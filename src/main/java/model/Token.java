@@ -92,8 +92,8 @@ public class Token implements Serializable {
         this.username = username;
         this.role = role;
         this.token = token;
-        this.issued = issued;
-        this.expires = expires;
+        this.issued = new Date(issued.getTime());
+        this.expires = new Date(expires.getTime());
     }
 
     /**
@@ -156,7 +156,7 @@ public class Token implements Serializable {
      * @return issued as Date object
      */
     public Date getIssued() {
-        return issued;
+        return new Date(issued.getTime());
     }
 
     /**
@@ -165,7 +165,7 @@ public class Token implements Serializable {
      * @param issued the token to set
      */
     public void setIssued(Date issued) {
-        this.issued = issued;
+        this.issued = new Date(issued.getTime());
     }
 
     /**
@@ -174,7 +174,7 @@ public class Token implements Serializable {
      * @return expires as Date object
      */
     public Date getExpires() {
-        return expires;
+        return new Date(expires.getTime());
     }
 
     /**
@@ -183,6 +183,6 @@ public class Token implements Serializable {
      * @param expires the expires to set
      */
     public void setExpires(Date expires) {
-        this.expires = expires;
+        this.expires = new Date(expires.getTime());
     }
 }
