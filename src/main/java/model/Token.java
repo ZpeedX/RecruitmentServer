@@ -16,6 +16,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -25,7 +26,9 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Oscar
  */
 @Entity
-@Table(name = "TOKEN")
+@Table(name = "TOKEN", uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"TOKEN"})
+    , @UniqueConstraint(columnNames = {"USERNAME"})})
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Token.findAll", query = "SELECT t FROM Token t")
@@ -41,26 +44,26 @@ public class Token implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
-    @Column(name = "USERNAME")
+    @Column(name = "USERNAME", nullable = false, length = 255)
     private String username;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
-    @Column(name = "ROLE")
+    @Column(name = "ROLE", nullable = false, length = 255)
     private String role;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
-    @Column(name = "TOKEN")
+    @Column(name = "TOKEN", nullable = false, length = 255)
     private String token;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "ISSUED")
+    @Column(name = "ISSUED", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date issued;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "EXPIRES")
+    @Column(name = "EXPIRES", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date expires;
 

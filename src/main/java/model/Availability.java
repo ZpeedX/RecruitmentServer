@@ -44,22 +44,23 @@ public class Availability implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "AVAILABILITY_ID")
+    @Column(name = "AVAILABILITY_ID", nullable = false)
     private Long availabilityId;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "FROM_DATE")
+    @Column(name = "FROM_DATE", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date fromDate;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "TO_DATE")
+    @Column(name = "TO_DATE", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date toDate;
     @NotNull
-    @JoinColumn(name = "PERSON_ID", referencedColumnName = "PERSON_ID")
+    @JoinColumn(name = "PERSON_ID", referencedColumnName = "PERSON_ID", nullable = false)
     @ManyToOne(optional = false)
     private Person personId;
+    
     /**
      * Constructor
      */

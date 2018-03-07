@@ -55,7 +55,7 @@ public class AppExceptionMapper implements ExceptionMapper<Throwable> {
                     return Response.status(Response.Status.SERVICE_UNAVAILABLE).build();
                 case OPERTAION_FAILED:
                     System.out.println("OPERTAION_FAILED");
-                    return Response.status(Response.Status.NO_CONTENT).build();
+                    return Response.status(Response.Status.SERVICE_UNAVAILABLE).build();
                 default:
                     System.out.println("DEFUALT");
                     return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();

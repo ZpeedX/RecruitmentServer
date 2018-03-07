@@ -17,6 +17,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -27,7 +28,8 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Oscar
  */
 @Entity
-@Table(name = "COMPETENCE_NAME")
+@Table(name = "COMPETENCE_NAME", uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"COMPETENCE_ID", "NAME", "SUPPORTED_LANGUAGE_ID"})})
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "CompetenceName.findAll", query = "SELECT c FROM CompetenceName c")
@@ -42,20 +44,22 @@ public class CompetenceName implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "COMPETENCE_NAME_ID")
+    @Column(name = "COMPETENCE_NAME_ID", nullable = false)
     private Long competenceNameId;
-    @JoinColumn(name = "SUPPORTED_LANGUAGE_ID", referencedColumnName = "SUPPORTED_LANGUAGE_ID")
+    @NotNull
+    @JoinColumn(name = "SUPPORTED_LANGUAGE_ID", referencedColumnName = "SUPPORTED_LANGUAGE_ID", nullable = false)
     @ManyToOne(optional = false)
     private SupportedLanguage supportedLanguageId;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
-    @Column(name = "NAME")
+    @Column(name = "NAME", nullable = false, length = 255)
     private String name;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "COMPETENCE_ID")
+    @Column(name = "COMPETENCE_ID", nullable = false)
     private long competenceId;
+    
     /**
      * Class constructor
      */
