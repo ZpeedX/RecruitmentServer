@@ -397,7 +397,6 @@ public class RecruitmentDAO {
         try {
             em.persist(entity);
         } catch(Exception ex) {
-            em.getTransaction().rollback();
             throwNewRuntimeException(ErrorMessageEnum.OPERTAION_FAILED.toString());
         }
     }
