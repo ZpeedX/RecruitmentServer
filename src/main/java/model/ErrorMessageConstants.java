@@ -11,11 +11,11 @@ package model;
  */
 public class ErrorMessageConstants {
     /**
-     * Code for username
+     * Code for username taken
      */
-    public static int USERNAME_PRESENT_CODE = 1;
+    public static final int USERNAME_PRESENT_CODE = 1;
     /**
-     * Code for social security number
+     * Code for social security number taken
      */
-    public static int SSN_PRESENT_CODE = 2;
+    public static final int SSN_PRESENT_CODE = 2;
 }

@@ -326,7 +326,11 @@ public class RecruitmentDAO {
         
         return getListByQuery(Availability.class, "findByPersonObject", params);
     }
-    
+    /**
+     * Returns status by name
+     * @param name name of status
+     * @return return status name
+     */
     public StatusName getStatusNameByName(String name) {
         Map<String, Object> params = new HashMap<>();
         params.put("name", name);

@@ -47,10 +47,15 @@ public class ApplicationsREST {
 
     @Inject
     private Controller contr;
-
+    /**
+     * Constructor
+     */
     public ApplicationsREST() {
     }
-
+    /**
+     * Endpoint for application list requests
+     * @return list of applications
+     */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("listApplications")
@@ -58,14 +63,21 @@ public class ApplicationsREST {
         List<Applications> applications = contr.listApplications();
         return appListToJsonArray(applications);
     }
-
+    /**
+     * Endpoint for competence list requests
+     * @return Respose containing list of competences
+     */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("competence")
     public Response listCompetences() {
         return Response.ok(new GenericEntity<List<CompetenceDTO>>(contr.listCompetence()) {}).build();
     }
-
+    /**
+     * Endpoint for application search requests
+     * @param entity application parameters
+     * @return Reponse containing search results
+     */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -117,7 +129,11 @@ public class ApplicationsREST {
         
         return builder.build();
     }
-
+    /**
+     * Endpoint for application retrieval requests
+     * @param applicationId id for application
+     * @return application requested
+     */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("getApplicationDetails")
@@ -130,7 +146,12 @@ public class ApplicationsREST {
         
         return Response.ok(new GenericEntity<ApplicationDetailsDTO>(appDetail) {}).build();
     }
-
+    /**
+     * Endpoint for pdf requests
+     * @param applicationId application to be printed as pdf
+     * @param language language of pdf
+     * @return pdf as object
+     */
     @GET
     @Produces("application/pdf")
     @Path("getApplicationDetails/pdf/{id}")
@@ -138,7 +159,11 @@ public class ApplicationsREST {
     public Response getPdf(@PathParam("id") Long applicationId, @HeaderParam("locale") String language){
         return Response.ok((Object) contr.getPdf(applicationId, language)).build();
     }
-
+    /**
+     * Endpoint for application status changes
+     * @param obj application information
+     * @return Response with List of StatusNameDTO object if response is ok, else return Response.EXPECTATION_FAILED
+     */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("changeStatus")
