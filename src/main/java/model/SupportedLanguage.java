@@ -21,7 +21,7 @@ import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- *
+ * Entity for supported languages
  * @author Emil
  */
 @Entity

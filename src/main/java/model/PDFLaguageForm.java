@@ -6,7 +6,7 @@
 package model;
 
 /**
- * 
+ * Language for pdf
  * @author Oscar
  */
 class PDFLaguageForm {

@@ -8,7 +8,7 @@ package model;
 import java.io.Serializable;
 
 /**
- *
+ * DTO for competence information
  * @author Evan
  */
 public class CompetenceProfileDTO implements Serializable {

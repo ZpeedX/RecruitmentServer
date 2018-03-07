@@ -24,7 +24,7 @@ import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- *
+ * Entity for availability
  * @author Evan
  * @author Oscar
  */
