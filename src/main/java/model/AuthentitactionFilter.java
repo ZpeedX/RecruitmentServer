@@ -33,7 +33,7 @@ public class AuthentitactionFilter implements ContainerRequestFilter {
     @EJB 
     private TokenDAO tokenDAO;
     /**
-     * Manage user token
+     * Filters 
      * @param requestContext
      * @throws IOException 
      */

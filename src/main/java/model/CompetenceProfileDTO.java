@@ -9,13 +9,14 @@ import java.io.Serializable;
 
 /**
  *
- * @author Oscar
+ * @author Evan
  */
 public class CompetenceProfileDTO implements Serializable {
     private static final long serialVersionUID = 1L;
     private Long competenceId;
-    private transient String name;
+    private String competenceName;
     private double yearsOfExperience;
+    private String language;
 
     /**
      * Class Constructor
@@ -29,11 +30,13 @@ public class CompetenceProfileDTO implements Serializable {
      * @param competenceId sets the competenceId property
      * @param name sets the name property
      * @param yearsOfExperience sets the yearsOfExperience property
+     * @param language
      */
-    public CompetenceProfileDTO(Long competenceId, String name, double yearsOfExperience) {
+    public CompetenceProfileDTO(Long competenceId, String name, double yearsOfExperience, String language) {
         this.competenceId = competenceId;
-        this.name = name;
+        this.competenceName = name;
         this.yearsOfExperience = yearsOfExperience;
+        this.language = language;
     }
 
     /**
@@ -77,8 +80,8 @@ public class CompetenceProfileDTO implements Serializable {
      *
      * @return name as String object
      */
-    public String getName() {
-        return name;
+    public String getCompetenceName() {
+        return competenceName;
     }
     
     /**
@@ -86,9 +89,21 @@ public class CompetenceProfileDTO implements Serializable {
      *
      * @param name the name to set
      */
-    public void setName(String name) {
-        this.name = name;
+    public void setCompetenceName(String name) {
+        this.competenceName = name;
     }
-    
-    
+    /**
+     * Returns language of profile
+     * @return language
+     */
+    public String getLanguage() {
+        return language;
+    }
+    /**
+     * Sets language of competence profile
+     * @param language a language
+     */
+    public void setLanguage(String language) {
+        this.language = language;
+    }
 }

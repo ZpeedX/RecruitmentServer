@@ -27,7 +27,7 @@ public class ApplicationDetailsDTO implements Serializable {
   
     private List<StatusNameDTO> statusName;
     
-    private List<CompetenceProfileDTO1> competenceProfiles;
+    private List<CompetenceProfileDTO> competenceProfiles;
     private List<AvailabilityDTO> availabilities;
 
     /**
@@ -54,8 +54,9 @@ public class ApplicationDetailsDTO implements Serializable {
             String email,
             String ssn,
             Date regDate,
+
             List<StatusNameDTO> statusName,
-            List<CompetenceProfileDTO1> cp,
+            List<CompetenceProfileDTO> cp,
             List<AvailabilityDTO> av) {
 
         this.user_firstname = firstname;
@@ -98,7 +99,7 @@ public class ApplicationDetailsDTO implements Serializable {
     /**
      * Set the surname of the applicant
      *
-     * @param user_surname entered surname
+     * @param user_surrname entered surname
      */
     public void setUser_surname(String user_surrname) {
         this.user_surname = user_surrname;
@@ -199,7 +200,7 @@ public class ApplicationDetailsDTO implements Serializable {
      *
      * @return applicants competences
      */
-    public List<CompetenceProfileDTO1> getCompetenceProfiles() {
+    public List<CompetenceProfileDTO> getCompetenceProfiles() {
         return competenceProfiles;
     }
 
@@ -208,7 +209,7 @@ public class ApplicationDetailsDTO implements Serializable {
      *
      * @param competenceProfiles list of applicants competences
      */
-    public void setCompetenceProfiles(List<CompetenceProfileDTO1> competenceProfiles) {
+    public void setCompetenceProfiles(List<CompetenceProfileDTO> competenceProfiles) {
         this.competenceProfiles = competenceProfiles;
     }
 

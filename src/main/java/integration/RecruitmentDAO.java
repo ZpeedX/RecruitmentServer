@@ -25,7 +25,7 @@ import model.Person;
 import model.Role;
 import model.SupportedLanguage;
 import model.Availability;
-import model.CompetenceProfileDTO1;
+import model.CompetenceProfileDTO;
 import model.ErrorMessageEnum;
 import model.StatusName;
 
@@ -273,14 +273,14 @@ public class RecruitmentDAO {
      * @param person person to get competenceprofile for
      * @return competence profile
      */
-    public List<CompetenceProfileDTO1> getCompetenceProfileByPersonId(Person person) {
+    public List<CompetenceProfileDTO> getCompetenceProfileByPersonId(Person person) {
         String query = "SELECT NEW model.CompetenceProfileDTO1(cp.competenceId, cn.name, cp.yearsOfExperience, cn.supportedLanguageId.locale) "
                 + "FROM CompetenceProfile cp, CompetenceName cn "
                 + "WHERE cp.competenceId = cn.competenceId "
                 + "AND cp.personId = :person";
         
         try {
-            return em.createQuery(query, CompetenceProfileDTO1.class)
+            return em.createQuery(query, CompetenceProfileDTO.class)
                 .setParameter("person", person).getResultList();
         } catch(Exception ex) {
             throwNewRuntimeException(ErrorMessageEnum.OPERTAION_FAILED.toString());
@@ -291,7 +291,7 @@ public class RecruitmentDAO {
         /*Map<String, Object> params = new HashMap<>();
         params.put("person", person);
         
-        return getListByQuery(CompetenceProfileDTO1.class, query, params);*/
+        return getListByQuery(CompetenceProfileDTO.class, query, params);*/
     }
     /**
      * Returns competencenames by id

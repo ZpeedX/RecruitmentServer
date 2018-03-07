@@ -1,6 +1,5 @@
 package model;
 
-import java.io.Serializable;
 import javax.ejb.ApplicationException;
 
 /**
@@ -8,15 +7,19 @@ import javax.ejb.ApplicationException;
  * @author Oscar
  */
 @ApplicationException(rollback=true)
-public class AppRuntimeException extends RuntimeException implements Serializable {
+public class AppRuntimeException extends RuntimeException{
     /**
-     * 
-     * @param message 
+     * Sets why exception was cast
+     * @param message reason
      */
     public AppRuntimeException(String message) {
         super(message);
     }
-
+    /**
+     * Sets message to why exception was thrown
+     * @param message reason for exception
+     * @param throwable the exception
+     */
     public AppRuntimeException(String message, Throwable throwable) {
         super(message, throwable);
     }

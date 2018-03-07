@@ -25,7 +25,7 @@ import model.Availability;
 import model.AvailabilityDTO;
 import model.CompetenceDTO;
 import model.CompetenceProfile;
-import model.CompetenceProfileDTO1;
+import model.CompetenceProfileDTO;
 import model.PDFGenerator;
 import model.Person;
 import model.StatusName;
