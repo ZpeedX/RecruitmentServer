@@ -76,6 +76,31 @@ public class PersonFacadeREST {
         cont.logout(username);
         return Response.noContent().build();
     }
+    
+    /**
+     * Endpoint recieving validation information from user to register
+     * 
+     * @param json
+     * @return empty response
+     */
+    @POST
+    @Secured
+    @Path("/validate")
+    public Response validateChoice(@NotNull JsonObject json) {
+        return validate(json);
+    }
+    
+    private Response validate(JsonObject json) {
+        String pass = json.getString("password", "");
+        String username = securityContext.getUserPrincipal().getName();
+        Person person = cont.authenticate(username);
+        
+        if(person == null || !person.authenticate(pass)) {
+            throw new AppRuntimeException(ErrorMessageEnum.INVALID_CONTENT.toString());
+        } else {
+            return Response.noContent().build();
+        }
+    }
 
     private JsonObject loginUser(JsonObject newUser) {
         Person person = cont.authenticate(newUser.getString("username", ""));
