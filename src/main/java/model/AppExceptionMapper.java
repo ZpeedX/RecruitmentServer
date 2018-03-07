@@ -26,8 +26,8 @@ public class AppExceptionMapper implements ExceptionMapper<Throwable> {
 
     private static final Logger LOGGER = Logger.getLogger("Server_Logger");
     private final String SERVER_LOGGER_SEVERE_FILE = "Server_Logger_Severe.log";
-    private final String SERVER_LOGGER_WARNING_FILE = "Server_Logger_Severe.log";
-    private final String SERVER_LOGGER_INFO_FILE = "Server_Logger_Severe.log";
+    private final String SERVER_LOGGER_WARNING_FILE = "Server_Logger_Warning.log";
+    private final String SERVER_LOGGER_INFO_FILE = "Server_Logger_Info.log";
 
     private FileHandler fh;
 
@@ -95,7 +95,7 @@ public class AppExceptionMapper implements ExceptionMapper<Throwable> {
 
     private void logErrorMsg(Throwable ex, Level logLvl) {
         try {
-            String file_name = "";
+            String file_name;
             switch (logLvl.getName()) {
                 case "SEVERE":
                     file_name = SERVER_LOGGER_SEVERE_FILE;
