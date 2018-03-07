@@ -15,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -24,7 +25,8 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Emil
  */
 @Entity
-@Table(name = "SUPPORTED_LANGUAGE")
+@Table(name = "SUPPORTED_LANGUAGE", uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"LOCALE"})})
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "SupportedLanguage.findAll", query = "SELECT s FROM SupportedLanguage s")
@@ -35,11 +37,12 @@ public class SupportedLanguage implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "SUPPORTED_LANGUAGE_ID")
+    @Column(name = "SUPPORTED_LANGUAGE_ID", nullable = false)
     private Long supportedLanguageId;
+    @Basic(optional = false)
     @NotNull
     @Size(max = 255)
-    @Column(name = "LOCALE")
+    @Column(name = "LOCALE", nullable = false, length = 255)
     private String locale;
     
     /**

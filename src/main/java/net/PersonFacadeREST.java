@@ -26,6 +26,8 @@ import model.Person;
 import model.Secured;
 
 /**
+ * Recievieves incoming external calls on specified paths and responds with the 
+ * outcome.
  *
  * @author Emil
  * @author Oscar

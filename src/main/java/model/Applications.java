@@ -53,20 +53,21 @@ public class Applications implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "APPLICATION_ID")
+    @Column(name = "APPLICATION_ID", nullable = false)
     private Long applicationId;
     @NotNull
-    @Column(name = "REGISTRATION_DATE")
+    @Column(name = "REGISTRATION_DATE", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date registrationDate;
     @NotNull
-    @JoinColumn(name = "STATUS_NAME", referencedColumnName = "STATUS_NAME_ID")
+    @JoinColumn(name = "STATUS_NAME", referencedColumnName = "STATUS_NAME_ID", nullable = false)
     @ManyToOne
     private StatusName statusId;
     @NotNull
-    @JoinColumn(name = "PERSON_ID", referencedColumnName = "PERSON_ID")
+    @JoinColumn(name = "PERSON_ID", referencedColumnName = "PERSON_ID", nullable = false)
     @ManyToOne
     private Person personId;
+    
     /**
      * Constructor
      */

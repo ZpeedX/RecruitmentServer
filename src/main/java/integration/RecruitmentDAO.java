@@ -6,6 +6,8 @@
 package integration;
 
 import java.math.BigInteger;
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -30,6 +32,7 @@ import model.ErrorMessageEnum;
 import model.StatusName;
 
 /**
+ * Handles the communication with the recruitment_db database.
  *
  * @author Emil
  * @author Oscar
@@ -41,7 +44,7 @@ public class RecruitmentDAO {
 
     @PersistenceContext(unitName = "recruitmentPU")
     private EntityManager em;
-
+    
     /**
      * This method stores a new user in the database.
      *
@@ -79,7 +82,7 @@ public class RecruitmentDAO {
     
     private void makeSureUsernameFree(String username) {
         if(getPerson(username) != null) {
-            throwNewRuntimeException(ErrorMessageEnum.USERNAME_PRESENT.toString());
+            throwNewRuntimeException(ErrorMessageEnum.USERNAME_PRESENT.toString(), null);
         }
     }
     
@@ -88,7 +91,7 @@ public class RecruitmentDAO {
         params.put("ssn", ssn);
         
         if(getSingleResultByQuery(Person.class, "findBySsn", params) != null) {
-            throwNewRuntimeException(ErrorMessageEnum.SSN_PRESENT.toString());
+            throwNewRuntimeException(ErrorMessageEnum.SSN_PRESENT.toString(), null);
         }
     }
 
@@ -175,7 +178,7 @@ public class RecruitmentDAO {
                             .setParameter("datePeriodTo", periodTo, TemporalType.DATE);
             return query.getResultList();
         } catch(Exception ex) {
-            throwNewRuntimeException(ErrorMessageEnum.OPERTAION_FAILED.toString());
+            throwNewRuntimeException(ErrorMessageEnum.OPERTAION_FAILED.toString(), ex);
             return null;
         }
         /*Map<String, Object> params = new HashMap<>();
@@ -283,7 +286,7 @@ public class RecruitmentDAO {
             return em.createQuery(query, CompetenceProfileDTO.class)
                 .setParameter("person", person).getResultList();
         } catch(Exception ex) {
-            throwNewRuntimeException(ErrorMessageEnum.OPERTAION_FAILED.toString());
+            throwNewRuntimeException(ErrorMessageEnum.OPERTAION_FAILED.toString(), ex);
             return null;
         }
         
@@ -344,6 +347,8 @@ public class RecruitmentDAO {
     }
     
     private <T> T getSingleResultByQuery(Class<T> entity, String query, Map<String, Object> parameters) {
+        validateDbConnectivity();
+        
         try {
             return getNamedQueryWithParameters(entity, query, parameters).getSingleResult();
         } catch(Exception ex) {
@@ -369,7 +374,7 @@ public class RecruitmentDAO {
             return namedQuery;
         } catch(Exception ex) {
             System.out.println("EXCEPTION CAUGHT");
-            throwNewRuntimeException(ErrorMessageEnum.OPERTAION_FAILED.toString());
+            throwNewRuntimeException(ErrorMessageEnum.OPERTAION_FAILED.toString(), ex);
             return null;
         }
     }
@@ -386,7 +391,7 @@ public class RecruitmentDAO {
         try {
             return em.find(entity, pk);
         } catch(Exception ex) {
-            throwNewRuntimeException(ErrorMessageEnum.OPERTAION_FAILED.toString());
+            throwNewRuntimeException(ErrorMessageEnum.OPERTAION_FAILED.toString(), ex);
             return null;
         } 
     }
@@ -397,16 +402,35 @@ public class RecruitmentDAO {
         try {
             em.persist(entity);
         } catch(Exception ex) {
-            throwNewRuntimeException(ErrorMessageEnum.OPERTAION_FAILED.toString());
+            throwNewRuntimeException(ErrorMessageEnum.OPERTAION_FAILED.toString(), ex);
         }
     }
     
-    private void throwNewRuntimeException(String msg) {
-        throw new AppRuntimeException(msg);
+    private void throwNewRuntimeException(String msg, Exception ex) {
+        if(ex != null) {
+            throw new AppRuntimeException(msg, ex);
+        } else {
+            throw new AppRuntimeException(msg);
+        }
+        
     }
 
     private void validateDbConnectivity() {
-        if(!em.isOpen()) { throwNewRuntimeException(ErrorMessageEnum.OPERTAION_FAILED.toString()); }
+        System.out.println("in db validation");
+        String user = "root";
+        String pass = "root";
+        String dbUrl = "jdbc:derby://localhost:1527/myDB;create=true;user=" + user + ";password=" + pass;
+        String driver = "org.apache.derby.jdbc.ClientDriver";
+
+        try {
+            Class.forName(driver).newInstance();
+            Connection conn = DriverManager.getConnection(dbUrl);
+            if(!conn.isValid(3)) {
+                throwNewRuntimeException(ErrorMessageEnum.NO_DB_CONNECTION.toString(), null);
+            }
+        } catch(Exception ex) {
+            throwNewRuntimeException(ErrorMessageEnum.NO_DB_CONNECTION.toString(), ex);
+        }
     }
     
 }

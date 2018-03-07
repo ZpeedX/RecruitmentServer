@@ -72,8 +72,8 @@ public class AppExceptionMapper implements ExceptionMapper<Throwable> {
                     System.out.println("NO_DB_CONNECTION");
                     return Response.status(Response.Status.SERVICE_UNAVAILABLE).build();
                 case OPERTAION_FAILED:
-                    logErrorMsg(ex, Level.INFO);
-                    return Response.status(Response.Status.NO_CONTENT).build();
+                    logErrorMsg(ex, Level.WARNING);
+                    return Response.status(Response.Status.SERVICE_UNAVAILABLE).build();
                 default:
                     logErrorMsg(ex, Level.SEVERE);
                     System.out.println("DEFUALT");

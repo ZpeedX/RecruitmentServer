@@ -13,6 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -23,7 +24,8 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Emil
  */
 @Entity
-@Table(name = "STATUS_NAME")
+@Table(name = "STATUS_NAME", uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"STATUS_ID", "NAME", "SUPPORTED_LANGUAGE_ID"})})
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "StatusName.findAll", query = "SELECT s FROM StatusName s")
@@ -36,18 +38,20 @@ public class StatusName implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "STATUS_NAME_ID")
+    @Column(name = "STATUS_NAME_ID", nullable = false)
     private Long statusNameId;
+    @Basic(optional = false)
     @NotNull
-    @Column(name = "STATUS_ID")
+    @Column(name = "STATUS_ID", nullable = false)
     private BigInteger statusId;
+    @Basic(optional = false)
     @NotNull
     @Size(max = 255)
-    @Column(name = "NAME")
+    @Column(name = "NAME", nullable = false, length = 255)
     private String name;
     @NotNull
-    @JoinColumn(name = "SUPPORTED_LANGUAGE_ID", referencedColumnName = "SUPPORTED_LANGUAGE_ID")
-    @ManyToOne
+    @JoinColumn(name = "SUPPORTED_LANGUAGE_ID", referencedColumnName = "SUPPORTED_LANGUAGE_ID", nullable = false)
+    @ManyToOne(optional = false)
     private SupportedLanguage supportedLanguageId;
 
     /**

@@ -20,6 +20,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -28,7 +29,9 @@ import javax.validation.constraints.Size;
  * @author Evan
  */
 @Entity
-@Table(name = "PERSON")
+@Table(name = "PERSON", uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"USERNAME"})
+    , @UniqueConstraint(columnNames = {"SSN"})})
 @NamedQueries({
     @NamedQuery(name = "Person.findAll", query = "SELECT p FROM Person p")
     , @NamedQuery(name = "Person.findByPersonId", query = "SELECT p FROM Person p WHERE p.personId = :personId")
@@ -48,42 +51,41 @@ public class Person implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "PERSON_ID")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "PERSON_ID", nullable = false)
     private long personId;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
-    @Column(name = "NAME")
+    @Column(name = "NAME", nullable = false, length = 255)
     private String name;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
-    @Column(name = "SURNAME")
+    @Column(name = "SURNAME", nullable = false, length = 255)
     private String surname;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
-    @Column(name = "SSN")
+    @Column(name = "SSN", nullable = false, length = 255)
     private String ssn;
-    // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
-    @Column(name = "EMAIL")
+    @Column(name = "EMAIL", nullable = false, length = 255)
     private String email;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
-    @Column(name = "PASSWORD")
+    @Column(name = "PASSWORD", nullable = false, length = 255)
     private String password;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
-    @Column(name = "USERNAME")
+    @Column(name = "USERNAME", nullable = false, length = 255)
     private String username;
     @NotNull
-    @JoinColumn(name = "ROLE_ID", referencedColumnName = "ROLE_ID")
+    @JoinColumn(name = "ROLE_ID", referencedColumnName = "ROLE_ID", nullable = false)
     @ManyToOne(optional = false)
     private Role roleId;
 

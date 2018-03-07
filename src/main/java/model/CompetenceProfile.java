@@ -40,17 +40,19 @@ public class CompetenceProfile implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "COMPETENCE_PROFILE_ID")
+    @Column(name = "COMPETENCE_PROFILE_ID", nullable = false)
     private Long competenceProfileId;
+    @Basic(optional = false)
     @NotNull
-    @Column(name = "YEARS_OF_EXPERIENCE", precision = 4, scale = 2)
+    @Column(name = "YEARS_OF_EXPERIENCE", precision = 4, scale = 2, nullable = false)
     private double yearsOfExperience;
+    @Basic(optional = false)
     @NotNull
-    @Column(name = "COMPETENCE_ID")
+    @Column(name = "COMPETENCE_ID", nullable = false)
     private Long competenceId;
     @NotNull
-    @JoinColumn(name = "PERSON_ID", referencedColumnName = "PERSON_ID")
-    @ManyToOne
+    @JoinColumn(name = "PERSON_ID", referencedColumnName = "PERSON_ID", nullable = false)
+    @ManyToOne(optional = false)
     private Person personId;
 
     /**

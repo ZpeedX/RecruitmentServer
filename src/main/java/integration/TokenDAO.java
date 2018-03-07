@@ -14,6 +14,7 @@ import javax.persistence.PersistenceContext;
 import model.Token;
 
 /**
+ * Handles the communication with the recruitment_tokens database.
  *
  * @author Oscar
  */
