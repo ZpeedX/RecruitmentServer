@@ -61,8 +61,7 @@ public class AppExceptionMapper implements ExceptionMapper<Throwable> {
                     return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
             }
         } else {
-            System.out.println("CAUGHT IT");
-            System.out.println(ex.getMessage());
+            System.out.println("SOMETHING ELSE HAPPEND");
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
 

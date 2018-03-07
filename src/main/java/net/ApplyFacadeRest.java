@@ -45,10 +45,8 @@ public class ApplyFacadeRest {
         GenericEntity<List<CompetenceDTO>> entity= new GenericEntity<List<CompetenceDTO>>(competences){};
         
         if(competences.isEmpty()) {
-            System.out.println("List empty");
             return Response.noContent().build();
         } else {
-            System.out.println("List NOT empty");
             return Response.ok(entity).build();
         }
     }
@@ -56,14 +54,7 @@ public class ApplyFacadeRest {
     @POST
     @Path("/competence")
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
     public Response registerCompetence(List<CompetenceProfile> profiles) {
-        System.out.println("path = /competence");
-        
-        profiles.forEach(p -> {
-            System.out.println("id: " + p.getCompetenceId() + ", name: " /*+ p.getName()*/ + ", yoe: " + p.getYearsOfExperience());
-        });
-        
         controller.addCompetenceProfiles(getUserFromPrincipal(), profiles);
         return Response.noContent().build();
     }
@@ -71,21 +62,13 @@ public class ApplyFacadeRest {
     @POST
     @Path("/availability")
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
     public Response registerAvailability(List<Availability> availabilities) {
-        System.out.println("path = /availability");
-        
-        availabilities.forEach(av -> {
-            System.out.println("from: " + av.getFromDate().toString() + ", to: " + av.getToDate().toString());
-        });
-        
         controller.addAvailabilities(getUserFromPrincipal(), availabilities);
         return Response.noContent().build();
     }
     
     private String getUserFromPrincipal() {
         String user = securityContext.getUserPrincipal().getName();
-        System.out.println("Logged in user is: " + user);
         return user;
     }
     

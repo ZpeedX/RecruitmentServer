@@ -254,7 +254,7 @@ public class Controller {
     }
 
     private boolean listIsEmpty(List<?> list) {
-        return list != null && !list.isEmpty();
+        return list == null || list.isEmpty();
     }
     
 }
