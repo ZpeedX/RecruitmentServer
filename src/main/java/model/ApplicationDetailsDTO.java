@@ -22,7 +22,7 @@ public class ApplicationDetailsDTO implements Serializable {
     private String user_ssn;
 
     private Date registrationDate;
-    private Map<String, String> statusName;
+    private List<StatusNameDTO> statusName;
     
     private List<CompetenceProfileDTO1> competenceProfiles;
     private List<AvailabilityDTO> availabilities;
@@ -36,7 +36,7 @@ public class ApplicationDetailsDTO implements Serializable {
             String email,
             String ssn,
             Date regDate,
-            Map<String, String> statusName,
+            List<StatusNameDTO> statusName,
             List<CompetenceProfileDTO1> cp,
             List<AvailabilityDTO> av) {
 
@@ -90,11 +90,11 @@ public class ApplicationDetailsDTO implements Serializable {
         this.registrationDate = registrationDate;
     }
 
-    public Map<String, String> getStatusName() {
+    public List<StatusNameDTO> getStatusName() {
         return statusName;
     }
 
-    public void setStatusName(Map<String, String> statusName) {
+    public void setStatusName(List<StatusNameDTO> statusName) {
         this.statusName = statusName;
     }
 

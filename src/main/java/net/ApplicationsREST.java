@@ -9,7 +9,9 @@ import controller.Controller;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.json.Json;
@@ -32,6 +34,7 @@ import model.Applications;
 import model.CompetenceDTO;
 import model.RoleEnum;
 import model.Secured;
+import model.StatusNameDTO;
 
 /**
  *
@@ -119,38 +122,40 @@ public class ApplicationsREST {
     @Path("getApplicationDetails")
     public Response getApplicationDetails(@HeaderParam("applicationId") long applicationId) {
         ApplicationDetailsDTO appDetail = contr.getApplicationDetails(applicationId);
-        if(appDetail == null){
-           return Response.status(Response.Status.BAD_REQUEST).build();
+        if (appDetail == null) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
         }
         return Response.ok(new GenericEntity<ApplicationDetailsDTO>(appDetail) {
         }, MediaType.APPLICATION_JSON).build();
     }
-    
+
     @GET
     @Produces("application/pdf")
     @Path("getApplicationDetails/pdf/{id}")
-    public Response getPdf(@PathParam("id") String id, @HeaderParam("locale") String language){
+    public Response getPdf(@PathParam("id") String id, @HeaderParam("locale") String language) {
         try {
             long applicationId = Long.parseLong(id);
             return Response.ok((Object) contr.getPdf(applicationId, language)).build();
-        } catch(Exception ex) {
+        } catch (Exception ex) {
             return Response.status(Response.Status.EXPECTATION_FAILED).build();
         }
     }
-    
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("changeStatus")
-    public Response changeAppStatus(@NotNull JsonObject obj){
-        
+    public Response changeAppStatus(@NotNull JsonObject obj) {
+
         long applicationId = obj.getInt("applicationId");
-        long appStatus = obj.getInt("appStatus");
-        
-        if(contr.changeAppStatus(applicationId, appStatus)){
-            return Response.ok().build();
+        String appStatus = obj.getString("appStatus");
+
+        List<StatusNameDTO> statusNames = contr.changeAppStatus(applicationId, appStatus);
+        if (statusNames != null) {
+            return Response.ok(new GenericEntity<List<StatusNameDTO>>(statusNames) {
+            }, MediaType.APPLICATION_JSON).build();
         }
         return Response.status(Response.Status.EXPECTATION_FAILED).build();
     }
-    
+
 }
