@@ -141,7 +141,7 @@ public class ApplicationsREST {
         ApplicationDetailsDTO appDetail = contr.getApplicationDetails(applicationId);
 
         if (appDetail == null) {
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            return Response.status(Response.Status.NOT_ACCEPTABLE).build();
         }
         
         return Response.ok(new GenericEntity<ApplicationDetailsDTO>(appDetail) {}).build();
