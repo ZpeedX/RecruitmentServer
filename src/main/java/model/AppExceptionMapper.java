@@ -5,6 +5,11 @@
  */
 package model;
 
+import java.io.IOException;
+import java.util.logging.FileHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
@@ -16,16 +21,22 @@ import javax.ws.rs.ext.Provider;
  */
 @Provider
 public class AppExceptionMapper implements ExceptionMapper<Throwable> {
+
+    static final Logger LOGGER = Logger.getLogger("Server_Logger");
+    FileHandler fh;
+
     /**
      * Error response returned based on exception
+     *
      * @param ex exception
-     * @return error response 
+     * @return error response
      */
     @Override
     public Response toResponse(Throwable ex) {
+        logErrorMsg(ex);
         System.out.println("MAPPER TRIGGERED: ");
 
-        if(ex instanceof AppRuntimeException) {
+        if (ex instanceof AppRuntimeException) {
             System.out.println("IN IF");
             System.out.println(ex.getMessage());
             switch (ErrorMessageEnum.valueOf(ex.getMessage())) {
@@ -67,8 +78,33 @@ public class AppExceptionMapper implements ExceptionMapper<Throwable> {
 
     }
     
+    /**
+     * Converts error code to json format
+     * @param code given error code
+     * @return json string
+     */
     private String errorJsonWithCodeString(int code) {
         return "{\"error\":" + code + "}";
     }
     
+    /**
+     * Logs the given throwble exception into a file
+     * @param ex given throwable exception
+     */
+    private void logErrorMsg(Throwable ex) {
+        try {
+            // This block configure the logger with handler and formatter  
+            fh = new FileHandler("Server_Logger.xml", true);
+            LOGGER.addHandler(fh);
+            SimpleFormatter formatter = new SimpleFormatter();
+            fh.setFormatter(formatter);
+
+            // the following statement is used to log any messages  
+            LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
+            fh.close();
+        } catch (SecurityException | IOException e) {
+            Logger.getLogger(AppExceptionMapper.class.getName()).log(Level.SEVERE, null, e);
+
+        }
+    }
 }

@@ -160,7 +160,8 @@ public class Availability implements Serializable {
     public void setPersonId(Person personId) {
         this.personId = personId;
     }
-
+    
+    
     @Override
     public String toString() {
         return "Availability{" + "availabilityId=" + availabilityId + ", fromDate=" + fromDate + ", toDate=" + toDate + ", personId=" + personId + '}';

@@ -53,7 +53,11 @@ public class ApplyFacadeRest {
             return Response.ok(entity).build();
         }
     }
-
+    /**
+     * Endpoint for registering competences
+     * @param profiles competence profile
+     * @return empty reponse
+     */
     @POST
     @Path("/competence")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -61,7 +65,11 @@ public class ApplyFacadeRest {
         controller.addCompetenceProfiles(getUserFromPrincipal(), profiles);
         return Response.noContent().build();
     }
-    
+    /**
+     * Endpint for registering availabilities
+     * @param availabilities availability list
+     * @return empty reponse
+     */
     @POST
     @Path("/availability")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -69,7 +77,10 @@ public class ApplyFacadeRest {
         controller.addAvailabilities(getUserFromPrincipal(), availabilities);
         return Response.noContent().build();
     }
-    
+    /**
+     * Retrieves a user
+     * @return a user
+     */
     private String getUserFromPrincipal() {
         String user = securityContext.getUserPrincipal().getName();
         return user;

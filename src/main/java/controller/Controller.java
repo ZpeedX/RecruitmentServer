@@ -10,10 +10,8 @@ import model.Applications;
 import model.SupportedLanguage;
 import integration.RecruitmentDAO;
 import integration.TokenDAO;
-import java.math.BigInteger;
-import java.util.HashMap;
+
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -204,7 +202,6 @@ public class Controller {
         List<StatusNameDTO> statusNames = statusNamesToDTO(rdao.getStatusNamesByStatusId(app.getStatusId().getStatusId()));
         List<CompetenceProfileDTO> cp = rdao.getCompetenceProfileByPersonId(person);
         List<AvailabilityDTO> av = avToAvDTO(rdao.getAvailabilityíesByPerson(person));
-
         return new ApplicationDetailsDTO(
                 person.getName(),
                 person.getSurname(),
@@ -237,7 +234,7 @@ public class Controller {
     /**
      * Changes the status of an appllication
      * @param applicationId id of application to be changed
-     * @param appStatus status of application
+     * @param statusName status of application
      * @return List of StatusNameDTO if changed or null if not
      */
     public List<StatusNameDTO> changeAppStatus(long applicationId, String statusName) {

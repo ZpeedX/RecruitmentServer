@@ -123,7 +123,7 @@ public class PDFGenerator {
         }
 
         preface.add(getParagraphWithChunk(PDFLaguageForm.FORM_APPLICATION_INFO[languageIndex][index++], smallBold, getSimpleDate(appDetails.getRegistrationDate()), normalFont));
-        preface.add(getParagraphWithChunk(PDFLaguageForm.FORM_APPLICATION_INFO[languageIndex][index++], smallBold, statusName, normalFont));
+        preface.add(getParagraphWithChunk(PDFLaguageForm.FORM_APPLICATION_INFO[languageIndex][index], smallBold, statusName, normalFont));
     }
 
     private void addUserInformation(Paragraph preface) throws Exception {
