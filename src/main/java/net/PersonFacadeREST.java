@@ -80,8 +80,9 @@ public class PersonFacadeREST {
     /**
      * Endpoint recieving validation information from user to register
      * 
-     * @param json
-     * @return empty response
+     * @param json object with the password
+     * @return response that everything checks out or throws an exception with an
+     * apporpriate status.
      */
     @POST
     @Secured
