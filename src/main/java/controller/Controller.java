@@ -29,13 +29,14 @@ import model.CompetenceProfileDTO;
 import model.PDFGenerator;
 import model.Person;
 import model.StatusName;
+import model.StatusNameDTO;
 import model.Token;
 import model.TokenGenerator;
 
 /**
- * Handles the incoming calls from the view and passes them on to the appropriate 
- * methods and returns data on success, else throws exceptions.
- * 
+ * Handles the incoming calls from the view and passes them on to the
+ * appropriate methods and returns data on success, else throws exceptions.
+ *
  * @author Emil
  * @author Oscar
  * @author Evan
@@ -125,26 +126,31 @@ public class Controller {
     }
 
     /**
-     * This method adds competence profiles of a user and persists them in
-     * the database.
+     * This method adds competence profiles of a user and persists them in the
+     * database.
      *
      * @param user username of the signed in user to whom the profiles belong.
      * @param profiles the profiles with the information.
      */
     public void addCompetenceProfiles(String user, List<CompetenceProfile> profiles) {
-        if(listIsEmpty(profiles)) { return; }
+        if (listIsEmpty(profiles)) {
+            return;
+        }
         rdao.addCompetenceProfiles(user, profiles);
     }
 
     /**
-     * This method adds availabilities of a user and persists them in
-     * the database.
+     * This method adds availabilities of a user and persists them in the
+     * database.
      *
-     * @param username username of the signed in user to whom the availabilities belong.
+     * @param username username of the signed in user to whom the availabilities
+     * belong.
      * @param availabilities the list with availability priods.
      */
     public void addAvailabilities(String username, List<Availability> availabilities) {
-        if(listIsEmpty(availabilities)) { return; }
+        if (listIsEmpty(availabilities)) {
+            return;
+        }
         rdao.addAvailabilities(username, availabilities);
     }
 
@@ -190,34 +196,34 @@ public class Controller {
      */
     public ApplicationDetailsDTO getApplicationDetails(long appId) {
         Applications app = rdao.getApplicationById(appId);
-        if(app == null){
+        if (app == null) {
             return null;
         }
         Person person = app.getPersonId();
-        
-        Map<String, String> statusMap = statusNamesToMap(rdao.getStatusNamesByStatusId(app.getStatusId().getStatusId()));
-        List<CompetenceProfileDTO> cp = rdao.getCompetenceProfileByPersonId(person);
+
+        List<StatusNameDTO> statusNames = statusNamesToDTO(rdao.getStatusNamesByStatusId(app.getStatusId().getStatusId()));
+        List<CompetenceProfileDTO1> cp = rdao.getCompetenceProfileByPersonId(person);
         List<AvailabilityDTO> av = avToAvDTO(rdao.getAvailabilityíesByPerson(person));
-        
+
         return new ApplicationDetailsDTO(
                 person.getName(),
                 person.getSurname(),
                 person.getEmail(),
                 person.getSsn(),
                 app.getRegistrationDate(),
-                statusMap,
+                statusNames,
                 cp,
                 av
         );
 
     }
 
-    private Map<String, String> statusNamesToMap(List<StatusName> statusNames) {
-        Map<String, String> statusMap = new HashMap<>();
-        statusNames.forEach((sn) -> {
-            statusMap.put(sn.getSupportedLanguageId().getLocale(), sn.getName());
-        });
-        return statusMap;
+    private List<StatusNameDTO> statusNamesToDTO(List<StatusName> statusNames) {
+        return statusNames.stream()
+                .map(statusName -> new StatusNameDTO(
+                statusName.getName(),
+                statusName.getSupportedLanguageId().getLocale()
+                )).collect(Collectors.toList());
     }
 
     private List<AvailabilityDTO> avToAvDTO(List<Availability> av) {
@@ -227,21 +233,23 @@ public class Controller {
                 availability.getToDate()))
                 .collect(Collectors.toList());
     }
+  
     /**
      * Changes the status of an appllication
      * @param applicationId id of application to be changed
      * @param appStatus status of application
-     * @return true/false if changed or not
+     * @return List of StatusNameDTO if changed or null if not
      */
-    public boolean changeAppStatus(long applicationId, long appStatus) {
+    public List<StatusNameDTO> changeAppStatus(long applicationId, String statusName) {
         Applications app = rdao.getApplicationById(applicationId);
-        StatusName sn = rdao.getStatusNamesByStatusId(BigInteger.valueOf(appStatus)).get(0);
-        if(app != null && sn != null){
+        StatusName sn = rdao.getStatusNameByName(statusName);        
+        if (app != null && sn != null) {
             app.setStatusId(sn);
-            return true;
+            return statusNamesToDTO(rdao.getStatusNamesByStatusId(app.getStatusId().getStatusId()));
         }
-        return false;
+        return null;
     }
+  
     /**
      * Get pdf of application
      * @param id id of application
@@ -256,5 +264,5 @@ public class Controller {
     private boolean listIsEmpty(List<?> list) {
         return list == null || list.isEmpty();
     }
-    
+
 }
