@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package model;
 
 import java.io.Serializable;
@@ -23,9 +18,9 @@ import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
+ * Entity for a status
  *
- * @author Evan
- * @author Oscar
+ * @author Emil
  */
 @Entity
 @Table(name = "STATUS_NAME")
@@ -55,41 +50,89 @@ public class StatusName implements Serializable {
     @ManyToOne
     private SupportedLanguage supportedLanguageId;
 
+    /**
+     * Constructor
+     */
     public StatusName() {
     }
 
+    /**
+     * Creates status by id
+     *
+     * @param statusNameId
+     */
     public StatusName(Long statusNameId) {
         this.statusNameId = statusNameId;
     }
 
+    /**
+     * Returns the status name id
+     *
+     * @return status name id
+     */
     public Long getStatusNameId() {
         return statusNameId;
     }
 
+    /**
+     * Set the id of the status name
+     *
+     * @param statusNameId id of status
+     */
     public void setStatusNameId(Long statusNameId) {
         this.statusNameId = statusNameId;
     }
 
+    /**
+     * Returns the status name id
+     *
+     * @return status name id
+     */
     public BigInteger getStatusId() {
         return statusId;
     }
 
+    /**
+     * Set the id of the status
+     *
+     * @param statusId id of status
+     */
     public void setStatusId(BigInteger statusId) {
         this.statusId = statusId;
     }
 
+    /**
+     * Returns the name of the status
+     *
+     * @return
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Sets the name of the status
+     *
+     * @param name status name
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * Return the language id of the status
+     *
+     * @return language id of status
+     */
     public SupportedLanguage getSupportedLanguageId() {
         return supportedLanguageId;
     }
 
+    /**
+     * Set the language id of the status
+     *
+     * @param supportedLanguageId status language id
+     */
     public void setSupportedLanguageId(SupportedLanguage supportedLanguageId) {
         this.supportedLanguageId = supportedLanguageId;
     }
