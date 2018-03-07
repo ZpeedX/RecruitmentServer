@@ -56,7 +56,9 @@ public class CompetenceName implements Serializable {
     @NotNull
     @Column(name = "COMPETENCE_ID")
     private long competenceId;
-
+    /**
+     * Class constructor
+     */
     public CompetenceName() {
     }
 

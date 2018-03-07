@@ -63,15 +63,14 @@ public class ApplicationsREST {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("competence")
     public Response listCompetences() {
-        return Response.ok(new GenericEntity<List<CompetenceDTO>>(contr.listCompetence()) {
-        }, MediaType.APPLICATION_JSON).build();
+        return Response.ok(new GenericEntity<List<CompetenceDTO>>(contr.listCompetence()) {}).build();
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("searchApplication")
-    public JsonArray searcApplications(JsonObject entity) {
+    public Response searcApplications(JsonObject entity) {
         Date regDate, periodFrom, periodTo, dummyDate;
         SimpleDateFormat formatDate = new SimpleDateFormat("d-MM-yyyy");
 
@@ -105,15 +104,17 @@ public class ApplicationsREST {
                         Long.parseLong(entity.getString("competence")),
                         entity.getString("name"),
                         dummyDate);
-        return appListToJsonArray(applications);
-
+        
+        return Response.ok(appListToJsonArray(applications)).build();
     }
 
-    public JsonArray appListToJsonArray(List<Applications> list) {
+    private JsonArray appListToJsonArray(List<Applications> list) {
         JsonArrayBuilder builder = Json.createArrayBuilder();
-        for (Applications l : list) {
-            builder.add(l.toJson());
-        }
+        
+        list.forEach(application -> {
+            builder.add(application.toJson());
+        });
+        
         return builder.build();
     }
 
@@ -122,28 +123,24 @@ public class ApplicationsREST {
     @Path("getApplicationDetails")
     public Response getApplicationDetails(@HeaderParam("applicationId") long applicationId) {
         ApplicationDetailsDTO appDetail = contr.getApplicationDetails(applicationId);
+
         if (appDetail == null) {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
-        return Response.ok(new GenericEntity<ApplicationDetailsDTO>(appDetail) {
-        }, MediaType.APPLICATION_JSON).build();
+        
+        return Response.ok(new GenericEntity<ApplicationDetailsDTO>(appDetail) {}).build();
     }
 
     @GET
     @Produces("application/pdf")
     @Path("getApplicationDetails/pdf/{id}")
-    public Response getPdf(@PathParam("id") String id, @HeaderParam("locale") String language) {
-        try {
-            long applicationId = Long.parseLong(id);
-            return Response.ok((Object) contr.getPdf(applicationId, language)).build();
-        } catch (Exception ex) {
-            return Response.status(Response.Status.EXPECTATION_FAILED).build();
-        }
+
+    public Response getPdf(@PathParam("id") Long applicationId, @HeaderParam("locale") String language){
+        return Response.ok((Object) contr.getPdf(applicationId, language)).build();
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("changeStatus")
     public Response changeAppStatus(@NotNull JsonObject obj) {
 

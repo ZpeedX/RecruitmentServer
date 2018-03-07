@@ -189,7 +189,11 @@ public class Controller {
     public void logout(String username) {
         tokenDAO.logout(username);
     }
-
+    /**
+     * Retrieves application from database
+     * @param appId id of application
+     * @return  applicationDetails
+     */
     public ApplicationDetailsDTO getApplicationDetails(long appId) {
         Applications app = rdao.getApplicationById(appId);
         if (app == null) {
@@ -229,7 +233,13 @@ public class Controller {
                 availability.getToDate()))
                 .collect(Collectors.toList());
     }
-
+  
+    /**
+     * Changes the status of an appllication
+     * @param applicationId id of application to be changed
+     * @param appStatus status of application
+     * @return List of StatusNameDTO if changed or null if not
+     */
     public List<StatusNameDTO> changeAppStatus(long applicationId, String statusName) {
         Applications app = rdao.getApplicationById(applicationId);
         StatusName sn = rdao.getStatusNameByName(statusName);        
@@ -239,7 +249,13 @@ public class Controller {
         }
         return null;
     }
-
+  
+    /**
+     * Get pdf of application
+     * @param id id of application
+     * @param language language of application
+     * @return pdfgenerator
+     */
     public Object getPdf(long id, String language) {
         ApplicationDetailsDTO appDetails = getApplicationDetails(id);
         return new PDFGenerator(appDetails, language).generatePDF();

@@ -12,6 +12,8 @@ import java.io.Serializable;
  * @author Oscar
  */
 public class CompetenceDTO implements Serializable{
+    private static final long serialVersionUID = 1L;
+
     private Long competenceNameId;
     private String name;
     private long competenceId;
