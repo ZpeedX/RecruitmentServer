@@ -24,6 +24,9 @@ import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.ext.Provider;
 
 /**
+ * Authroization filter which acts as a man in the middle on all incoming calls,
+ * after the authentication filter, and validates that a user belongs to a 
+ * specific role else returns an 403.
  *
  * @author Oscar, with some borrowed code from the internet
  */

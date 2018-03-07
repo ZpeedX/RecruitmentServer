@@ -6,6 +6,7 @@
 package model;
 
 /**
+ * Messages sent to the exception mapper to differentiate between exceptions.
  *
  * @author Oscar
  */

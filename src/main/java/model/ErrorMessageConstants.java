@@ -6,6 +6,7 @@
 package model;
 
 /**
+ * Constants used to set the code when a conflict occurs.
  *
  * @author Oscar
  */

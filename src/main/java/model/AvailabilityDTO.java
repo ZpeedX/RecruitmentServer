@@ -10,6 +10,7 @@ import java.util.Date;
 
 /**
  *  DTO for availabilities
+ * 
  * @author Oscar
  */
 public class AvailabilityDTO implements Serializable{

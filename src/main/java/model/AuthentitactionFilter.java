@@ -20,6 +20,8 @@ import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.ext.Provider;
 
 /**
+ * Authentication filter which acts as a man in the middle on all incoming calls
+ * and validates that a user is signed in else returns an 401.
  *
  * @author Oscar, borrowed code from the internet!!
  */

@@ -13,6 +13,7 @@ import java.util.concurrent.TimeUnit;
 import javax.ejb.Stateless;
 
 /**
+ * Generator for the random tokens given to users when they log in.
  *
  * @author Oscar
  */
