@@ -67,10 +67,15 @@ public class Applications implements Serializable {
     @JoinColumn(name = "PERSON_ID", referencedColumnName = "PERSON_ID")
     @ManyToOne
     private Person personId;
-
+    /**
+     * Constructor
+     */
     public Applications() {
     }
-
+    /**
+     * Constuct application from id
+     * @param applicationId 
+     */
     public Applications(Long applicationId) {
         this.applicationId = applicationId;
     }
@@ -117,7 +122,7 @@ public class Applications implements Serializable {
      * @return registrationDate as Date object
      */
     public Date getRegistrationDate() {
-        return registrationDate;
+        return new Date(registrationDate.getTime());
     }
 
     /**
@@ -126,13 +131,19 @@ public class Applications implements Serializable {
      * @param registrationDate the registrationDate to set
      */
     public void setRegistrationDate(Date registrationDate) {
-        this.registrationDate = registrationDate;
+        this.registrationDate = new Date(registrationDate.getTime());
     }
-
+    /**
+     * Returns status id of application
+     * @return status id
+     */
     public StatusName getStatusId() {
         return statusId;
     }
-
+    /**
+     * Sets the status id of the application
+     * @param statusId the status id
+     */
     public void setStatusId(StatusName statusId) {
         this.statusId = statusId;
     }

@@ -16,7 +16,11 @@ import javax.ws.rs.ext.Provider;
  */
 @Provider
 public class AppExceptionMapper implements ExceptionMapper<Throwable> {
-    
+    /**
+     * Error response returned based on exception
+     * @param ex exception
+     * @return error response 
+     */
     @Override
     public Response toResponse(Throwable ex) {
         System.out.println("MAPPER TRIGGERED: ");

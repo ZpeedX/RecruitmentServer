@@ -38,7 +38,7 @@ public class TokenDAO {
             success = true;
         } catch(Exception ex) {
             System.out.println("ERROR ADDING TOKEN: " + ex.getMessage());
-            ex.printStackTrace();
+
         }
         
         return success;
@@ -67,7 +67,6 @@ public class TokenDAO {
                 .setParameter("token", token).getSingleResult().getUsername();
         } catch(NullPointerException nex) {
             System.out.println("ERROR GETTING USER: " + nex.getMessage());
-            nex.printStackTrace();
             return null;
         }
     }
