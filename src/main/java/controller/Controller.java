@@ -237,7 +237,7 @@ public class Controller {
     /**
      * Changes the status of an appllication
      * @param applicationId id of application to be changed
-     * @param appStatus status of application
+     * @param statusName status of application
      * @return List of StatusNameDTO if changed or null if not
      */
     public List<StatusNameDTO> changeAppStatus(long applicationId, String statusName) {
