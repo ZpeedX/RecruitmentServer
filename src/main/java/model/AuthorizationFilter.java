@@ -40,7 +40,11 @@ public class AuthorizationFilter implements ContainerRequestFilter {
     
     @EJB
     private TokenDAO tokenDAO;
-
+    /**
+     * Checks permission for user
+     * @param requestContext
+     * @throws IOException 
+     */
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
 
@@ -73,11 +77,11 @@ public class AuthorizationFilter implements ContainerRequestFilter {
     // Extract the roles from the annotated element
     private List<RoleEnum> extractRoles(AnnotatedElement annotatedElement) {
         if (annotatedElement == null) {
-            return new ArrayList<RoleEnum>();
+            return new ArrayList<>();
         } else {
             Secured secured = annotatedElement.getAnnotation(Secured.class);
             if (secured == null) {
-                return new ArrayList<RoleEnum>();
+                return new ArrayList<>();
             } else {
                 RoleEnum[] allowedRoles = secured.value();
                 return Arrays.asList(allowedRoles);

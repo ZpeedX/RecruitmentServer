@@ -60,7 +60,9 @@ public class Availability implements Serializable {
     @JoinColumn(name = "PERSON_ID", referencedColumnName = "PERSON_ID")
     @ManyToOne(optional = false)
     private Person personId;
-
+    /**
+     * Constructor
+     */
     public Availability() {
     }
 
@@ -82,8 +84,8 @@ public class Availability implements Serializable {
      */
     public Availability(Long availabilityId, Date fromDate, Date toDate) {
         this.availabilityId = availabilityId;
-        this.fromDate = fromDate;
-        this.toDate = toDate;
+        this.fromDate = new Date(fromDate.getTime());
+        this.toDate = new Date(toDate.getTime());
     }
 
     /**
@@ -110,7 +112,7 @@ public class Availability implements Serializable {
      * @return fromDate as Date object
      */
     public Date getFromDate() {
-        return fromDate;
+        return fromDate != null ? new Date(fromDate.getTime()) : null;
     }
 
     /**
@@ -119,7 +121,7 @@ public class Availability implements Serializable {
      * @param fromDate the fromDate to set
      */
     public void setFromDate(Date fromDate) {
-        this.fromDate = fromDate;
+        this.fromDate = fromDate != null ? new Date(fromDate.getTime()) : null;
     }
 
     /**
@@ -128,7 +130,7 @@ public class Availability implements Serializable {
      * @return toDate as Date object
      */
     public Date getToDate() {
-        return toDate;
+        return toDate != null ? new Date(toDate.getTime()) : null;
     }
 
     /**
@@ -137,7 +139,7 @@ public class Availability implements Serializable {
      * @param toDate the toDate to set
      */
     public void setToDate(Date toDate) {
-        this.toDate = toDate;
+        this.toDate = toDate != null ? new Date(toDate.getTime()) : null;
     }
 
     /**

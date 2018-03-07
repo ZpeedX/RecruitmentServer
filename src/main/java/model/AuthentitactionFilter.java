@@ -8,6 +8,7 @@ package model;
 import integration.TokenDAO;
 import java.io.IOException;
 import java.security.Principal;
+import java.util.Locale;
 import javax.annotation.Priority;
 import javax.ejb.EJB;
 import javax.ws.rs.Priorities;
@@ -31,7 +32,11 @@ public class AuthentitactionFilter implements ContainerRequestFilter {
 
     @EJB 
     private TokenDAO tokenDAO;
-    
+    /**
+     * Manage user token
+     * @param requestContext
+     * @throws IOException 
+     */
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
         
@@ -84,8 +89,8 @@ public class AuthentitactionFilter implements ContainerRequestFilter {
         // Check if the Authorization header is valid
         // It must not be null and must be prefixed with "Bearer" plus a whitespace
         // The authentication scheme comparison must be case-insensitive
-        return authorizationHeader != null && authorizationHeader.toLowerCase()
-                    .startsWith(AUTHENTICATION_SCHEME.toLowerCase() + " ");
+        return authorizationHeader != null && authorizationHeader.toLowerCase(Locale.ENGLISH)
+                    .startsWith(AUTHENTICATION_SCHEME.toLowerCase(Locale.ENGLISH) + " ");
     }
 
     private void abortWithUnauthorized(ContainerRequestContext requestContext) {

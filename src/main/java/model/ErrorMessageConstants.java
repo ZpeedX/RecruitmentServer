@@ -10,6 +10,12 @@ package model;
  * @author Oscar
  */
 public class ErrorMessageConstants {
+    /**
+     * Code for username
+     */
     public static int USERNAME_PRESENT_CODE = 1;
+    /**
+     * Code for social security number
+     */
     public static int SSN_PRESENT_CODE = 2;
 }
