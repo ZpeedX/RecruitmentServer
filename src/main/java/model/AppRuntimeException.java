@@ -3,7 +3,8 @@ package model;
 import javax.ejb.ApplicationException;
 
 /**
- * Runtime exception handler
+ * Custom exception to differentiate from others.
+ * 
  * @author Oscar
  */
 @ApplicationException(rollback=true)

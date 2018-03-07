@@ -16,6 +16,8 @@ import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
 /**
+ * Intercepts all throwable exceptions not already handled and returns a response
+ * to the client depending on the occured error.
  *
  * @author Oscar
  */

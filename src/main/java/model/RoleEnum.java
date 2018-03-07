@@ -6,7 +6,8 @@
 package model;
 
 /**
- * Holds roles
+ * Holds roles the server supports.
+ * 
  * @author Oscar
  */
 public enum RoleEnum {

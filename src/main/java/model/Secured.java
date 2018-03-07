@@ -8,7 +8,8 @@ import java.lang.annotation.Target;
 import javax.ws.rs.NameBinding;
 
 /**
- * Secures a class
+ * Secures a class with a path or a method with a path.
+ * 
  * @author Oscar
  */
 @NameBinding
