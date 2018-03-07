@@ -9,9 +9,7 @@ import controller.Controller;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.json.Json;
@@ -37,6 +35,8 @@ import model.Secured;
 import model.StatusNameDTO;
 
 /**
+ * Recievieves incoming external calls on specified paths and responds with the 
+ * outcome.
  *
  * @author Evan
  */

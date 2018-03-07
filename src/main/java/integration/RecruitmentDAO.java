@@ -32,6 +32,7 @@ import model.ErrorMessageEnum;
 import model.StatusName;
 
 /**
+ * Handles the communication with the recruitment_db database.
  *
  * @author Emil
  * @author Oscar

@@ -9,6 +9,7 @@ import java.util.Set;
 import javax.ws.rs.core.Application;
 
 /**
+ * Sets the application variables and settings.
  *
  * @author Evan
  */

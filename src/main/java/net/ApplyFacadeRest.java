@@ -26,6 +26,8 @@ import model.RoleEnum;
 import model.Secured;
 
 /**
+ * Recievieves incoming external calls on specified paths and responds with the 
+ * outcome.
  *
  * @author Oscar
  */
