@@ -274,7 +274,7 @@ public class RecruitmentDAO {
      * @return competence profile
      */
     public List<CompetenceProfileDTO> getCompetenceProfileByPersonId(Person person) {
-        String query = "SELECT NEW model.CompetenceProfileDTO1(cp.competenceId, cn.name, cp.yearsOfExperience, cn.supportedLanguageId.locale) "
+        String query = "SELECT NEW model.CompetenceProfileDTO(cp.competenceId, cn.name, cp.yearsOfExperience, cn.supportedLanguageId.locale) "
                 + "FROM CompetenceProfile cp, CompetenceName cn "
                 + "WHERE cp.competenceId = cn.competenceId "
                 + "AND cp.personId = :person";

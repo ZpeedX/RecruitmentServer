@@ -204,7 +204,6 @@ public class Controller {
         List<StatusNameDTO> statusNames = statusNamesToDTO(rdao.getStatusNamesByStatusId(app.getStatusId().getStatusId()));
         List<CompetenceProfileDTO> cp = rdao.getCompetenceProfileByPersonId(person);
         List<AvailabilityDTO> av = avToAvDTO(rdao.getAvailabilityíesByPerson(person));
-
         return new ApplicationDetailsDTO(
                 person.getName(),
                 person.getSurname(),
