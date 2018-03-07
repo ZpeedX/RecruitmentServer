@@ -10,10 +10,8 @@ import model.Applications;
 import model.SupportedLanguage;
 import integration.RecruitmentDAO;
 import integration.TokenDAO;
-import java.math.BigInteger;
-import java.util.HashMap;
+
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;

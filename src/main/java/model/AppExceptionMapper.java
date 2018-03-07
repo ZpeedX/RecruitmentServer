@@ -10,7 +10,6 @@ import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
-import java.util.logging.XMLFormatter;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
@@ -78,11 +77,20 @@ public class AppExceptionMapper implements ExceptionMapper<Throwable> {
         }
 
     }
-
+    
+    /**
+     * Converts error code to json format
+     * @param code given error code
+     * @return json string
+     */
     private String errorJsonWithCodeString(int code) {
         return "{\"error\":" + code + "}";
     }
-
+    
+    /**
+     * Logs the given throwble exception into a file
+     * @param ex given throwable exception
+     */
     private void logErrorMsg(Throwable ex) {
         try {
             // This block configure the logger with handler and formatter  
