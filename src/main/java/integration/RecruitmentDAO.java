@@ -422,9 +422,10 @@ public class RecruitmentDAO {
 
         try {
             Class.forName(driver).newInstance();
-            Connection conn = DriverManager.getConnection(dbUrl);
-            if(!conn.isValid(3)) {
-                throwNewRuntimeException(ErrorMessageEnum.NO_DB_CONNECTION.toString(), null);
+            try (Connection conn = DriverManager.getConnection(dbUrl)) {
+                if(!conn.isValid(3)) {
+                    throwNewRuntimeException(ErrorMessageEnum.NO_DB_CONNECTION.toString(), null);
+                }
             }
         } catch(Exception ex) {
             throwNewRuntimeException(ErrorMessageEnum.NO_DB_CONNECTION.toString(), ex);
