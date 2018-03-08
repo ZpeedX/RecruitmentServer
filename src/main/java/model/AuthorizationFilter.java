@@ -100,7 +100,6 @@ public class AuthorizationFilter implements ContainerRequestFilter {
         
         String username = securityContext.getUserPrincipal().getName();
         for(RoleEnum role : allowedRoles) {
-            System.out.println("ROLE: " + role.name());
             if(tokenDAO.isUserInRole(username, role.name())) { return; }
         }
         

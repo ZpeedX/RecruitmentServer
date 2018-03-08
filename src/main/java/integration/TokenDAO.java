@@ -10,6 +10,7 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import model.Token;
 
@@ -39,6 +40,7 @@ public class TokenDAO {
             success = true;
         } catch(Exception ex) {
             System.out.println("ERROR ADDING TOKEN: " + ex.getMessage());
+            
 
         }
         
@@ -66,7 +68,7 @@ public class TokenDAO {
         try {
             return em.createNamedQuery("Token.findByToken", Token.class)
                 .setParameter("token", token).getSingleResult().getUsername();
-        } catch(NullPointerException nex) {
+        } catch(NullPointerException | NoResultException nex) {
             System.out.println("ERROR GETTING USER: " + nex.getMessage());
             return null;
         }

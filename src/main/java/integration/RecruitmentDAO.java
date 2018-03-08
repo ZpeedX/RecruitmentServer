@@ -373,7 +373,6 @@ public class RecruitmentDAO {
 
             return namedQuery;
         } catch(Exception ex) {
-            System.out.println("EXCEPTION CAUGHT");
             throwNewRuntimeException(ErrorMessageEnum.OPERTAION_FAILED.toString(), ex);
             return null;
         }
@@ -416,7 +415,6 @@ public class RecruitmentDAO {
     }
 
     private void validateDbConnectivity() {
-        System.out.println("in db validation");
         String user = "root";
         String pass = "root";
         String dbUrl = "jdbc:derby://localhost:1527/myDB;create=true;user=" + user + ";password=" + pass;

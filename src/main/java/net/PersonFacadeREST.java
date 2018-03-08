@@ -118,7 +118,6 @@ public class PersonFacadeREST {
     }
 
     private JsonObject registerUser(Person newPerson) {
-        System.out.println("Now going to register: " + newPerson.getUsername());
         Person person = cont.register(newPerson);
         
         String token = cont.login(person.getUsername(), person.getRoleId().getName());

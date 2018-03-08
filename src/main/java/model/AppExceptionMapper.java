@@ -39,23 +39,17 @@ public class AppExceptionMapper implements ExceptionMapper<Throwable> {
      */
     @Override
     public Response toResponse(Throwable ex) {
-        System.out.println("MAPPER TRIGGERED: ");
 
         if (ex instanceof AppRuntimeException) {
-            System.out.println("IN IF");
-            System.out.println(ex.getMessage());
             switch (ErrorMessageEnum.valueOf(ex.getMessage())) {
                 case INVALID_CONTENT:
                     logErrorMsg(ex, Level.INFO);
-                    System.out.println("INVALID_CONTENT");
                     return Response.status(Response.Status.BAD_REQUEST).build();
                 case CONTENT_PRESENT:
                     logErrorMsg(ex, Level.INFO);
-                    System.out.println("CONTENT_PRESENT");
                     return Response.status(Response.Status.CONFLICT).build();
                 case USERNAME_PRESENT:
                     logErrorMsg(ex, Level.INFO);
-                    System.out.println("USERNAME_PRESENT");
                     return Response.status(Response.Status.CONFLICT)
                             .entity(errorJsonWithCodeString(ErrorMessageConstants.USERNAME_PRESENT_CODE))
                             .type(MediaType.APPLICATION_JSON)
@@ -71,14 +65,12 @@ public class AppExceptionMapper implements ExceptionMapper<Throwable> {
                     return Response.status(Response.Status.NO_CONTENT).build();
                 case NO_DB_CONNECTION:
                     logErrorMsg(ex, Level.SEVERE);
-                    System.out.println("NO_DB_CONNECTION");
                     return Response.status(Response.Status.SERVICE_UNAVAILABLE).build();
                 case OPERTAION_FAILED:
                     logErrorMsg(ex, Level.WARNING);
                     return Response.status(Response.Status.SERVICE_UNAVAILABLE).build();
                 default:
                     logErrorMsg(ex, Level.SEVERE);
-                    System.out.println("DEFUALT");
                     return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
             }
         } else {
