@@ -26,6 +26,7 @@ import javax.validation.constraints.Size;
 
 /**
  * Entity for user
+ *
  * @author Evan
  */
 @Entity
@@ -176,7 +177,7 @@ public class Person implements Serializable {
     public void setSurname(String surname) {
         this.surname = surname;
     }
-    
+
     /**
      * Gets the value of the snn property
      *
@@ -185,7 +186,7 @@ public class Person implements Serializable {
     public String getSsn() {
         return ssn;
     }
-    
+
     /**
      * Sets the ssn property
      *
@@ -212,7 +213,7 @@ public class Person implements Serializable {
     public void setEmail(String email) {
         this.email = email;
     }
-    
+
     /**
      * Gets the value of the password property
      *
@@ -235,11 +236,11 @@ public class Person implements Serializable {
      * Gets the value of the username property
      *
      * @return username as String object
-     */ 
+     */
     public String getUsername() {
         return username;
     }
-    
+
     /**
      * Sets the username property
      *
@@ -253,7 +254,7 @@ public class Person implements Serializable {
      * Gets the value of the roleId property
      *
      * @return roleId as Role object
-     */   
+     */
     public Role getRoleId() {
         return roleId;
     }
@@ -266,9 +267,11 @@ public class Person implements Serializable {
     public void setRoleId(Role roleId) {
         this.roleId = roleId;
     }
-    
+
     /**
-     * Checks if provided password matches the password property in the Person object
+     * Checks if provided password matches the password property in the Person
+     * object
+     *
      * @param pass provided password
      * @return Boolean True if they match, else False
      */
@@ -276,10 +279,12 @@ public class Person implements Serializable {
         return pass.equals(password);
     }
 
+    /**
+     * @return returns Object of this class as string
+     */
     @Override
     public String toString() {
         return "Person{" + "competenceProfileList=" + competenceProfileList + ", applicationsList=" + applicationsList + ", personId=" + personId + ", name=" + name + ", surname=" + surname + ", ssn=" + ssn + ", email=" + email + ", password=" + password + ", username=" + username + ", roleId=" + roleId + '}';
     }
-    
-    
+
 }

@@ -9,21 +9,23 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- *  DTO for availabilities
- * 
+ * DTO for availabilities
+ *
  * @author Oscar
  */
-public class AvailabilityDTO implements Serializable{
+public class AvailabilityDTO implements Serializable {
+
     private static final long serialVersionUID = 1L;
     private Date fromDate;
     private Date toDate;
+
     /**
      * Constructor
      */
     public AvailabilityDTO() {
     }
 
-   /**
+    /**
      * Class Constructor
      *
      * @param fromDate sets the fromDate property
@@ -70,9 +72,12 @@ public class AvailabilityDTO implements Serializable{
         this.toDate = toDate != null ? new Date(toDate.getTime()) : null;
     }
 
+    /**
+     * @return returns Object of this class as string
+     */
     @Override
     public String toString() {
         return "AvailabilityDTO{" + "fromDate=" + fromDate + ", toDate=" + toDate + '}';
     }
-    
+
 }

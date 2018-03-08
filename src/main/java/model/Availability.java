@@ -162,6 +162,9 @@ public class Availability implements Serializable {
     }
     
     
+    /**
+     * @return returns Object of this class as string 
+     */
     @Override
     public String toString() {
         return "Availability{" + "availabilityId=" + availabilityId + ", fromDate=" + fromDate + ", toDate=" + toDate + ", personId=" + personId + '}';
